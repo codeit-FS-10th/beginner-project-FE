@@ -1,0 +1,28 @@
+.gnb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid red;
+}
+
+/* gnb Size */
+.gnb--sm {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.gnb--lg {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* logo size */
+.logo--sm {
+  width: 106px;
+  height: 35px;
+}
+
+.logo--lg {
+  width: 182px;
+  height: 60px;
+}

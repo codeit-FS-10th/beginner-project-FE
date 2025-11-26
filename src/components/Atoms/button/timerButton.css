@@ -6,6 +6,7 @@
   justify-content: center;
   font-weight: 800;
   color: #ffffff;
+  cursor: pointer;
 }
 
 /*  타이머버튼 variant: start, stop,pause, restart  */
