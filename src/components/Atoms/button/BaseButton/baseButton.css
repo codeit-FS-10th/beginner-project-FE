@@ -1,0 +1,48 @@
+.btn {
+  font-family: "EF_jejudoldam";
+  font-style: Regular;
+  font-size: 18px;
+  color: #ffffff;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  height: 58px;
+  border: none;
+  padding: 14px;
+  border-radius: 16px;
+}
+
+/* basebutton type 2가지 */
+.btn--type-default {
+  background-color: #99c08e;
+  text-shadow: 0 -2px 0 rgba(79, 107, 67, 0.5);
+}
+
+.btn--type-cancel {
+  background-color: #dddddd;
+  text-shadow: 0 -2px 0 rgba(129, 129, 129, 0.8);
+}
+
+/* 사이즈 4가지 */
+.btn--xl {
+  width: 600px;
+}
+
+.btn--lg {
+  width: 312px;
+}
+
+.btn--md {
+  width: 288px;
+}
+
+.btn--sm {
+  width: 140px;
+}
+
+/* full width */
+.btn--full {
+  width: 100%;
+}
