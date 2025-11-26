@@ -1,5 +1,10 @@
 import React from "react";
-import { PlayIcon, PauseIcon, RestartIcon, StopIcon } from "../Icons";
+import {
+  PlayIcon,
+  PauseIcon,
+  RestartIcon,
+  StopIcon,
+} from "../../../../public/Icons";
 import "./timerButton.css";
 
 const TimerButton = ({
@@ -36,10 +41,6 @@ const TimerButton = ({
     inactive: "timer--inactive",
   }[status];
 
-  //  만약 variant가 start,stop 이고, size가 lg경우와
-  // variant가 start,stop 이고, size가 sm경우,
-  //variant가 pause,restart 이고, size가 lg경우,
-  //variant가 pause,restart 이고, size가 sm경우로 사이즈를 다르게 지정하고 싶으면 어떻게하지?
   const sizeClass = getSizeClass(variant, size);
 
   const displayIcon = {

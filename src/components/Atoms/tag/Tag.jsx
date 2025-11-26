@@ -1,5 +1,5 @@
 import React from "react";
-import LeafIcon from "../Icons/LeafIcon";
+import LeafIcon from "../../../../public/Icons/LeafIcon";
 import "./tag.css";
 
 const Tag = ({ type, value, emoji, size = "sm", theme = "dark" }) => {
