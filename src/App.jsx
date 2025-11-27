@@ -1,7 +1,9 @@
-import "./App.css";
+// Parent.jsx
+import { useEffect, useState } from "react";
+import ModalList from "./components/Organism/ModalHabitList/ModalHabitList";
 
 function App() {
-  return <div></div>;
+    return <ModalList />;
 }
 
 export default App;
