@@ -1,20 +1,25 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Detail from "./components/Pages/Detail.jsx";
-import Home from "./components/Pages/Home.jsx";
+import GNB from "./components/Molecule/GNB/GNB";
+import Habit from "./components/pages/Habit";
+import Home from "./components/pages/Home";
+import Detail from "./components/pages/Detail";
 
 function App() {
-    return (
-        <div>
-            <Routes>
-                {/* 메인페이지 */}
-                <Route path="/" element={<Home />} />
-                <Route path="/Detail" element={<Detail />} />
-                {/* <Route path="/Study" element={<Study />} />
+  return (
+    <div>
+      <GNB />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Detail" element={<Detail />} />
+          <Route path="/Habit" element={<Habit />} />
+          {/* <Route path="/Study" element={<Study />} />
                 <Route path="/Habit" element={<Habit />} /> */}
-            </Routes>
-        </div>
-    );
+        </Routes>
+      </main>
+    </div>
+  );
 }
 
 export default App;
