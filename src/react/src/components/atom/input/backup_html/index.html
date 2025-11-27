@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>로그인</title>
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="login">
+      <label>닉네임</label>
+      <input
+        id="nickname"
+        name="nickname"
+        type="text"
+        placeholder="닉네임을 입력해주세요"
+      />
+      <p class="error-message"></p>
+
+      <label>비밀번호</label>
+      <div class="password-wrapper">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="비밀번호를 입력해주세요"
+        />
+        <img class="toggle-password" src="eye1.svg" alt="비밀번호 보기" />
+      </div>
+      <p class="error-message"></p>
+
+      <label>비밀번호 확인</label>
+      <div class="password-wrapper">
+        <input 
+          id="password2"
+          name="password2"
+          type="password"
+          placeholder="비밀번호를 다시 한 번 입력해주세요"
+        />
+        <img class="toggle-password" src="eye-off.svg" alt="비밀번호 보기" />
+      </div>
+      <p class="error-message"></p>
+
+      <button type="submit" disabled>회원가입</button>
+    </form>
+
+    <script src="input.js"></script>
+  </body>
+</html>

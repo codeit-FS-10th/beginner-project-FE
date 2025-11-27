@@ -1,0 +1,9 @@
+/*Pretendard 글꼴 전역 적용*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
+    margin: 0;
+}
