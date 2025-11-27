@@ -3,7 +3,7 @@ import BaseButton from "../../Atoms/button/BaseButton/BaseButton";
 import { Link, useLocation } from "react-router-dom";
 import "./gnb.css";
 
-const GNB = ({ size = "md" }) => {
+const GNB = ({ size = "lg" }) => {
   const gnbClass = {
     sm: "gnb--sm",
     md: "gnb--lg",
