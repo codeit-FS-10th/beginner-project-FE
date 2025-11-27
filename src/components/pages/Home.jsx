@@ -1,5 +1,5 @@
 import React from "react";
-import GNB from "../components/Molecule/GNB/GNB";
+import GNB from "../Molecule/GNB/GNB";
 
 const Home = () => {
     return (
