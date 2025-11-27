@@ -1,6 +1,6 @@
 import React from "react";
 import BaseButton from "../../Atoms/button/BaseButton/BaseButton";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./gnb.css";
 
 const GNB = ({ size = "md" }) => {
@@ -22,14 +22,20 @@ const GNB = ({ size = "md" }) => {
     lg: "lg",
   }[size];
 
+  const location = useLocation();
+  const hideButtonPath = ["/studydetail", "/todayhabit", "/todayfocus"];
+  const hideButton = hideButtonPath.includes(location.pathname);
+
   return (
     <nav className={`gnb ${gnbClass}`}>
       <Link to="/">
         <img className={logoClass} src="/Icons/img_logo.png" alt="logo" />
       </Link>
-      <Link to="/">
-        <BaseButton size={btnSize}>스터디 만들기</BaseButton>
-      </Link>
+      {!hideButton && (
+        <Link to="/">
+          <BaseButton size={btnSize}>스터디 만들기</BaseButton>
+        </Link>
+      )}
     </nav>
   );
 };
