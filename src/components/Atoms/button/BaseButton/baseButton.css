@@ -3,14 +3,14 @@
   font-style: Regular;
   font-size: 18px;
   color: #ffffff;
-  leading-trim: NONE;
+  cursor: pointer;
   line-height: 100%;
   letter-spacing: 0%;
   text-align: center;
   vertical-align: middle;
   height: 58px;
   border: none;
-  padding: 14px;
+  padding: 10px;
   border-radius: 16px;
 }
 
@@ -26,20 +26,22 @@
 }
 
 /* 사이즈 4가지 */
-.btn--xl {
-  width: 600px;
+.btn--xs {
+  width: 106px;
+  height: 38px;
+  font-size: 12px;
 }
-
-.btn--lg {
-  width: 312px;
-}
-
-.btn--md {
-  width: 288px;
-}
-
 .btn--sm {
   width: 140px;
+}
+.btn--md {
+  width: 160px;
+}
+.btn--lg {
+  width: 252px;
+}
+.btn--xl {
+  width: 288px;
 }
 
 /* full width */

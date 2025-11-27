@@ -7,10 +7,11 @@ const BaseButton = ({ children, type = "default", size = "md", ...props }) => {
     cancel: "btn--type-cancel",
   }[type];
   const sizeClass = {
-    xl: "btn--xl",
-    lg: "btn--lg",
-    md: "btn--md",
+    xs: "btn--xs",
     sm: "btn--sm",
+    md: "btn--md",
+    lg: "btn--lg",
+    xl: "btn--xl",
     full: "btn--full",
   }[size];
 
