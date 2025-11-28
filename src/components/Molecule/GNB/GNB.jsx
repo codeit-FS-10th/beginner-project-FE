@@ -31,7 +31,7 @@ function GNB() {
     }
 
     return (
-        <header>
+        <header className="gnb-header">
             <nav
                 className={`gnb ${isHome ? "gnb--home" : ""} ${
                     isDetail ? "gnb--detail" : ""
