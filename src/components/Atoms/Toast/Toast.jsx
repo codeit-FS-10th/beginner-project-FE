@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./Toast.css";
+import "../../../assets/styles/Toast.css";
 
 export default function Toast({
     point,
