@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../Molecule/Card/Card";
+import "../../assets/styles/home.css";
 
 function Home() {
     // studyData 위에 레벨로 props로 전달해야
