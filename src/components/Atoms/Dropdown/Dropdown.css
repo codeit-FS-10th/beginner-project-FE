@@ -1,50 +1,50 @@
 /*dropdown 컴포넌트*/
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .dropdown-btn {
-  width: 180px;
-  height: 42px;
-  color: #ffffff;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
+    width: 180px;
+    height: 42px;
+    color: #ffffff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  border-radius: 20px;
-  width: 180px;
-  height: 168px;
-  overflow: hidden;
-  z-index: 10;
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 20px;
+    width: 180px;
+    height: 168px;
+    overflow: hidden;
+    z-index: 10;
 }
 
 /*열릴 때*/
 .dropdown-content.show {
-  display: block;
+    display: block;
 }
 
 .dropdown-content li {
-  list-style-type: none;
-  height: 42px;
-  font-size: 16px;
-  font-weight: 400;
-  font-style: regular;
-  color: #414141;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    list-style-type: none;
+    height: 42px;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: regular;
+    color: #414141;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /*호버 효과*/
 .dropdown-content li:hover {
-    background-color: #F9FAFB;
+    background-color: #f9fafb;
 }
