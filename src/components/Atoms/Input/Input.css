@@ -1,0 +1,51 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-container input {
+  display: block;
+  width: 100%;
+  height: 56px;
+  padding: 16px 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f3f4f6;
+  font-size: 16px;
+}
+
+.input-container input::placeholder {
+  color: #9ca3af;
+}
+
+.input-container input:focus {
+  outline: none;
+}
+
+/* 에러 상태 */
+.input-container input.error {
+  border: 1px solid #f74747;
+}
+
+/* 에러 메시지 */
+.error-message {
+  color: #f74747;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 8px 0 0 0;
+}
+
+.eye-icon {
+  position: absolute;
+  display: block;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
