@@ -1,7 +1,11 @@
+.root-container {
+    display: flex;
+    justify-content: center;
+}
+
 .main-container {
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 16px;
+    padding-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -9,17 +13,15 @@
 
 .recent-container,
 .study-container {
-    border-radius: 16px;
-    padding: 24px 28px;
+    padding: 40px;
+    border-radius: 20px;
     background-color: #fff;
 }
 
 .recent-container {
     height: 302px;
 }
-.study-container {
-    height: 822px;
-}
+
 .section-title {
     color: #414141;
     font-family: Pretendard;
@@ -28,22 +30,20 @@
     line-height: normal;
 }
 
-.recent-list {
-    display: flex;
-    gap: 16px;
+.recent-container h2 {
+    margin-bottom: 30px;
 }
 
-.study-header {
+.recent-list {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
+    gap: 24px;
 }
 
 .study-controls {
     display: flex;
+    justify-content: space-between;
+    margin: 24px 0;
     align-items: center;
-    gap: 12px;
 }
 
 .study-search {
@@ -67,8 +67,8 @@
 .study-list {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px 16px;
-    margin-bottom: 24px;
+    gap: 24px;
+    margin-bottom: 60px;
 }
 
 .pagination {
