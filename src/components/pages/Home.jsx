@@ -1,26 +1,41 @@
 import React from "react";
 import Card from "../Molecule/Card/Card";
-import "../../assets/styles/home.css";
+import "../../assets/styles/Home.css";
+import { MOCK_STUDIES } from "../../mocks/studyCardMock";
 
 function Home() {
-    // studyData 위에 레벨로 props로 전달해야
-    const studyData = [
-        {
-            studyname: "아유디의 UX 스터디",
-            point: 310,
-            day: 62,
-            goal: "Slow And Steady Wins The Race!!",
-            reactionData: reactionData(),
-        },
-    ];
-    function reactionData() {
-        return [
-            { id: "dev", type: "reaction", emoji: "🧑‍💻", value: 37 },
-            { id: "fire", type: "reaction", emoji: "🔥", value: 26 },
-            { id: "heart", type: "reaction", emoji: "🤍", value: 14 },
-        ];
-    }
-    return <div>{/* <Card data={studyData} /> */}</div>;
+    return (
+        <div className="main-container">
+            <section className="recent-container">
+                <h2 className="section-title">최근 조회한 스터디</h2>
+                <div className="recent-list">
+                    <Card
+                        size={"lg"}
+                        theme={"light"}
+                        studyData={MOCK_STUDIES}
+                    />
+                </div>
+            </section>
+
+            <section className="study-container">
+                <div className="study-header">
+                    <h2 className="section-title">스터디 둘러보기</h2>
+
+                    <div className="study-controls">
+                        <input className="study-search" placeholder="검색" />
+                        <select className="study-sort">
+                            <option>최근 순</option>
+                            <option>오래된 순</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="study-list">{/* 카드 리스트 */}</div>
+
+                <div className="pagination">{/* 더보기 버튼*/}</div>
+            </section>
+        </div>
+    );
 }
 
 export default Home;
