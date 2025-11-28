@@ -1,5 +1,5 @@
-import BaseButton from "../../Atoms/button/BaseButton/BaseButton";
-import "./ModalHabitList.css";
+import BaseButton from "../../Atoms/button/BaseButton";
+import "../../../assets/styles/ModalHabitList.css";
 
 function ModalList() {
     return (
@@ -16,7 +16,7 @@ function ModalList() {
                             취소
                         </BaseButton>
                         <BaseButton type="default" size="md">
-                            수정환료
+                            수정완료
                         </BaseButton>
                     </footer>
                 </div>
