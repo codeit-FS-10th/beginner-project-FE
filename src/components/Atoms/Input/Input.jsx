@@ -1,61 +1,42 @@
 import { useState } from "react";
-import "./Input.css";
+import styles from "@styles/atom/input.module.scss";
 
-export default function Input() {
-  const [nickname, setNickname] = useState("");
-  const [showPw1, setShowPw1] = useState(false);
-  const [showPw2, setShowPw2] = useState(false);
-
-  const isNicknameError = nickname.trim() === "";
+function Input({
+  value = "",
+  onChange,
+  type = "text",
+  error = false,
+  errorMessage = "",
+  showToggle = false,
+  ...rest
+}) {
+  const [show, setShow] = useState(false);
+  const actualType = showToggle ? (show ? "text" : "password") : type;
 
   return (
-    <div className="input-container">
-      {/* 닉네임 입력 */}
-      <div className="input-wrapper">
-        <input
-          id="nickname"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          onBlur={() => setNickname(nickname.trim())}
-          className={isNicknameError ? "error" : ""}
-          placeholder="닉네임을 입력해주세요"
-        />
-        {isNicknameError && (
-          <p className="error-message">*필수 입력 사항입니다.</p>
-        )}
-      </div>
+    <div className={styles.wrapper}>
+      <input
+        className={`${styles.input} ${error ? styles.error : ""}`}
+        value={value}
+        onChange={onChange}
+        type={actualType}
+        {...rest}
+      />
 
-      {/* 비밀번호 입력 */}
-      <div className="input-wrapper">
-        <input
-          id="password2"
-          type={showPw1 ? "text" : "password"}
-          placeholder="비밀번호를 입력해주세요"
-        />
+      {showToggle && (
         <img
-          src={showPw1 ? "/img/eye2.svg" : "/img/eye1.svg"}
-          className="eye-icon"
+          src={show ? "/img/eye2.svg" : "/img/eye1.svg"}
+          className={styles.eyeIcon}
           alt="toggle password"
-          onClick={() => setShowPw1(!showPw1)}
+          onClick={() => setShow(!show)}
         />
-      </div>
+      )}
 
-      {/* 비밀번호 확인 입력 */}
-      <div className="input-wrapper">
-        <input
-          id="password2"
-          type={showPw2 ? "text" : "password"}
-          placeholder="에러사항입니다"
-        />
-        <img
-          src={showPw2 ? "/img/eye2.svg" : "/img/eye1.svg"}
-          className="eye-icon"
-          alt="toggle password"
-          onClick={() => setShowPw2(!showPw2)}
-        />
-      </div>
-
-      <button type="submit">회원가입</button>
+      {error && errorMessage && (
+        <p className={styles.errorMessage}>{errorMessage}</p>
+      )}
     </div>
   );
 }
+
+export default Input;
