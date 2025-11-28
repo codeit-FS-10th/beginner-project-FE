@@ -1,31 +1,31 @@
+header {
+    background-color: #f6f4ef;
+}
 .gnb {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 220px;
 }
 
-/* gnb Size */
-.gnb--sm {
-  padding-top: 32px;
-  padding-bottom: 32px;
-  max-width: 343px;
-  padding: 16px;
+.gnb-logo {
+    width: 182px;
+    height: 60px;
 }
 
-.gnb--lg {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  max-width: 1480px;
-  padding: 24px;
+@media (max-width: 744px) {
+    .gnb {
+        padding: 20px 24px;
+    }
+
+    .gnb.gnb--home .btn.btn--lg {
+        width: 140px;
+    }
 }
 
-/* logo size */
-.logo--sm {
-  width: 106px;
-  height: 35px;
-}
-
-.logo--lg {
-  width: 182px;
-  height: 60px;
+@media (max-width: 375px) {
+    .gnb-logo {
+        width: 106px;
+        height: 35px;
+    }
 }

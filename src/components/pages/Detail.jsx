@@ -1,5 +1,5 @@
-const Detail = () => {
-    return <div>Detail Pages</div>;
-};
+function Detail() {
+    return <div>Detail</div>;
+}
 
 export default Detail;
