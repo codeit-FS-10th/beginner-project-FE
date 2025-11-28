@@ -1,0 +1,18 @@
+import React from "react";
+
+const StopIcon = () => {
+  return (
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle
+        cx="21.6002"
+        cy="21.6"
+        r="13.86"
+        stroke="white"
+        strokeWidth="3.08"
+      />
+      <rect x="16" y="16" width="11" height="11" rx="3" fill="white" />
+    </svg>
+  );
+};
+
+export default StopIcon;

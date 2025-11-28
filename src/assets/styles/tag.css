@@ -18,7 +18,19 @@
 .tag--type-reaction {
   padding: 6px 8px;
 }
-
+/* 사이즈별 */
+.tag--type-point .tag--size-sm {
+  height: 86px;
+}
+.tag--type-point .tag--size-lg {
+  height: 116px;
+}
+.tag--type-reaction .tag--size-sm {
+  height: 48px;
+}
+.tag--type-reaction .tag--size-lg {
+  height: 56px;
+}
 /* tag theme - dark,light  */
 .tag--theme-dark {
   color: #ffffff;
