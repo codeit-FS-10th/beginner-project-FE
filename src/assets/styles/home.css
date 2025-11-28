@@ -11,7 +11,7 @@
 .study-container {
     border-radius: 16px;
     padding: 24px 28px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    background-color: #fff;
 }
 
 .recent-container {
