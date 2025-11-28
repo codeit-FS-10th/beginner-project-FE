@@ -1,3 +1,6 @@
+header {
+    background-color: #f6f4ef;
+}
 .gnb {
     display: flex;
     align-items: center;
