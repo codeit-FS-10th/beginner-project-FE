@@ -1,5 +1,7 @@
 import { useState } from "react";
-import "../../../assets/styles/Input.css";
+
+import styles from "@styls/Input.css";
+
 
 function Input({
     value = "",

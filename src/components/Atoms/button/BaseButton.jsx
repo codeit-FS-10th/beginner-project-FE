@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../assets/styles/basebutton.css";
+import "@styles/basebutton.css";
 
 const BaseButton = ({ children, type = "default", size = "md", ...props }) => {
     const typeClass = {

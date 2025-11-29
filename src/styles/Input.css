@@ -1,0 +1,46 @@
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    width: 100%;
+    height: 56px;
+    padding: 16px 24px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f3f4f6;
+    font-size: 16px;
+
+    &::placeholder {
+        color: #9ca3af;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: #ffffff;
+    }
+}
+
+.error {
+    border: 1px solid #f74747;
+}
+
+.errorMessage {
+    color: #f74747;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.eyeIcon {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transform: translateY(-50%);
+}

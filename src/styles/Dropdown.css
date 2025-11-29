@@ -25,7 +25,10 @@
   height: 168px;
   overflow: hidden;
   z-index: 10;
+
 }
+
+
 
 /*열릴 때*/
 .dropdown-content.show {
