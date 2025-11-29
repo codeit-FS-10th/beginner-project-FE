@@ -11,15 +11,13 @@ function App() {
     return (
         <>
             <GNB />
-            <main>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/Detail" element={<Detail />} />
-                    <Route path="/Habit" element={<Habit />} />
-                    <Route path="/Study" element={<Study />} />
-                    <Route path="/Focus" element={<Focus />} />
-                </Routes>
-            </main>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/Detail" element={<Detail />} />
+                <Route path="/Habit" element={<Habit />} />
+                <Route path="/Study" element={<Study />} />
+                <Route path="/Focus" element={<Focus />} />
+            </Routes>
         </>
     );
 }

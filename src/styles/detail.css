@@ -1,0 +1,144 @@
+.detail-conainer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.detail-content {
+    width: 1120px;
+    padding: 40px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 20px;
+    background: #fff;
+}
+
+.detail-content-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-buttons {
+    display: flex;
+    align-items: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.detail-share-button,
+.detail-edit-button {
+    color: var(--green-green_text_578246, #578246);
+}
+
+.detail-share-button,
+.detail-edit-button,
+.detail-delete-button {
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.detail-delete-button {
+    color: var(--gray-gray_818181, #818181);
+}
+
+.divider {
+    margin: 0 16px;
+}
+
+.divider-1 {
+    color: var(--green-green_text_578246, #578246);
+}
+
+.divider-2 {
+    color: var(--gray-gray_818181, #818181);
+}
+
+.detail-intro {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-intro-button {
+    display: flex;
+    gap: 16px;
+}
+
+.detail-habit-history {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+    height: 463px;
+}
+
+.habit-title {
+    color: var(--black-black_414141, #414141);
+    text-align: right;
+    font-family: Pretendard;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.habit-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns:
+        1fr
+        repeat(7, auto);
+    align-items: center;
+}
+
+.habit-name-cell {
+    padding: 0 24px;
+    color: var(--black-black_414141, #414141);
+    text-align: right;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.day-cell {
+    padding: 0 48px;
+    color: var(--gray-gray_818181, #818181);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px;
+}
+
+.sticker-cell {
+    padding: 14px 41px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sticker-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.sticker-cell.done .sticker-dot {
+    background: #b7d96f;
+}
+
+.sticker-cell.empty .sticker-dot {
+    background: #e4e4e4;
+}

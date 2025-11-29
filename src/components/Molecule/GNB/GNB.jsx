@@ -14,12 +14,12 @@ function GNB() {
     const showButton = isHome || isDetail;
 
     const isMax744 = useMediaQuery("(max-width: 744px)");
-    const isMax375 = useMediaQuery("(max-width: 375px)");
+    const isMax480 = useMediaQuery("(max-width: 480px)");
 
     let buttonSize = "lg";
 
     if (isHome) {
-        if (isMax375) {
+        if (isMax480) {
             buttonSize = "xs";
         } else if (isMax744) {
             buttonSize = "md";
