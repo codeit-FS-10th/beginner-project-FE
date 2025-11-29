@@ -31,3 +31,7 @@
 // export const deleteStudy = (studyId, password) => {
 //     return api.delete(`/study/${studyId}`, { data: { password } });
 // };
+
+// export const fetchBackgroundList = () => {
+//     return api.get("/study/backgrounds");
+// };
