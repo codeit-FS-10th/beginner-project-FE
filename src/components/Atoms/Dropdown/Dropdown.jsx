@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import "../../../assets/styles/Dropdown.css";
+import "@styles/Dropdown.css";
 
 export default function Dropdown({
     items = [],

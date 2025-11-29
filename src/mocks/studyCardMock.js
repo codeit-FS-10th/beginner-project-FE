@@ -1,20 +1,26 @@
+import bg1 from "@img/mockimg/card_background1.jpg";
+import bg2 from "@img/mockimg/card_background2.jpg";
+import bg3 from "@img/mockimg/card_background3.jpg";
+import bg4 from "@img/mockimg/card_background4.jpg";
+
+
 // 카드 배경 이미지
 export const BACKGROUNDS = [
   { id: "color-light-green", type: "color", value: "##E1EDDE" },
   { id: "color-cream", type: "color", value: "##FFF1CC" },
   { id: "color-blue", type: "color", value: "##E0F1F5" },
   { id: "color-pink", type: "color", value: "##FDE0E9" },
-  { id: "img-desk", type: "image", value: "/img/mockImg/card_background1.jpg" },
+  { id: "img-desk", type: "image", value: bg1},
   {
     id: "img-window",
     type: "image",
-    value: "/img/mockImg/card_background2.jpg",
+    value: bg2,
   },
-  { id: "img-tile", type: "image", value: "/img/mockImg/card_background3.jpg" },
+  { id: "img-tile", type: "image", value: bg3 },
   {
     id: "img-plant",
     type: "image",
-    value: "/img/mockImg/card_background4.jpg",
+    value: bg4,
   },
 ];
 
