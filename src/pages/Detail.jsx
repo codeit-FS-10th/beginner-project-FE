@@ -2,6 +2,7 @@ import React from "react";
 import Tag from "@Atoms/tag/Tag";
 import "@styles/detail.css";
 import { habitsFromApi } from "@mocks/habitcheck.js";
+
 function Detail() {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -39,25 +40,19 @@ function Detail() {
                     <h2 className="habit-title">습관 기록표</h2>
 
                     <div className="habit-grid">
-                        {/* 왼쪽 상단 빈칸 */}
                         <div className="habit-name-cell empty"></div>
-
-                        {/* 요일 헤더 */}
                         {days.map((day) => (
                             <div key={day} className="day-cell">
                                 {day}
                             </div>
                         ))}
 
-                        {/* 습관 목록 */}
                         {habitsFromApi.map((habit) => (
                             <React.Fragment key={habit.id}>
-                                {/* 습관명 */}
                                 <div className="habit-name-cell">
                                     {habit.name}
                                 </div>
 
-                                {/* 월~일 스티커 */}
                                 {days.map((day) => {
                                     const done = habit[day] === 1;
                                     return (
