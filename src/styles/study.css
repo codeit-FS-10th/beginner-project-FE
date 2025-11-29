@@ -1,0 +1,47 @@
+.study-main-container {
+    width: 100%;
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.study-section {
+    width: 648px;
+    padding: 24px 40px 40px;
+    border-radius: 20px;
+    background-color: #fff;
+}
+
+.bg-list {
+    display: gird;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+.study-header-title {
+    color: #414141;
+    font-family: Pretendard;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.study-form p {
+    color: var(--black-black_414141, #414141);
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin: 24px 0 16px;
+}
+
+.select-background {
+    margin-bottom: 24px !important;
+}
