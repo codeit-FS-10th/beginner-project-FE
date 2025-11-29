@@ -4,7 +4,7 @@ import GNB from "@Molecule/gnb/GNB";
 import Habit from "@pages/Habit";
 import Home from "@pages/Home";
 import Detail from "@pages/Detail";
-import Focus from "@pages/focus";
+import Focus from "@pages/Focus";
 import Study from "@pages/Study";
 
 function App() {
