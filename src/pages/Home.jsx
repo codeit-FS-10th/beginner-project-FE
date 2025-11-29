@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "@Molecule/card/Card";
-import "@styles/home.css";
+import "@styles/pages/home.css";
 import { MOCK_STUDIES } from "../mocks/studyCardMock";
 
 function Home() {
