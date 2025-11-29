@@ -1,5 +1,5 @@
 import React from "react";
-import DeleteButton from "../Atoms/button/DeleteButton";
+import DeleteButton from "@Atoms/button/DeleteButton";
 
 function Habit() {
     return (

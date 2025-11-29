@@ -1,11 +1,11 @@
-import "./assets/styles/App.css";
+import "@styles/App.css";
 import { Routes, Route } from "react-router-dom";
-import GNB from "./components/Molecule/GNB/GNB";
-import Habit from "./components/pages/Habit";
-import Home from "./components/pages/Home";
-import Detail from "./components/pages/Detail";
-import Focus from "./components/pages/focus";
-import Study from "./components/pages/Study";
+import GNB from "@Molecule/GNB/GNB";
+import Habit from "@pages/Habit";
+import Home from "@pages/Home";
+import Detail from "@pages/Detail";
+import Focus from "@pages/focus";
+import Study from "@pages/Study";
 
 function App() {
     return (

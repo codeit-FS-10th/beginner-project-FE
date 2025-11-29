@@ -1,5 +1,5 @@
-import BaseButton from "../../Atoms/button/BaseButton";
-import "../../../assets/styles/ModalHabitList.css";
+import BaseButton from "@Atoms/button/BaseButton";
+import "@styles/ModalHabitList.css";
 
 function ModalList() {
     return (
