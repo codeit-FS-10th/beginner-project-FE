@@ -1,6 +1,6 @@
 import "@styles/App.css";
 import { Routes, Route } from "react-router-dom";
-import GNB from "@Molecule/GNB/GNB";
+import GNB from "@Molecule/gnb/GNB";
 import Habit from "@pages/Habit";
 import Home from "@pages/Home";
 import Detail from "@pages/Detail";

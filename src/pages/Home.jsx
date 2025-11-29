@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "@Molecule/Card/Card";
+import Card from "@Molecule/card/Card";
 import "@styles/home.css";
 import { MOCK_STUDIES } from "../mocks/studyCardMock";
 

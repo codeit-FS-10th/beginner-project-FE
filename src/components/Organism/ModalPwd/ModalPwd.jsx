@@ -1,4 +1,4 @@
-import BaseButton from "../../Atoms/button/BaseButton";
+import BaseButton from "@Atoms/button/BaseButton";
 import "@styles/ModalPwd.css";
 
 function ModalPwd() {
