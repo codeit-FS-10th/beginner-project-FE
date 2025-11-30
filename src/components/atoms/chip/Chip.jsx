@@ -1,5 +1,5 @@
 import React from "react";
-import "@styles/chip.css";
+import "@styles/atoms/chip.css";
 
 const Chip = ({ children, variant = "default", ...props }) => {
     const className = `chip chip-state--${variant}`.trim();

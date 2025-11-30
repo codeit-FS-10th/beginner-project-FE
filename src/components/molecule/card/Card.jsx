@@ -1,6 +1,6 @@
 import React from "react";
 import Tag from "@Atoms/tag/Tag";
-import "@styles/card.css";
+import "@styles/molecule/card.css";
 
 const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
     const sizeClass = {

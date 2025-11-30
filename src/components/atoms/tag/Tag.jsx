@@ -1,6 +1,6 @@
 import React from "react";
 import { LeafIcon } from "@assets/Icons";
-import "@styles/tag.css";
+import "@styles/atoms/tag.css";
 
 const Tag = ({ type, value, emoji, size = "sm", theme = "dark" }) => {
     const typeClass = {

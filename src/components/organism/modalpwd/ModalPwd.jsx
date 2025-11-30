@@ -1,5 +1,5 @@
 import BaseButton from "@Atoms/button/BaseButton";
-import "@styles/ModalPwd.css";
+import "@styles/organism/ModalPwd.css";
 
 function ModalPwd() {
     return (

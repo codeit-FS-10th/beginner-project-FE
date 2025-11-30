@@ -1,7 +1,8 @@
 import React from "react";
 import Tag from "@Atoms/tag/Tag";
-import "@styles/detail.css";
+import "@styles/pages/detail.css";
 import { habitsFromApi } from "@mocks/habitcheck.js";
+import Modal from "../components/ui/modal/Modal";
 
 function Detail() {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
@@ -36,6 +37,7 @@ function Detail() {
                     <p>현재까지 획득한 포인트</p>
                     <Tag type="point" value="30" theme="light" />
                 </div>
+
                 <div className="detail-habit-history">
                     <h2 className="habit-title">습관 기록표</h2>
 
@@ -46,7 +48,6 @@ function Detail() {
                                 {day}
                             </div>
                         ))}
-
                         {habitsFromApi.map((habit) => (
                             <React.Fragment key={habit.id}>
                                 <div className="habit-name-cell">
