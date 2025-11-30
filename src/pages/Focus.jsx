@@ -1,7 +1,8 @@
-import Tag from "@Atoms/tag/Tag";
+import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import { useState } from "react";
-import TimerButton from "../components/Atoms/button/TimerButton";
+import TimerButton from "../components/atoms/button/TimerButton";
+import NavButton from "@atoms/button/NavButton";
 
 function Focus() {
     const [focusMinutes, setFocusMinutes] = useState(25);
@@ -20,8 +21,8 @@ function Focus() {
                         <h2>연우의 개발공장</h2>
                     </div>
                     <div className="focus-content-button">
-                        <button>오늘의 습관</button>
-                        <button>오늘의 홈</button>
+                        <NavButton to={"/habit"}>오늘의 습관</NavButton>
+                        <NavButton to={"/"}>홈</NavButton>
                     </div>
                 </div>
 
