@@ -1,6 +1,6 @@
 import "@styles/pages/study.css";
 import { mockBackgrounds } from "@mocks/studyBackgrounds";
-import BaseButton from "@Atoms/button/BaseButton";
+import BaseButton from "@atoms/button/BaseButton";
 // import { useEffect } from "react";
 
 function Study() {

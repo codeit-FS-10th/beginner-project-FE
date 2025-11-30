@@ -1,8 +1,9 @@
 import React from "react";
-import Tag from "@Atoms/tag/Tag";
+import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
 import { habitsFromApi } from "@mocks/habitcheck.js";
 import Modal from "../components/ui/modal/Modal";
+import ReactionAddButton from "../components/atoms/button/ReactionAddButton";
 
 function Detail() {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
@@ -12,6 +13,7 @@ function Detail() {
             <div className="detail-content">
                 <div className="detail-content-header">
                     <Tag type="reaction" />
+                    <ReactionAddButton />
                     <div className="detail-buttons">
                         <button className="detail-share-button">
                             공유하기
