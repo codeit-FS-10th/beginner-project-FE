@@ -1,5 +1,5 @@
 import "@styles/ui/modal.css";
-import BaseButton from "@Atoms/button/BaseButton";
+import BaseButton from "@atoms/button/BaseButton";
 
 function Modal({ children, buttons = [] }) {
     const isSingle = buttons.length === 1;

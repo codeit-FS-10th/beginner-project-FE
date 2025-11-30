@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "@styles/pages/habit.css";
-import Chip from "@Atoms/chip/chip";
+import Chip from "@atoms/chip/chip";
+import NavButton from "@atoms/button/NavButton";
 
 function Habit() {
     const [time, setTime] = useState("");
@@ -72,8 +73,8 @@ function Habit() {
                         <h2>연우의 개발공장</h2>
                     </div>
                     <div className="habit-content-button">
-                        <button>오늘의 집중</button>
-                        <button>오늘의 홈</button>
+                        <NavButton to={"/focus"}>오늘의 집중</NavButton>
+                        <NavButton to={"/"}>홈</NavButton>
                     </div>
                 </div>
 

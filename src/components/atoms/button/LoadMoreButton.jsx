@@ -1,8 +1,8 @@
-import "../../../assets/styles/loadMoreButton.css";
+import "@styles/atoms/loadMoreButton.css";
 import React from "react";
 
-const LoadMoreButton = () => {
-  return <button className="loadmore-btn">더보기</button>;
+const LoadMoreButton = ({ children }) => {
+    return <button className="loadmore-btn">{children}</button>;
 };
 
 export default LoadMoreButton;

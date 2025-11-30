@@ -1,4 +1,4 @@
-import BaseButton from "@Atoms/button/BaseButton";
+import BaseButton from "@atoms/button/BaseButton";
 import "@styles/organism/ModalHabitList.css";
 
 function ModalList() {

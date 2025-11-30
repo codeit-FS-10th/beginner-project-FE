@@ -1,7 +1,8 @@
 import React from "react";
-import Card from "@Molecule/card/Card";
+import Card from "@molecule/card/Card";
 import "@styles/pages/home.css";
 import { MOCK_STUDIES } from "../mocks/studyCardMock";
+import LoadMoreButton from "@atoms/button/LoadMoreButton";
 
 function Home() {
     return (
@@ -46,7 +47,7 @@ function Home() {
                     </div>
 
                     <div className="pagination">
-                        <button>다ㅓ보기</button>
+                        <LoadMoreButton>더보기</LoadMoreButton>
                     </div>
                 </section>
             </div>
