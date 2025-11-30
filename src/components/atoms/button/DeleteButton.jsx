@@ -1,6 +1,6 @@
 import React from "react";
 import { TrashIcon } from "@assets/Icons/index";
-import "@styles/deleteButton.css";
+import "@styles/atoms/deleteButton.css";
 
 const DeleteButton = () => {
     return (

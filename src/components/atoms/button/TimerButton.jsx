@@ -1,6 +1,6 @@
 import React from "react";
 import { PlayIcon, PauseIcon, RestartIcon, StopIcon } from "@assets/Icons";
-import "@styles/timerbutton.css";
+import "@styles/atoms/timerbutton.css";
 
 const TimerButton = ({
     variant = "start",

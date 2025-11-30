@@ -1,6 +1,6 @@
 import React from "react";
 import Tag from "@Atoms/tag/Tag";
-import "@styles/detail.css";
+import "@styles/pages/detail.css";
 import { habitsFromApi } from "@mocks/habitcheck.js";
 
 function Detail() {

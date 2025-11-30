@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import BaseButton from "@Atoms/button/BaseButton";
-import "@styles/gnb.css";
+import "@styles/molecule/gnb.css";
 import useMediaQuery from "@hooks/seMediaQuery";
 
 function GNB() {
