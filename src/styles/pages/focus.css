@@ -67,19 +67,33 @@
     width: 100%;
 }
 
-.focus-timmer {
+.focus-timmer-wrap {
+    border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+    padding: 20px;
+    margin: 100px auto 94px;
+    border-radius: 20px;
+    width: 600px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    width: 100%;
-    margin-top: 100px;
-    margin-bottom: 94px;
+}
+.focus-timer-edit-btn {
+    width: 80px;
+    height: 35px;
+    border-radius: 15px;
+    border: 1px solid #dddddd;
+    background-color: #dddddd;
+    color: #818181;
+    cursor: pointer;
+    align-self: end;
+}
+
+.focus-timmer {
     color: var(--black-black_414141, #414141);
     text-align: center;
-    font-family: Pretendard;
     font-size: 150px;
-    font-style: normal;
     font-weight: 800;
-    line-height: normal;
 }
 
 .focus-start-button {
