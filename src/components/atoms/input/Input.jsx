@@ -1,5 +1,7 @@
 import { useState } from "react";
-// import styles from "@styles/atom/input.module.scss";
+
+import styles from "@styls/Input.css";
+
 
 function Input({
     value = "",

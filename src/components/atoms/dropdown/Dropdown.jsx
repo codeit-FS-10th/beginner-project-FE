@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+
 import "@styles/atoms/Dropdown.css";
 
 export default function Dropdown({
@@ -48,4 +49,3 @@ export default function Dropdown({
         </div>
     );
 }
-//pr용
