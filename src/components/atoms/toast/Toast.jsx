@@ -11,23 +11,41 @@ const defaultOptions = {
     draggable: true,
 };
 
-export const showSuccessToast = (message, options = {}) =>
-    toast.success(message, { ...defaultOptions, ...options });
+const toastClassMap = {
+    default: "custom-toast",
+    point: "custom-toast-point",
+};
 
-export const showErrorToast = (message, options = {}) =>
-    toast.error(message, { ...defaultOptions, ...options });
+export const showSuccessToast = (message, options = {}) => {
+    const { toastType = "default", ...rest } = options;
 
-export const showInfoToast = (message, options = {}) =>
-    toast.info(message, { ...defaultOptions, ...options });
+    return toast.success(message, {
+        ...defaultOptions,
+        ...rest,
+        className: toastClassMap[toastType],
+    });
+};
+
+export const showErrorToast = (message, options = {}) => {
+    const { toastType = "default", ...rest } = options;
+
+    return toast.error(message, {
+        ...defaultOptions,
+        ...rest,
+        className: toastClassMap[toastType],
+    });
+};
+
+export const showInfoToast = (message, options = {}) => {
+    const { toastType = "default", ...rest } = options;
+
+    return toast.info(message, {
+        ...defaultOptions,
+        ...rest,
+        className: toastClassMap[toastType],
+    });
+};
 
 export default function Toast() {
-    return (
-        <ToastContainer
-            {...defaultOptions}
-            closeButton={false}
-            toastClassName={() => "custom-toast"}
-            bodyClassName={() => "custom-toast-body"}
-            progressClassName="custom-toast-progress"
-        />
-    );
+    return <ToastContainer {...defaultOptions} closeButton={false} />;
 }

@@ -74,7 +74,10 @@
     margin: 24px 0 40px;
 }
 
-.input-box {
-    margin-top: 16px;
-    margin-bottom: 40px;
+.modal-body label {
+    margin-bottom: 16px;
+}
+
+.modal-footer {
+    margin-top: 40px;
 }

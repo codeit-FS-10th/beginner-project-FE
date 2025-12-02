@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MOCK_STUDIES } from "@mocks/studyCardMock";
+import { fetchStudies } from "@api/service/studyservice";
 import { getRecentStudies } from "@utils/recentStudy";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
@@ -11,14 +11,34 @@ function Home() {
     const [sortOption, setSortOption] = useState("정렬 기준");
     const [searchText, setSearchText] = useState("");
     const [recentStudy, setRecentStudy] = useState([]);
+    const [studies, setStudies] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const filteredStudies = MOCK_STUDIES.filter((study) =>
+    const filteredStudies = studies.filter((study) =>
         study.studyName.toLowerCase().includes(searchText.toLowerCase())
     );
 
     useEffect(() => {
         const data = getRecentStudies();
         setRecentStudy(data);
+    }, []);
+
+    useEffect(() => {
+        const loadStudies = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchStudies();
+                setStudies(data);
+            } catch (err) {
+                console.error(err);
+                setError("스터디 목록을 불러오는 데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadStudies();
     }, []);
 
     return (

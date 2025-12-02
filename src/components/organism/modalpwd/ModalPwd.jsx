@@ -2,7 +2,7 @@ import { useState } from "react";
 import BaseButton from "@atoms/button/BaseButton";
 import Input from "@atoms/input/Input";
 import "@styles/organism/ModalPwd.css";
-import { showErrorToast } from "@atoms/toast/Toast";
+import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 function ModalPwd({ onClose }) {
     const [password, setPassword] = useState("");

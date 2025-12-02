@@ -4,6 +4,7 @@
 
 .custom-toast {
     display: flex;
+    width: auto;
     background: var(--pink-pink_FDE0E9, #fde0e9);
     border-radius: 12px;
     padding: 14px 28px;
@@ -12,8 +13,19 @@
     font-size: 16px;
     font-weight: 500;
     line-height: normal;
-    border: 1px solid rgba(148, 163, 184, 0.4);
     align-items: center;
+}
+
+.custom-toast-point {
+    width: auto;
+    background: var(--green-green_E1EDDE, #e1edde);
+    color: var(--green-green_text_578246, #578246);
+    font-family: Pretendard;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
 .custom-toast-body {
