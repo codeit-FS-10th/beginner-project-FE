@@ -6,11 +6,13 @@ import Home from "@pages/Home";
 import Detail from "@pages/Detail";
 import Focus from "@pages/Focus";
 import Study from "@pages/Study";
+import Toast from "./components/atoms/toast/Toast";
 
 function App() {
     return (
         <>
             <GNB />
+            <Toast />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/Detail" element={<Detail />} />
