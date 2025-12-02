@@ -16,11 +16,18 @@ function Study() {
                 <form className="study-form">
                     <h2 className="study-header-title">스터디 만들기</h2>
                     <p>닉네임</p>
-                    <input type="text" placeholder="sad" />
+                    <Input
+                        onChange={() => {}}
+                        placeholder="닉네임을 입력해 주세요"
+                    />
                     <p>스터디 이름</p>
-                    <input type="text" placeholder="sad" />
+                    <Input
+                        onChange={() => {}}
+                        placeholder="스터디 이름을 입력해주세요"
+                    />
                     <p>소개</p>
-                    <input type="text" placeholder="sad" />
+                    <Input placeholder="소개 멘트를 작성해 주세요" multiline />
+
                     <p className="select-background">배경을 선택해주세요</p>
                     <div className="bg-list">
                         {mockBackgrounds.map((bg) => (
@@ -28,8 +35,17 @@ function Study() {
                         ))}
                     </div>
                     <p>비밀번호</p>
+                    <Input
+                        type="password"
+                        onChange={() => {}}
+                        placeholder="비밀번호를 입력해 주세요"
+                    />
                     <p>비밀번호 확인</p>
-                    <input type="password" placeholder="sad" />
+                    <Input
+                        type="password"
+                        onChange={() => {}}
+                        placeholder="비밀번호를 다시 한 번 입력해 주세요"
+                    />
                     <BaseButton type="default" size="full">
                         만들기
                     </BaseButton>
