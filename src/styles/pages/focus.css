@@ -22,6 +22,7 @@
     display: flex;
     gap: 16px;
 }
+
 .focus-header-title h2 {
     color: #414141;
     font-family: Pretendard;
@@ -78,6 +79,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .focus-timer-edit-btn {
     width: 80px;
     height: 35px;
@@ -96,7 +98,69 @@
     font-weight: 800;
 }
 
+/* 10초 이하 위험 색상 */
+.focus-timmer--danger {
+    color: #ff3b30;
+}
+
+/* finished 상태 (연한 회색) */
+.focus-timmer--finished {
+    color: #b9b9b9;
+}
+
 .focus-start-button {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+}
+
+.focus-timer-edit-input {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-timer-edit-input input {
+    width: 80px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: right;
+}
+
+/* Toast 공통 위치 */
+.focus-toast-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* 포인트 Toast */
+.focus-toast {
+    padding: 10px 24px;
+    border-radius: 20px;
+    background: #e3f3dd;
+    color: #414141;
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pause Toast */
+.focus-toast-pause {
+    padding: 10px 24px;
+    border-radius: 20px;
+    background: #fde9e9;
+    color: #d14747;
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
 }
