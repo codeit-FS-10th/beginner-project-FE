@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import "@styles/atoms/Toast.css";
 
 export default function Toast({

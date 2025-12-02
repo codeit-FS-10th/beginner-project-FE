@@ -1,42 +1,27 @@
-import { useState } from "react";
-// import styles from "@styles/atom/input.module.scss";
+import "@styles/atoms/Input.css";
 
-function Input({
-    value = "",
+export default function Input({
+    label,
+    placeholder,
+    value,
     onChange,
-    type = "text",
-    error = false,
-    errorMessage = "",
-    showToggle = false,
-    ...rest
+    error,
+    errorMessage,
 }) {
-    const [show, setShow] = useState(false);
-    const actualType = showToggle ? (show ? "text" : "password") : type;
-
     return (
         <div className={styles.wrapper}>
+            {label && <label className={styles.label}>{label}</label>}
+
             <input
                 className={`${styles.input} ${error ? styles.error : ""}`}
                 value={value}
                 onChange={onChange}
-                type={actualType}
-                {...rest}
+                placeholder={placeholder}
             />
 
-            {showToggle && (
-                <img
-                    src={show ? "/img/eye2.svg" : "/img/eye1.svg"}
-                    className={styles.eyeIcon}
-                    alt="toggle password"
-                    onClick={() => setShow(!show)}
-                />
-            )}
-
             {error && errorMessage && (
-                <p className={styles.errorMessage}>{errorMessage}</p>
+                <p className={styles.errorMsg}>{errorMessage}</p>
             )}
         </div>
     );
 }
-
-export default Input;
