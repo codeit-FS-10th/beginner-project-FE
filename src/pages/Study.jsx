@@ -1,6 +1,8 @@
 import "@styles/pages/study.css";
 import { mockBackgrounds } from "@mocks/studyBackgrounds";
 import BaseButton from "@atoms/button/BaseButton";
+import Input from "../components/atoms/input/Input";
+import Toast from "../components/atoms/toast/Toast";
 // import { useEffect } from "react";
 
 function Study() {
@@ -26,7 +28,6 @@ function Study() {
                         ))}
                     </div>
                     <p>비밀번호</p>
-                    <input type="password" placeholder="sad" />
                     <p>비밀번호 확인</p>
                     <input type="password" placeholder="sad" />
                     <BaseButton type="default" size="full">

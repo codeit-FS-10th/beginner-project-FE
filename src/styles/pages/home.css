@@ -77,3 +77,15 @@
     align-items: center;
     gap: 12px;
 }
+
+.study-search-input {
+    display: flex;
+    width: 335px;
+    padding: 12px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    background: #fff;
+}

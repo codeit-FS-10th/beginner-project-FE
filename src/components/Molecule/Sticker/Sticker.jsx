@@ -1,5 +1,3 @@
-import "../../../assets/styles/Sticker.css";
-
 function Sticker({ type }) {
     const src = `/img/${type}.svg`;
 

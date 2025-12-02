@@ -1,12 +1,17 @@
 import React from "react";
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
+import { useEffect } from "react";
 import { habitsFromApi } from "@mocks/habitcheck.js";
-import Modal from "../components/ui/modal/Modal";
-import ReactionAddButton from "../components/atoms/button/ReactionAddButton";
+import ReactionAddButton from "@atoms/button/ReactionAddButton";
 
-function Detail() {
+function Detail({ study }) {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
+
+    useEffect(() => {
+        if (!study) return;
+        addRecentStudy(study);
+    }, [study]);
 
     return (
         <div className="detail-conainer">

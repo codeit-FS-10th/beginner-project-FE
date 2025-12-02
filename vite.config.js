@@ -13,6 +13,7 @@ export default defineConfig({
             "@pages": "/src/pages",
             "@hooks": "/src/hooks",
             "@mocks": "/src/mocks",
+            "@utils": "/src/utils",
             "@api": "/src/api",
         },
     },
