@@ -1,4 +1,4 @@
-import "@styles/molecule/sticker.css";
+// import "@styles/molecule/sticker.css";
 import activeImg from "@img/sticker_active.svg";
 import defaultImg from "@img/sticker_default.svg";
 
