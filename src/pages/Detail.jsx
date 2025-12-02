@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
-import { useEffect } from "react";
 import { habitsFromApi } from "@mocks/habitcheck.js";
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
+import ModalPwd from "../components/organism/modalpwd/ModalPwd";
 
 function Detail({ study }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     useEffect(() => {
         if (!study) return;
-        addRecentStudy(study);
+        // addRecentStudy(study);
     }, [study]);
 
     return (
@@ -24,9 +25,17 @@ function Detail({ study }) {
                             공유하기
                         </button>
                         <span className="divider divider-1">|</span>
-                        <button className="detail-edit-button">수정하기</button>
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="detail-edit-button"
+                        >
+                            수정하기
+                        </button>
                         <span className="divider divider-2">|</span>
-                        <button className="detail-delete-button">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="detail-delete-button"
+                        >
                             스터디 삭제하기
                         </button>
                     </div>
@@ -44,7 +53,6 @@ function Detail({ study }) {
                     <p>현재까지 획득한 포인트</p>
                     <Tag type="point" value="30" theme="light" />
                 </div>
-
                 <div className="detail-habit-history">
                     <h2 className="habit-title">습관 기록표</h2>
 
@@ -79,6 +87,7 @@ function Detail({ study }) {
                     </div>
                 </div>
             </div>
+            {isModalOpen && <ModalPwd onClose={() => setIsModalOpen(false)} />}
         </div>
     );
 }
