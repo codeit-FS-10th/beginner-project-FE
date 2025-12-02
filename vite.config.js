@@ -6,7 +6,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@assets": "/src/assets",
-            "@img": "/src/assets/Img",
+            "@img": "/src/assets/img",
             "@styles": "/src/styles",
             "@atoms": "/src/components/atoms",
             "@molecule": "/src/components/molecule",

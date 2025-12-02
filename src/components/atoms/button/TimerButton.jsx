@@ -45,27 +45,24 @@ const TimerButton = ({
         restart: <RestartIcon />,
     }[variant];
 
-    const displayLable = function (variant) {
-        if (variant === "start") {
-            return "Start!";
-        }
-        if (variant === "stop") {
-            return "Stop!";
-        } else {
-            return "";
-        }
+    const displayLabel = (variant) => {
+        if (variant === "start") return "Start!";
+        if (variant === "stop") return "Stop!";
+        return "";
     };
 
     const hasLabel = variant === "start" || variant === "stop";
 
     return (
         <button
-            className={`timer-btn ${variantClass} ${statusClass}  ${sizeClass}`}
+            className={`timer-btn ${variantClass} ${statusClass} ${sizeClass}`}
+            disabled={status === "inactive"}
+            {...props}
         >
             <span className={`timer-icon--${size}`}>{displayIcon}</span>
             {hasLabel && (
                 <span className={`timer-label--${size}`}>
-                    {displayLable(variant)}
+                    {displayLabel(variant)}
                 </span>
             )}
         </button>
