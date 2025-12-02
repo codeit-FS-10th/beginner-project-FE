@@ -1,25 +1,25 @@
 import React from "react";
 import EmojiButton from "./EmojiButton";
-import "../../../assets/styles/EmojiButton.css";
+import EmojiPickerWrapper from "./EmojiPickerWrapper";
+import "../../../styles/EmojiGroup.css";
 
-export default function EmojiGroup() {
-    const emojiData = [
-        { emoji: "🙇🏻‍♀️", count: 37 },
-        { emoji: "👍🏻", count: 11 },
-        { emoji: "🤩", count: 9 },
-        { emoji: "🤩", count: 9 },
-        { emoji: "🙇🏻‍♀️", count: 37 },
-    ];
-
+export default function EmojiGroup({ reactions, onEmojiClick, onAddEmoji }) {
     return (
         <div className="emoji-group">
-            {emojiData.map((item, index) => (
-                <EmojiButton
-                    key={index}
-                    emoji={item.emoji}
-                    count={item.count}
-                />
-            ))}
+            <div className="emoji-group__inner">
+                {reactions.map((item) => (
+                    <EmojiButton
+                        key={item.id}
+                        emoji={item.emoji}
+                        count={item.count}
+                        isActive={item.me}
+                        onClick={() => onEmojiClick?.(item.emoji)}
+                    />
+                ))}
+                <EmojiPickerWrapper onSelect={onAddEmoji}>
+                    <EmojiButton variant="add" />
+                </EmojiPickerWrapper>
+            </div>
         </div>
     );
 }

@@ -1,13 +1,30 @@
-import React from "react";
-import "../../../assets/styles/EmojiButton.css";
+import "../../../styles/EmojiButton.css";
 
-function EmojiButton({ emoji, count }) {
+export default function EmojiButton({
+    emoji,
+    count,
+    isActive = false,
+    onClick,
+    variant = "default",
+}) {
+    const isAdd = variant === "add"; // 따로 스타일링을 위해 변수 생성 (EmojiPickerWrapper에서 사용됨)
+
     return (
-        <div className="emoji-button">
-            <span className="emoji-icon">{emoji}</span>
-            <span className="emoji-count">{count}</span>
-        </div>
+        <button
+            type="button"
+            className={`emoji-button 
+                ${isActive ? "emoji-button--active" : ""} 
+                ${isAdd ? "emoji-button--add" : ""}`}
+            onClick={onClick}
+        >
+            {isAdd ? (
+                <span className="emoji-button__icon">+</span>
+            ) : (
+                <>
+                    <span className="emoji-button__icon">{emoji}</span>
+                    <span className="emoji-button__count">{count}</span>
+                </>
+            )}
+        </button>
     );
 }
-
-export default EmojiButton;
