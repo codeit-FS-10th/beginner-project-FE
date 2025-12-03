@@ -3,7 +3,7 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
 import ModalPwd from "@organism/ModalPwd";
-import Sticker from "@molecule/Sticker/Sticker";
+import Sticker from "@molecule/sticker/Sticker";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { fetchTodayHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";

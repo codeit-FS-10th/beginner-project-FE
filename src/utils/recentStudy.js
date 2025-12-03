@@ -1,5 +1,5 @@
 const STORAGE_KEY = "recentStudies";
-const MAX_RECENT = 4; // 최근 조회 4개까지만 유지 같은 느낌
+const MAX_RECENT = 3;
 
 export const getRecentStudies = () => {
     if (typeof window === "undefined") return [];
