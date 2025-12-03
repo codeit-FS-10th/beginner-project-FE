@@ -1,28 +1,54 @@
+import SmileIcon from "@assets/Img/ic_smile.svg";
 import "@styles/EmojiButton.css";
 
 export default function EmojiButton({
+    variant = "normal", // 'normal' | 'more' | 'add'
     emoji,
     count,
-    isActive = false,
+    label,
     onClick,
-    variant = "default",
+    isActive = false,
 }) {
-    const isAdd = variant === "add"; // 따로 스타일링을 위해 변수 생성 (EmojiPickerWrapper에서 사용됨)
-
     return (
         <button
             type="button"
-            className={`emoji-button 
-                ${isActive ? "emoji-button--active" : ""} 
-                ${isAdd ? "emoji-button--add" : ""}`}
+            className={`
+                emoji-button
+                ${variant === "normal" ? "emoji-button--normal" : ""}
+                ${variant === "add" ? "emoji-button--add" : ""}
+                ${variant === "more" ? "emoji-button--more" : ""}
+                ${isActive ? "emoji-button--active" : ""}
+            `}
             onClick={onClick}
         >
-            {isAdd ? (
-                <span className="emoji-button__icon">+</span>
-            ) : (
+            {/* ------------------------
+                NORMAL (이모지 + 카운트)
+            ------------------------- */}
+            {variant === "normal" && (
                 <>
-                    <span className="emoji-button__icon">{emoji}</span>
-                    <span className="emoji-button__count">{count}</span>
+                    <span className="emoji-normal-icon">{emoji}</span>
+                    <span className="emoji-normal-count">{count}</span>
+                </>
+            )}
+
+            {/* ------------------------
+                MORE (더보기 버튼)
+            ------------------------- */}
+            {variant === "more" && (
+                <span className="emoji-more-label">{label}</span>
+            )}
+
+            {/* ------------------------
+                ADD (이모지 추가 버튼)
+            ------------------------- */}
+            {variant === "add" && (
+                <>
+                    <img
+                        src={SmileIcon}
+                        alt="add emoji"
+                        className="emoji-add-icon"
+                    />
+                    <span className="emoji-add-label">추가</span>
                 </>
             )}
         </button>
