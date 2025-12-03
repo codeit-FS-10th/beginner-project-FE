@@ -1,10 +1,10 @@
-// import api from "@api/axiosinstance.js";
+import api from "../axiosInstance.js"
 
-// export const fetchTodayHabits = (studyId, password) => {
-//     return api.get(`/studies/${studyId}/habits/today`, {
-//         params: { password },
-//     });
-// };
+export const fetchTodayHabits =  async (studyId) => {
+    const res = await api.get(`/studies/${studyId}/habits`);
+    return res.data;
+};
+
 
 // export const createHabit = (studyId, payload) => {
 //     return api.post(`/studies/${studyId}/habits`, payload);

@@ -1,0 +1,166 @@
+.focus-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 39px;
+}
+
+.focus-content {
+    width: 1168px;
+    padding: 40px;
+    border-radius: 20px;
+    background: #fff;
+}
+
+.focus-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.focus-content-button {
+    display: flex;
+    gap: 16px;
+}
+
+.focus-header-title h2 {
+    color: #414141;
+    font-family: Pretendard;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.focus-total-point {
+    color: var(--gray-gray_818181, #818181);
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 16px 0 8px 0;
+}
+
+.focus-today {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+    padding: 40px 24px;
+    width: 1120px;
+    height: 551px;
+    border-radius: 20px;
+    border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+    background: #fff;
+}
+
+.focus-today h2 {
+    color: var(--black-black_414141, #414141);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.focus-box {
+    width: 100%;
+}
+
+.focus-timmer-wrap {
+    border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+    padding: 20px;
+    margin: 100px auto 94px;
+    border-radius: 20px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-timer-edit-btn {
+    width: 80px;
+    height: 35px;
+    border-radius: 15px;
+    border: 1px solid #dddddd;
+    background-color: #dddddd;
+    color: #818181;
+    cursor: pointer;
+    align-self: end;
+}
+
+.focus-timmer {
+    color: var(--black-black_414141, #414141);
+    text-align: center;
+    font-size: 150px;
+    font-weight: 800;
+}
+
+/* 10초 이하 위험 색상 */
+.focus-timmer--danger {
+    color: #ff3b30;
+}
+
+/* finished 상태 (연한 회색) */
+.focus-timmer--finished {
+    color: #b9b9b9;
+}
+
+.focus-start-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+}
+
+.focus-timer-edit-input {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-timer-edit-input input {
+    width: 80px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: right;
+}
+
+/* Toast 공통 위치 */
+.focus-toast-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+/* 포인트 Toast */
+.focus-toast {
+    padding: 10px 24px;
+    border-radius: 20px;
+    background: #e3f3dd;
+    color: #414141;
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pause Toast */
+.focus-toast-pause {
+    padding: 10px 24px;
+    border-radius: 20px;
+    background: #fde9e9;
+    color: #d14747;
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

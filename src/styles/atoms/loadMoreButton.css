@@ -1,0 +1,11 @@
+.loadmore-btn {
+  width: 280px;
+  height: 53px;
+  border-radius: 20px;
+  border: 1px solid #dddddd;
+  background-color: #ffffff;
+  color: #578246;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}

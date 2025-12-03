@@ -1,0 +1,82 @@
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    cursor: pointer;
+}
+.card--sm {
+    width: 180px;
+    height: 120px;
+    padding: 16px;
+}
+.card--lg {
+    width: 298px;
+    height: 183px;
+    padding: 24px;
+}
+.card--inner {
+}
+
+/* 카드헤더 - title + point 태그 + day  */
+.title-box {
+    display: flex;
+    color: #414141;
+    /* align-item: center;
+  justify-content: center; */
+    /* flex-direction: row;
+*/
+}
+
+.title-box.title-box-sm {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.title-box.title-box-lg {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+}
+
+/* .title-box.title-box-lg p {
+  text-align: center;
+} */
+.title-box p {
+    font-weight: 700;
+    margin: 0;
+}
+
+.title-sm {
+    font-size: 16px;
+}
+.title-lg {
+    font-size: 18px;
+}
+.auther {
+    color: #578246;
+}
+/* 목표 문구 */
+.goal-sm {
+    margin-bottom: 11px;
+}
+.goal-lg {
+    margin-top: 30px;
+    margin-bottom: 54px;
+}
+
+/* .title-box-dark > * {
+    color: #414141;
+}
+.title-box-light > * {
+    color: ##ffffff;
+} */
+/* reaction 태그들  */
+.card--reactions {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    gap: 5px;
+    margin: 0;
+}

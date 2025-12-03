@@ -1,0 +1,70 @@
+.timer-btn {
+    border: none;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/* variant: start, stop, pause, restart */
+.timer--start {
+    background-color: #99c08e;
+}
+.timer--stop {
+    background-color: #99c08e;
+}
+.timer--pause {
+    background-color: #578246;
+}
+.timer--restart {
+    background-color: #99c08e;
+}
+
+/* status: active / inactive */
+.timer--active {
+    /* 그대로 */
+}
+.timer--inactive {
+    background-color: #818181;
+}
+
+/* shape & size */
+.timer-pill--sm {
+    width: 140px;
+    height: 48px;
+}
+.timer-pill--lg {
+    width: 333px;
+    height: 64px;
+}
+.timer-circle--sm {
+    width: 48px;
+    height: 48px;
+}
+.timer-circle--lg {
+    width: 64px;
+    height: 64px;
+}
+
+/* icon size */
+.timer-icon--sm {
+    width: 25px;
+    height: 25px;
+}
+.timer-icon--lg {
+    width: 28px;
+    height: 28px;
+}
+
+/* label size */
+.timer-label--sm {
+    font-size: 18px;
+    margin-left: 12px;
+}
+.timer-label--lg {
+    font-size: 28px;
+    margin-left: 23px;
+}
