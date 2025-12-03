@@ -11,7 +11,7 @@ import Tag from "@atoms/tag/Tag";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/sticker/Sticker";
 import NavButton from "@atoms/button/NavButton";
-import EmojiGroup from "../components/molecule/Emoji/EmojiGroup";
+// import EmojiGroup from "../components/molecule/Emoji/EmojiGroup";
 
 function Detail() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,9 +60,8 @@ function Detail() {
                     : item
             )
         );
-
-        // TODO: 여기서 PATCH /studies/:id/emoji 로 서버에 반영
     };
+
     const handleAddEmoji = (emoji) => {
         setReactions((prev) => [
             ...prev,
@@ -73,8 +72,6 @@ function Detail() {
                 me: true,
             },
         ]);
-
-        // TODO: 여기서 POST /studies/:id/emoji 로 서버에 반영
     };
 
     useEffect(() => {
@@ -85,21 +82,19 @@ function Detail() {
                 const raw = await fetchEmoji(studyId);
                 console.log("이모지 응답 raw:", raw);
 
-                // 🔥 안전하게 배열인지 한 번 체크
                 const arr = Array.isArray(raw) ? raw : raw?.data ?? [];
 
-                // 🔥 UNICODE, COUNTING -> EmojiGroup에서 쓰는 형태로 변환
                 const mapped = arr.map((item, index) => ({
-                    id: index, // 또는 item.REG_DATE, item.STUDY_ID 등으로 유니크하게
+                    id: index,
                     emoji: item.UNICODE,
                     count: item.COUNTING ?? 0,
-                    me: false, // TODO: 나중에 "내가 눌렀는지" 정보 있으면 여기 반영
+                    me: false,
                 }));
 
                 setReactions(mapped);
             } catch (err) {
                 console.error("이모지 불러오기 실패:", err);
-                setReactions([]); // 실패해도 map 에러 안 나게
+                setReactions([]);
             }
         };
 
@@ -165,11 +160,11 @@ function Detail() {
             <div className="detail-content">
                 <div className="detail-content-header">
                     <div className="detail-content-first">
-                        <EmojiGroup
+                        {/* <EmojiGroup
                             reactions={reactions}
                             onEmojiClick={handleEmojiClick}
                             onAddEmoji={handleAddEmoji}
-                        />
+                        /> */}
                     </div>
                     <div className="detail-buttons">
                         <button className="detail-share-button">

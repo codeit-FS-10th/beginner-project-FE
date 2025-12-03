@@ -1,4 +1,4 @@
-// import api from "@api/axiosinstance.js";
+import api from "@api/axiosinstance.js";
 
 // export const fetchFocusInfo = (studyId, password) => {
 //     return api.get(`/study/${studyId}/focus`, {

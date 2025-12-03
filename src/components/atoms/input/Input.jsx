@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "@styles/atoms/Input.css";
 
-import eyeClosed from "@assets/img/eye1.svg";
-import eyeOpen from "@assets/img/eye2.svg";
+import eyeClosed from "@img/eye1.svg";
+import eyeOpen from "@img/eye2.svg";
 
 export default function Input({
     label,
