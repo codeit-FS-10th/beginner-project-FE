@@ -10,6 +10,7 @@ export default defineConfig({
             "@styles": "/src/styles",
             "@atoms": "/src/components/atoms",
             "@molecule": "/src/components/molecule",
+            "@organism": "/src/components/organism",
             "@pages": "/src/pages",
             "@hooks": "/src/hooks",
             "@mocks": "/src/mocks",

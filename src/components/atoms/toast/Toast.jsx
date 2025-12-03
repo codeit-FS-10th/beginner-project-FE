@@ -1,40 +1,51 @@
-import { useEffect, useState } from "react";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "@styles/atoms/Toast.css";
 
-export default function Toast({
-    point,
-    type = "point",
-    duration = 2000,
-    onClose,
-}) {
-    const [visible, setVisible] = useState(true);
+const defaultOptions = {
+    position: "bottom-center",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+};
 
-    useEffect(() => {
-        if (!visible) return;
+const toastClassMap = {
+    default: "custom-toast",
+    point: "custom-toast-point",
+};
 
-        const timer = setTimeout(() => {
-            setVisible(false);
-            onClose?.();
-        }, duration);
+export const showSuccessToast = (message, options = {}) => {
+    const { toastType = "default", ...rest } = options;
 
-        return () => clearTimeout(timer);
-    }, [visible, duration, onClose]);
+    return toast.success(message, {
+        ...defaultOptions,
+        ...rest,
+        className: toastClassMap[toastType],
+    });
+};
 
-    if (!visible) return null;
+export const showErrorToast = (message, options = {}) => {
+    const { toastType = "default", ...rest } = options;
 
-    return (
-        <div className={`toast ${type}`}>
-            {type === "point" && (
-                <h3 className="point_lg">
-                    🎉 <span className="point_number">{point}</span>포인트를
-                    획득했습니다!
-                </h3>
-            )}
+    return toast.error(message, {
+        ...defaultOptions,
+        ...rest,
+        className: toastClassMap[toastType],
+    });
+};
 
-            {type === "warning" && (
-                <h3 className="warning_lg">🚨 집중이 중단되었습니다!</h3>
-            )}
-        </div>
-    );
+export const showInfoToast = (message, options = {}) => {
+    const { toastType = "default", ...rest } = options;
+
+    return toast.info(message, {
+        ...defaultOptions,
+        ...rest,
+        className: toastClassMap[toastType],
+    });
+};
+
+export default function Toast() {
+    return <ToastContainer {...defaultOptions} closeButton={false} />;
 }

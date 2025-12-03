@@ -9,7 +9,7 @@
 
 .study-section {
     width: 648px;
-    padding: 24px 40px 40px;
+    padding: 24px 24px 40px;
     border-radius: 20px;
     background-color: #fff;
 }
@@ -43,4 +43,12 @@
 
 .select-background {
     margin-bottom: 24px !important;
+}
+
+.error-text {
+    color: var(--red-error_C41013, #c41013) !important;
+    font-family: Pretendard !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    margin-top: 8px !important;
 }

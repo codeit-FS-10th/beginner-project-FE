@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MOCK_STUDIES } from "@mocks/studyCardMock";
+import { fetchStudies } from "@api/service/studyservice";
 import { getRecentStudies } from "@utils/recentStudy";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
@@ -11,19 +11,73 @@ function Home() {
     const [sortOption, setSortOption] = useState("정렬 기준");
     const [searchText, setSearchText] = useState("");
     const [recentStudy, setRecentStudy] = useState([]);
+    const [studies, setStudies] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
 
-    const filteredStudies = MOCK_STUDIES.filter((study) =>
-        study.studyName.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [error, setError] = useState(null);
+
+    const PAGE_SIZE = 6;
+
+    const filteredStudies = (studies ?? []).filter((study) => {
+        const name = study?.NAME ?? "";
+        return name.toLowerCase().includes(searchText.toLowerCase());
+    });
 
     useEffect(() => {
         const data = getRecentStudies();
         setRecentStudy(data);
     }, []);
 
+    const loadStudies = async ({ pageToLoad = 1, append = false } = {}) => {
+        try {
+            if (append) {
+                setLoadingMore(true);
+            } else {
+                setLoading(true);
+                setError(null);
+            }
+
+            // 🔥 fetchStudies는 전체 응답을 그대로 반환한다고 가정
+            const res = await fetchStudies({
+                page: pageToLoad,
+                limit: PAGE_SIZE,
+            });
+
+            const items = res.items ?? []; // ✅ 리스트만 추출
+            const totalPages = res.totalPages ?? 1;
+
+            // studies는 항상 "배열"만 저장
+            setStudies((prev) => (append ? [...prev, ...items] : items));
+
+            // hasMore는 페이지 기반으로 계산
+            setHasMore(pageToLoad < totalPages);
+
+            setPage(pageToLoad);
+        } catch (err) {
+            console.error(err);
+            setError("스터디 목록을 불러오는 데 실패했습니다.");
+        } finally {
+            setLoading(false);
+            setLoadingMore(false);
+        }
+    };
+
+    useEffect(() => {
+        loadStudies({ pageToLoad: 1, append: false });
+    }, []);
+
+    const handleLoadMore = () => {
+        if (!hasMore || loadingMore) return;
+        loadStudies({ pageToLoad: page + 1, append: true });
+    };
+
     return (
         <div className="root-container">
             <div className="main-container">
+                {/* 최근 조회한 스터디 */}
                 <section className="recent-container">
                     <h2 className="section-title">최근 조회한 스터디</h2>
                     <div className="recent-list">
@@ -41,6 +95,7 @@ function Home() {
                     </div>
                 </section>
 
+                {/* 스터디 둘러보기 */}
                 <section className="study-container">
                     <div className="study-header">
                         <h2 className="section-title">스터디 둘러보기</h2>
@@ -62,19 +117,27 @@ function Home() {
                     </div>
 
                     <div className="study-list">
-                        {filteredStudies.length === 0 ? (
+                        {loading ? (
+                            <p>불러오는 중...</p>
+                        ) : error ? (
+                            <p>{error}</p>
+                        ) : filteredStudies.length === 0 ? (
                             <p>아직 둘러 볼 스터디가 없어요</p>
                         ) : (
                             <Card
-                                size={"lg"}
-                                theme={"light"}
+                                size="lg"
+                                theme="light"
                                 studyData={filteredStudies}
                             />
                         )}
                     </div>
 
                     <div className="pagination">
-                        <LoadMoreButton>더보기</LoadMoreButton>
+                        {hasMore && !loading && (
+                            <LoadMoreButton onClick={handleLoadMore}>
+                                {loadingMore ? "불러오는 중..." : "더보기"}
+                            </LoadMoreButton>
+                        )}
                     </div>
                 </section>
             </div>

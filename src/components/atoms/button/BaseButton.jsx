@@ -16,7 +16,7 @@ const BaseButton = ({ children, type = "default", size = "md", ...props }) => {
     }[size];
 
     return (
-        <button className={`btn ${typeClass} ${sizeClass}`.trim()}>
+        <button className={`btn ${typeClass} ${sizeClass}`.trim()} {...props}>
             {children}
         </button>
     );
