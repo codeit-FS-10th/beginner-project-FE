@@ -1,9 +1,8 @@
 import React from "react";
 import EmojiButton from "./EmojiButton";
-import EmojiPickerWrapper from "./EmojiPickerWrapper";
 import "@styles/EmojiGroup.css";
 
-export default function EmojiGroup({ reactions, onEmojiClick, onAddEmoji }) {
+export default function EmojiGroup({ reactions, onEmojiClick }) {
     return (
         <div className="emoji-group">
             <div className="emoji-group__inner">
@@ -16,9 +15,6 @@ export default function EmojiGroup({ reactions, onEmojiClick, onAddEmoji }) {
                         onClick={() => onEmojiClick?.(item.emoji)}
                     />
                 ))}
-                <EmojiPickerWrapper onSelect={onAddEmoji}>
-                    <EmojiButton variant="add" />
-                </EmojiPickerWrapper>
             </div>
         </div>
     );
