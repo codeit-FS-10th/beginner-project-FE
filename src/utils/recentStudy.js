@@ -1,29 +1,39 @@
-
 const STORAGE_KEY = "recentStudies";
-const MAX_RECENT = 5;
+const MAX_RECENT = 4; // 최근 조회 4개까지만 유지 같은 느낌
 
-export function getRecentStudies() {
+export const getRecentStudies = () => {
+    if (typeof window === "undefined") return [];
+
     try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return [];
-        return JSON.parse(raw);
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return [];
+        const parsed = JSON.parse(stored);
+
+
+        if (!Array.isArray(parsed)) return [];
+
+        return parsed;
     } catch (e) {
-        console.error("getRecentStudies parse error:", e);
+        console.error("getRecentStudies error:", e);
         return [];
     }
-}
+};
+
+export const addRecentStudy = (study) => {
+    if (typeof window === "undefined" || !study) return;
+
+    try {
+        const prev = getRecentStudies();
+
+        const filtered = prev.filter(
+            (item) => item.STUDY_ID !== study.STUDY_ID
+        );
 
 
-export function addRecentStudy(study) {
-    if (!study || !study.id) return;
+        const next = [study, ...filtered].slice(0, MAX_RECENT);
 
-    const current = getRecentStudies()
-
-    const filtered = current.filter((item) => item.id !== study.id);
-
-    const updated = [study, ...filtered];
-
-    const limited = updated.slice(0, MAX_RECENT);
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(limited));
-}
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    } catch (e) {
+        console.error("addRecentStudy error:", e);
+    }
+};

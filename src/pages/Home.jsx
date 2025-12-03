@@ -13,9 +13,14 @@ function Home() {
     const [recentStudy, setRecentStudy] = useState([]);
     const [studies, setStudies] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
 
-    // 🔍 검색 필터 (NAME이 없을 때도 안전하게 처리)
+    const PAGE_SIZE = 6;
+
     const filteredStudies = (studies ?? []).filter((study) => {
         const name = study?.NAME ?? "";
         return name.toLowerCase().includes(searchText.toLowerCase());
@@ -26,22 +31,46 @@ function Home() {
         setRecentStudy(data);
     }, []);
 
-    useEffect(() => {
-        const loadStudies = async () => {
-            try {
+    const loadStudies = async ({ pageToLoad = 1, append = false } = {}) => {
+        try {
+            if (append) {
+                setLoadingMore(true);
+            } else {
                 setLoading(true);
-                const data = await fetchStudies(); // 백엔드에서 받은 배열
-                setStudies(data);
-            } catch (err) {
-                console.error(err);
-                setError("스터디 목록을 불러오는 데 실패했습니다.");
-            } finally {
-                setLoading(false);
+                setError(null);
             }
-        };
 
-        loadStudies();
+            const items = await fetchStudies({
+                page: pageToLoad,
+                limit: PAGE_SIZE,
+            });
+
+            setStudies((prev) => (append ? [...prev, ...items] : items));
+
+            if (!items || items.length < PAGE_SIZE) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
+
+            setPage(pageToLoad);
+        } catch (err) {
+            console.error(err);
+            setError("스터디 목록을 불러오는 데 실패했습니다.");
+        } finally {
+            setLoading(false);
+            setLoadingMore(false);
+        }
+    };
+
+    useEffect(() => {
+        loadStudies({ pageToLoad: 1, append: false });
     }, []);
+
+    const handleLoadMore = () => {
+        if (!hasMore || loadingMore) return;
+        loadStudies({ pageToLoad: page + 1, append: true });
+    };
 
     return (
         <div className="root-container">
@@ -102,7 +131,11 @@ function Home() {
                     </div>
 
                     <div className="pagination">
-                        <LoadMoreButton>더보기</LoadMoreButton>
+                        {hasMore && !loading && (
+                            <LoadMoreButton onClick={handleLoadMore}>
+                                {loadingMore ? "불러오는 중..." : "더보기"}
+                            </LoadMoreButton>
+                        )}
                     </div>
                 </section>
             </div>

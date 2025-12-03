@@ -1,9 +1,17 @@
 import api from "../axiosInstance.js"
 
-export const fetchStudies = async () => {
-    const res = await api.get("/studies");
+export const fetchStudies = async ({ page = 1, limit = 6 } = {}) => {
+    const res = await api.get("/studies", {
+        params: { page, limit },
+    });
+        return res.data;
+};
+
+export const createStudy = async (payload) => {
+    const res = await api.post("/studies", payload);
     return res.data;
 };
+
 
 // export const fetchRecentstudy = () => {
 //     return api.get("/study/recent");

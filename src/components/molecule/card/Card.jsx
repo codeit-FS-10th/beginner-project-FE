@@ -63,37 +63,44 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
     return (
         <>
             {safeStudyData.map((item) => {
-                // DB 응답(STUDY_ID) + mock(id) 둘 다 대응
                 const {
-                    id,
                     STUDY_ID,
-                    studyName,
                     NAME,
-                    auther,
                     NICKNAME,
                     point,
                     day,
-                    goal,
+                    INTRO,
+                    IMAGE, //
                     background,
                     reactionData,
                 } = item;
 
-                const studyId = id ?? STUDY_ID; // 클릭 시 보낼 id
+                const studyId = STUDY_ID;
                 const key = studyId;
-                const title = studyName ?? NAME ?? "";
-                const author = auther ?? NICKNAME ?? "";
+                const title = NAME ?? "";
+                const author = NICKNAME ?? "";
+
                 const safePoint = point ?? 0;
                 const safeDay = day ?? 0;
-                const safeGoal = goal ?? "";
+                const safeGoal = INTRO ?? "";
+
+                // 🔹 현재는 기존 background 그대로 사용
                 const bg = background ?? null;
+
+                // 🔹 나중에 IMAGE를 배경으로 쓸 때 이렇게 바꿀 예정 (지금은 주석만)
+                // const bg = IMAGE
+                //     ? { type: "image", value: IMAGE }
+                //     : background ?? null;
+
                 const reactions = Array.isArray(reactionData)
                     ? reactionData
                     : [];
 
                 const handleClick = () => {
                     if (!studyId) return;
-                    // /detail?id=1 이런 식으로 이동
-                    navigate(`/detail?id=${studyId}`);
+                    navigate(`/detail?id=${studyId}`, {
+                        state: { study: item },
+                    });
                 };
 
                 return (
