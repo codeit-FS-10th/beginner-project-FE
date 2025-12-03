@@ -1,10 +1,18 @@
+// src/pages/Focus.jsx
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
 import PencilIcon from "@assets/Icons/PencilIcon";
-// import { fetchStudyDetail } from "@api/study"; // 방금 만든 함수
+
+import {
+    fetchStudyDetail,
+    fetchFocusInfo,
+    finishFocus,
+} from "@api/service/focusApi";
 
 const PHASE = {
     READY: "ready",
@@ -14,6 +22,13 @@ const PHASE = {
 };
 
 function Focus() {
+    const { studyId } = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    // 비밀번호는 비밀번호 페이지에서 navigate할 때 state로 전달
+    const password = location.state?.password;
+
     // 수정 가능한 분 단위
     const [focusMinutes, setFocusMinutes] = useState(25);
 
@@ -29,7 +44,7 @@ function Focus() {
     const [error, setError] = useState(null);
 
     // 총 포인트
-    const [totalPoint, setTotalPoint] = useState(30);
+    const [totalPoint, setTotalPoint] = useState(0);
 
     // 포인트 토스트
     const [lastEarnedPoint, setLastEarnedPoint] = useState(0);
@@ -42,6 +57,8 @@ function Focus() {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(String(focusMinutes));
 
+    // ---------- 유틸 ----------
+
     // MM:SS 또는 -MM:SS 포맷
     const formatTime = (seconds) => {
         const abs = Math.abs(seconds);
@@ -49,6 +66,45 @@ function Focus() {
         const s = String(abs % 60).padStart(2, "0");
         return seconds < 0 ? `-${m}:${s}` : `${m}:${s}`;
     };
+
+    // ---------- 비밀번호 체크 + 초기 데이터 로딩 ----------
+
+    // password 없이 직접 URL로 들어오면 비밀번호 페이지로 돌려보내기
+    // useEffect(() => {
+    //     if (!password) {
+    //         navigate(`/study/${studyId}/password`, { replace: true });
+    //     }
+    // }, [password, studyId, navigate]);
+
+    // 스터디 정보 + 현재 포인트 로딩
+    useEffect(() => {
+        // if (!password) return;
+
+        const load = async () => {
+            try {
+                setIsLoading(true);
+                setError(null);
+
+                // 스터디 정보 + 현재까지 포인트를 동시에 요청
+                const [detailRes, focusRes] = await Promise.all([
+                    fetchStudyDetail(studyId, password),
+                    fetchFocusInfo(studyId, password),
+                ]);
+
+                setStudyInfo(detailRes.data);
+                setTotalPoint(focusRes.data.totalPoint);
+            } catch (err) {
+                console.error(err);
+                setError("집중 정보를 불러오지 못했습니다.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        load();
+    }, [studyId, password]);
+
+    // ---------- 타이머 조작 ----------
 
     // Start: ready 또는 paused에서 running으로
     const handleStart = () => {
@@ -74,22 +130,26 @@ function Focus() {
         setRemainSeconds(focusMinutes * 60);
     };
 
-    //  Stop → 포인트 계산 → Toast → ready 리셋
-    const handleStop = () => {
+    // Stop → 서버에 포인트 적립 요청 → Toast → ready 리셋
+    const handleStop = async () => {
         if (phase !== PHASE.FINISHED) return;
+        if (!password) return;
 
-        // remainSeconds는 음수 (예: -25, -40 ...)
-        const overtimeSeconds = Math.abs(remainSeconds);
+        // 백엔드 스펙: timeSec(초)을 body로 보냄
+        const timeSec = focusMinutes * 60;
 
-        // 기본 포인트 3점
-        const basePoint = 3;
-        // 추가 포인트: 10초당 1점
-        const extraPoint = Math.floor(overtimeSeconds / 10);
-        const earned = basePoint + extraPoint;
+        try {
+            const res = await finishFocus(studyId, password, timeSec);
 
-        setLastEarnedPoint(earned);
-        setTotalPoint((prev) => prev + earned);
-        setIsToastVisible(true);
+            const { point, totalPoint: newTotal } = res.data;
+
+            setLastEarnedPoint(point); // 이번에 얻은 포인트
+            setTotalPoint(newTotal); // 누적 포인트
+            setIsToastVisible(true);
+        } catch (err) {
+            console.error("포인트 적립 실패:", err);
+            alert("포인트 적립에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        }
 
         // ready로 리셋
         setPhase(PHASE.READY);
@@ -145,6 +205,24 @@ function Focus() {
         return () => clearTimeout(id);
     }, [isPauseToastVisible]);
 
+    const handleHabitClick = () => {
+        if (!studyId) return;
+
+        navigate(`/habit?id=${studyId}`, {
+            // state: { password },
+        });
+    };
+
+    const handleHomeClick = () => {
+        if (!studyId) return;
+
+        navigate(`/focus?id=${studyId}`, {
+            // state: { password },
+        });
+    };
+
+    // ---------- 렌더 ----------
+
     return (
         <>
             <div className="focus-container">
@@ -152,11 +230,21 @@ function Focus() {
                     {/* Header */}
                     <div className="focus-content-header">
                         <div className="focus-header-title">
-                            <h2>연우의 개발공장</h2>
+                            {isLoading && <h2>로딩 중...</h2>}
+                            {error && !isLoading && <h2>에러 발생</h2>}
+                            {!isLoading && !error && (
+                                <h2>
+                                    {studyInfo?.NICKNAME ??
+                                        studyInfo?.NAME ??
+                                        "오늘의 집중"}
+                                </h2>
+                            )}
                         </div>
                         <div className="focus-content-button">
-                            <NavButton to={"/habit"}>오늘의 습관</NavButton>
-                            <NavButton to={"/"}>홈</NavButton>
+                            <NavButton onClick={handleHabitClick}>
+                                오늘의 습관
+                            </NavButton>
+                            <NavButton onClick={handleHomeClick}>홈</NavButton>
                         </div>
                     </div>
 
@@ -175,7 +263,7 @@ function Focus() {
 
                         {/* 타이머 수정 & 표시 */}
                         <div className="focus-timmer-wrap">
-                            {/* ✏ 버튼은 ready에서만 */}
+                            {/*  버튼은 ready에서만 */}
                             {phase === PHASE.READY && !isEditing && (
                                 <button
                                     type="button"

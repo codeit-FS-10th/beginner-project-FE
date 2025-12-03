@@ -24,6 +24,11 @@ export const finishFocus = (studyId, password, timeSec) => {
         { params: { password } }
     );
 };
+export const verifyStudyPassword = (studyId, password) => {
+    return api.post(`/studies/${studyId}/verify-password`, {
+        password,
+    });
+};
 
 // export const startFocus = (studyId, payload) => {
 //     return api.post(`/studies/${studyId}/focus/start`, payload);

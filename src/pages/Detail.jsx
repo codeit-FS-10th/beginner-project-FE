@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import NavButton from "@atoms/button/NavButton";
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
 import { habitsFromApi } from "@mocks/habitcheck.js";
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/Sticker/Sticker";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 function Detail() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const studyId = searchParams.get("id"); // 🔥 ?id=1 에서 1 가져옴
 
     useEffect(() => {
@@ -20,6 +22,22 @@ function Detail() {
         // TODO: 나중에 여기서 studyId로 상세 API 호출하면 됨
         // fetchStudyDetail(studyId) 이런 식으로
     }, [studyId]);
+
+    const handleHabitClick = () => {
+        if (!studyId) return;
+
+        navigate(`/habit?id=${studyId}`, {
+            // state: { password },
+        });
+    };
+
+    const handleFocusClick = () => {
+        if (!studyId) return;
+
+        navigate(`/focus?id=${studyId}`, {
+            // state: { password },
+        });
+    };
 
     return (
         <div className="detail-conainer">
@@ -51,8 +69,12 @@ function Detail() {
                 <div className="detail-intro">
                     <h2>연우의 개발공장</h2>
                     <div className="detail-intro-button">
-                        <button>오늘의 습관</button>
-                        <button>오늘의 집중</button>
+                        <NavButton onClick={handleHabitClick}>
+                            오늘의 습관
+                        </NavButton>
+                        <NavButton onClick={handleFocusClick}>
+                            오늘의 집중
+                        </NavButton>
                     </div>
                 </div>
 
