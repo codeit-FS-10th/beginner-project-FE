@@ -1,7 +1,7 @@
 import React from "react";
 import EmojiButton from "./EmojiButton";
 import EmojiPickerWrapper from "./EmojiPickerWrapper";
-import "../../../styles/EmojiGroup.css";
+import "@styles/EmojiGroup.css";
 
 export default function EmojiGroup({ reactions, onEmojiClick, onAddEmoji }) {
     return (

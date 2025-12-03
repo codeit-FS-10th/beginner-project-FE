@@ -1,4 +1,4 @@
-import "../../../styles/EmojiButton.css";
+import "@styles/EmojiButton.css";
 
 export default function EmojiButton({
     emoji,
