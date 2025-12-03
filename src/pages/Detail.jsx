@@ -5,23 +5,18 @@ import "@styles/pages/detail.css";
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/Sticker/Sticker";
-<<<<<<< HEAD
-import { useSearchParams, useNavigate } from "react-router-dom";
-=======
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchTodayHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
->>>>>>> 1b3010fadc46d6ef04fe66c26a888dc151bd7eae
 
 function Detail() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     const [searchParams] = useSearchParams();
-<<<<<<< HEAD
+
     const navigate = useNavigate();
-    const studyId = searchParams.get("id"); // 🔥 ?id=1 에서 1 가져옴
-=======
+
     const studyId = searchParams.get("id");
 
     const location = useLocation();
@@ -45,7 +40,6 @@ function Detail() {
             토: habit.SAT ? 1 : 0,
             일: habit.SUN ? 1 : 0,
         }));
->>>>>>> 1b3010fadc46d6ef04fe66c26a888dc151bd7eae
 
     useEffect(() => {
         if (!studyId) return;
@@ -66,7 +60,6 @@ function Detail() {
         loadHabits();
     }, [studyId]);
 
-<<<<<<< HEAD
     const handleHabitClick = () => {
         if (!studyId) return;
 
@@ -82,7 +75,7 @@ function Detail() {
             // state: { password },
         });
     };
-=======
+
     const habits = habitData;
 
     useEffect(() => {
@@ -95,7 +88,6 @@ function Detail() {
         if (!study) return;
         addRecentStudy(study);
     }, [study]);
->>>>>>> 1b3010fadc46d6ef04fe66c26a888dc151bd7eae
 
     return (
         <div className="detail-conainer">
