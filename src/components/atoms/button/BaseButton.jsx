@@ -1,5 +1,5 @@
 import React from "react";
-import "@styles/atoms/basebutton.css";
+import "@styles/atoms/baseButton.css";
 
 const BaseButton = ({ children, type = "default", size = "md", ...props }) => {
     const typeClass = {
