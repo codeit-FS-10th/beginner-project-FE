@@ -40,18 +40,20 @@ function Home() {
                 setError(null);
             }
 
-            const items = await fetchStudies({
+            // 🔥 fetchStudies는 전체 응답을 그대로 반환한다고 가정
+            const res = await fetchStudies({
                 page: pageToLoad,
                 limit: PAGE_SIZE,
             });
 
+            const items = res.items ?? []; // ✅ 리스트만 추출
+            const totalPages = res.totalPages ?? 1;
+
+            // studies는 항상 "배열"만 저장
             setStudies((prev) => (append ? [...prev, ...items] : items));
 
-            if (!items || items.length < PAGE_SIZE) {
-                setHasMore(false);
-            } else {
-                setHasMore(true);
-            }
+            // hasMore는 페이지 기반으로 계산
+            setHasMore(pageToLoad < totalPages);
 
             setPage(pageToLoad);
         } catch (err) {
