@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "@styles/pages/habit.css";
-import Chip from "@atoms/chip/chip";
+// import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
 
 function Habit() {
