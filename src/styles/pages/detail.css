@@ -60,9 +60,10 @@
     color: var(--gray-gray_818181, #818181);
 }
 
-.detail-intro {
+.detail-title-container {
     display: flex;
     justify-content: space-between;
+    margin: 24px 0 16px 0;
 }
 
 .detail-intro-button {
@@ -90,7 +91,54 @@
     font-weight: 800;
     line-height: normal;
 }
+.habit-empty-message {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    color: var(--gray-gray_818181, #818181);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+.detail-intro-box {
+    margin-bottom: 40px;
+}
 
+.detail-content-first {
+    display: flex;
+    gap: 8px;
+}
+.detail-intro-box h3 {
+    color: var(--gray-gray_818181, #818181);
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.detail-intro {
+    color: var(--black-black_414141, #414141);
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+.detail-point-title {
+    color: var(--gray-gray_818181, #818181);
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
 .habit-grid {
     display: grid;
     width: 100%;
@@ -141,4 +189,13 @@
 
 .sticker-cell.empty .sticker-dot {
     background: #e4e4e4;
+}
+
+.detail-title {
+    color: #414141;
+    font-family: Pretendard;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
 }

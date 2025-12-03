@@ -6,7 +6,7 @@ import "@styles/atoms/navButton.css";
 const NavButton = ({ children, to }) => {
     return (
         <Link to={to} className="nav-btn">
-            <span> {children}</span>
+            <span className="nav-btn-children"> {children}</span>
 
             <ArrowIcon />
         </Link>

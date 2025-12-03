@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
-import Tag from "@atoms/tag/Tag";
-import "@styles/pages/detail.css";
-import ReactionAddButton from "@atoms/button/ReactionAddButton";
-import ModalPwd from "@organism/ModalPwd";
-import Sticker from "@molecule/sticker/Sticker";
+import { fetchStudyPoints } from "@api/service/studyservice";
+import { fetchEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { fetchTodayHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
 
+import "@styles/pages/detail.css";
+
+import Tag from "@atoms/tag/Tag";
+import ModalPwd from "@organism/ModalPwd";
+import Sticker from "@molecule/sticker/Sticker";
+import NavButton from "@atoms/button/NavButton";
+import EmojiGroup from "../components/molecule/Emoji/EmojiGroup";
+
 function Detail() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [reactions, setReactions] = useState([]);
+
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     const [searchParams] = useSearchParams();
@@ -24,6 +31,14 @@ function Detail() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [points, setPoints] = useState(0);
+    const [pointError, setPointError] = useState(null);
+    const [pointLoading, setPointLoading] = useState(false);
+
+    const nickname = study?.NICKNAME || "";
+    const studyName = study?.NAME || "";
+    const intro = study?.INTRO || "";
+
     const normalizeHabits = (rawHabits) =>
         rawHabits.map((habit) => ({
             id: habit.HABIT_ID,
@@ -36,6 +51,82 @@ function Detail() {
             토: habit.SAT ? 1 : 0,
             일: habit.SUN ? 1 : 0,
         }));
+
+    const handleEmojiClick = (emoji) => {
+        setReactions((prev) =>
+            prev.map((item) =>
+                item.emoji === emoji
+                    ? { ...item, count: item.count + 1, me: true }
+                    : item
+            )
+        );
+
+        // TODO: 여기서 PATCH /studies/:id/emoji 로 서버에 반영
+    };
+    const handleAddEmoji = (emoji) => {
+        setReactions((prev) => [
+            ...prev,
+            {
+                id: Date.now(),
+                emoji,
+                count: 1,
+                me: true,
+            },
+        ]);
+
+        // TODO: 여기서 POST /studies/:id/emoji 로 서버에 반영
+    };
+
+    useEffect(() => {
+        if (!studyId) return;
+
+        const loadEmoji = async () => {
+            try {
+                const raw = await fetchEmoji(studyId);
+                console.log("이모지 응답 raw:", raw);
+
+                // 🔥 안전하게 배열인지 한 번 체크
+                const arr = Array.isArray(raw) ? raw : raw?.data ?? [];
+
+                // 🔥 UNICODE, COUNTING -> EmojiGroup에서 쓰는 형태로 변환
+                const mapped = arr.map((item, index) => ({
+                    id: index, // 또는 item.REG_DATE, item.STUDY_ID 등으로 유니크하게
+                    emoji: item.UNICODE,
+                    count: item.COUNTING ?? 0,
+                    me: false, // TODO: 나중에 "내가 눌렀는지" 정보 있으면 여기 반영
+                }));
+
+                setReactions(mapped);
+            } catch (err) {
+                console.error("이모지 불러오기 실패:", err);
+                setReactions([]); // 실패해도 map 에러 안 나게
+            }
+        };
+
+        loadEmoji();
+    }, [studyId]);
+
+    useEffect(() => {
+        if (!studyId) return;
+
+        const loadPoints = async () => {
+            try {
+                setPointLoading(true);
+                const data = await fetchStudyPoints(studyId);
+
+                const pointValue = data?.totalPoint ?? 0;
+
+                setPoints(pointValue);
+            } catch (err) {
+                console.error(err);
+                setPointError("포인트를 불러오는 데 실패했습니다.");
+            } finally {
+                setPointLoading(false);
+            }
+        };
+
+        loadPoints();
+    }, [studyId]);
 
     useEffect(() => {
         if (!studyId) return;
@@ -73,8 +164,13 @@ function Detail() {
         <div className="detail-conainer">
             <div className="detail-content">
                 <div className="detail-content-header">
-                    <Tag type="reaction" />
-                    <ReactionAddButton />
+                    <div className="detail-content-first">
+                        <EmojiGroup
+                            reactions={reactions}
+                            onEmojiClick={handleEmojiClick}
+                            onAddEmoji={handleAddEmoji}
+                        />
+                    </div>
                     <div className="detail-buttons">
                         <button className="detail-share-button">
                             공유하기
@@ -96,18 +192,34 @@ function Detail() {
                     </div>
                 </div>
 
-                <div className="detail-intro">
-                    <h2>연우의 개발공장</h2>
+                <div className="detail-title-container">
+                    <h2 className="detail-title">
+                        {nickname && studyName
+                            ? `${nickname}의 ${studyName}`
+                            : "스터디 상세"}
+                    </h2>
                     <div className="detail-intro-button">
-                        <button>오늘의 습관</button>
-                        <button>오늘의 집중</button>
+                        <NavButton to={"/Habit"}>오늘의 습관</NavButton>
+                        <NavButton to={"/Focus"}>오늘의 집중</NavButton>
                     </div>
                 </div>
 
-                <div>
+                <div className="detail-intro-box">
                     <h3>소개</h3>
-                    <p>현재까지 획득한 포인트</p>
-                    <Tag type="point" value="30" theme="light" />
+
+                    {intro ? (
+                        <p className="detail-intro">{intro}</p>
+                    ) : (
+                        <p className="detail-intro-empty">
+                            소개가 아직 등록되지 않았어요.
+                        </p>
+                    )}
+
+                    <p className="detail-point-title">현재까지 획득한 포인트</p>
+
+                    {pointError && <p className="point-error">{pointError}</p>}
+
+                    <Tag type="point" value={points} theme="light" />
                 </div>
 
                 <div className="detail-habit-history">

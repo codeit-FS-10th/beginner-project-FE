@@ -1,16 +1,26 @@
 .nav-btn {
-  width: 104px;
-  height: 24px;
-  padding: 12px 16px 12px 24px;
-  border-radius: 15px;
-  border: 1px solid #dddddd;
-  background-color: #ffffff;
-  color: #818181;
-  font-weight: 500;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  cursor: pointer;
+    width: 104px;
+    height: 24px;
+    padding: 12px 16px 12px 24px;
+    border-radius: 15px;
+    border: 1px solid #dddddd;
+    background-color: #ffffff;
+    color: #818181;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-btn-children {
+    color: var(--gray-gray_818181, #818181);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }

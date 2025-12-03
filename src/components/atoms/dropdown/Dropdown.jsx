@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
 import "@styles/atoms/Dropdown.css";
-import { ToggleIcon } from "../../../assets/Icons";
+import { ToggleIcon } from "@assets/Icons";
 
 export default function Dropdown({
     items = [],
