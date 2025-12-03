@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { fetchStudyPoints } from "@api/service/studyservice";
+import {
+    fetchStudyPoints,
+    updateStudy,
+    deleteStudy,
+    fetchStudyDetail,
+} from "@api/service/studyservice";
+
 import { fetchEmoji } from "@api/service/Emojiservice";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchTodayHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
 
@@ -11,10 +17,19 @@ import Tag from "@atoms/tag/Tag";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/sticker/Sticker";
 import NavButton from "@atoms/button/NavButton";
-// import EmojiGroup from "../components/molecule/Emoji/EmojiGroup";
+import EmojiGroup from "@molecule/Emoji/EmojiGroup";
+import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 function Detail() {
+    const navigate = useNavigate();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalAction, setModalAction] = useState(null); // edit | delete
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [editTitle, setEditTitle] = useState("");
+    const [editIntro, setEditIntro] = useState("");
+
     const [reactions, setReactions] = useState([]);
 
     const days = ["월", "화", "수", "목", "금", "토", "일"];
@@ -33,12 +48,113 @@ function Detail() {
 
     const [points, setPoints] = useState(0);
     const [pointError, setPointError] = useState(null);
-    const [pointLoading, setPointLoading] = useState(false);
 
-    const nickname = study?.NICKNAME || "";
-    const studyName = study?.NAME || "";
-    const intro = study?.INTRO || "";
+    const nickname = study?.NICKNAME ?? "";
+    const studyName = study?.NAME ?? "";
+    const intro = study?.INTRO ?? "";
 
+    // 🟦 비밀번호 검증 후 실행되는 콜백
+    const handleVerified = async (actionType) => {
+        if (actionType === "edit") {
+            setIsEditing(true);
+            setEditTitle(studyName);
+            setEditIntro(intro);
+        }
+
+        if (actionType === "delete") {
+            await handleDelete();
+        }
+    };
+
+    // 🟥 DELETE 요청 실행
+    const handleDelete = async () => {
+        try {
+            await deleteStudy(studyId);
+            showSuccessToast("스터디가 삭제되었습니다.");
+            navigate("/");
+        } catch (err) {
+            showErrorToast("삭제 실패");
+        }
+    };
+
+    // 🟩 PATCH 수정 실행
+    const handleUpdate = async () => {
+        try {
+            await updateStudy(studyId, {
+                name: editTitle,
+                nickname: nickname,
+                intro: editIntro,
+                image: study?.image || "",
+            });
+
+            setStudy({
+                ...study,
+                NAME: editTitle,
+                INTRO: editIntro,
+            });
+
+            showSuccessToast("수정 완료!");
+            setIsEditing(false);
+        } catch (err) {
+            showErrorToast("수정 실패");
+        }
+    };
+
+    // 🟦 스터디 디테일 가져오기
+    useEffect(() => {
+        const loadStudyDetail = async () => {
+            try {
+                const data = await fetchStudyDetail(studyId);
+                setStudy(data);
+            } catch (err) {
+                console.error("스터디 정보 불러오기 실패", err);
+            }
+        };
+        loadStudyDetail();
+    }, [studyId]);
+
+    // 🟦 이모지
+    useEffect(() => {
+        if (!studyId) return;
+
+        const loadEmoji = async () => {
+            try {
+                const raw = await fetchEmoji(studyId);
+                const arr = Array.isArray(raw) ? raw : raw?.data ?? [];
+
+                const mapped = arr.map((item, index) => ({
+                    id: index,
+                    emoji: item.UNICODE,
+                    count: item.COUNTING ?? 0,
+                    me: false,
+                }));
+
+                setReactions(mapped);
+            } catch {
+                setReactions([]);
+            }
+        };
+
+        loadEmoji();
+    }, [studyId]);
+
+    // 🟦 포인트
+    useEffect(() => {
+        if (!studyId) return;
+
+        const loadPoints = async () => {
+            try {
+                const data = await fetchStudyPoints(studyId);
+                setPoints(data?.totalPoint ?? 0);
+            } catch {
+                setPointError("포인트 불러오기 실패");
+            }
+        };
+
+        loadPoints();
+    }, [studyId]);
+
+    // 🟦 습관 기록표
     const normalizeHabits = (rawHabits) =>
         rawHabits.map((habit) => ({
             id: habit.HABIT_ID,
@@ -52,88 +168,17 @@ function Detail() {
             일: habit.SUN ? 1 : 0,
         }));
 
-    const handleEmojiClick = (emoji) => {
-        setReactions((prev) =>
-            prev.map((item) =>
-                item.emoji === emoji
-                    ? { ...item, count: item.count + 1, me: true }
-                    : item
-            )
-        );
-    };
-
-    const handleAddEmoji = (emoji) => {
-        setReactions((prev) => [
-            ...prev,
-            {
-                id: Date.now(),
-                emoji,
-                count: 1,
-                me: true,
-            },
-        ]);
-    };
-
-    useEffect(() => {
-        if (!studyId) return;
-
-        const loadEmoji = async () => {
-            try {
-                const raw = await fetchEmoji(studyId);
-                console.log("이모지 응답 raw:", raw);
-
-                const arr = Array.isArray(raw) ? raw : raw?.data ?? [];
-
-                const mapped = arr.map((item, index) => ({
-                    id: index,
-                    emoji: item.UNICODE,
-                    count: item.COUNTING ?? 0,
-                    me: false,
-                }));
-
-                setReactions(mapped);
-            } catch (err) {
-                console.error("이모지 불러오기 실패:", err);
-                setReactions([]);
-            }
-        };
-
-        loadEmoji();
-    }, [studyId]);
-
-    useEffect(() => {
-        if (!studyId) return;
-
-        const loadPoints = async () => {
-            try {
-                setPointLoading(true);
-                const data = await fetchStudyPoints(studyId);
-
-                const pointValue = data?.totalPoint ?? 0;
-
-                setPoints(pointValue);
-            } catch (err) {
-                console.error(err);
-                setPointError("포인트를 불러오는 데 실패했습니다.");
-            } finally {
-                setPointLoading(false);
-            }
-        };
-
-        loadPoints();
-    }, [studyId]);
-
     useEffect(() => {
         if (!studyId) return;
 
         const loadHabits = async () => {
             try {
                 setLoading(true);
+
                 const data = await fetchTodayHabits(studyId);
                 setHabitData(normalizeHabits(data));
-            } catch (err) {
-                console.error(err);
-                setError("습관 데이터를 불러오는 데 실패했습니다.");
+            } catch {
+                setError("습관 데이터 불러오기 실패");
             } finally {
                 setLoading(false);
             }
@@ -142,8 +187,7 @@ function Detail() {
         loadHabits();
     }, [studyId]);
 
-    const habits = habitData;
-
+    // 최근 조회 저장
     useEffect(() => {
         if (stateStudy) {
             setStudy(stateStudy);
@@ -151,35 +195,60 @@ function Detail() {
     }, [stateStudy]);
 
     useEffect(() => {
-        if (!study) return;
-        addRecentStudy(study);
+        if (study) addRecentStudy(study);
     }, [study]);
+
+    const handleShareClick = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            showSuccessToast("링크 복사가 성공적으로 되었습니다.", {
+                toastType: "point",
+            });
+        } catch (error) {
+            showErrorToast("링크 복사에 실패했습니다.");
+        }
+    };
 
     return (
         <div className="detail-conainer">
             <div className="detail-content">
+                {/* HEADER */}
                 <div className="detail-content-header">
                     <div className="detail-content-first">
-                        {/* <EmojiGroup
+                        <EmojiGroup
                             reactions={reactions}
-                            onEmojiClick={handleEmojiClick}
-                            onAddEmoji={handleAddEmoji}
-                        /> */}
+                            onEmojiClick={() => {}}
+                            onAddEmoji={() => {}}
+                        />
                     </div>
+
                     <div className="detail-buttons">
-                        <button className="detail-share-button">
+                        <button
+                            onClick={handleShareClick}
+                            className="detail-share-button"
+                        >
                             공유하기
                         </button>
+
                         <span className="divider divider-1">|</span>
+
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                                setModalAction("edit");
+                                setIsModalOpen(true);
+                            }}
                             className="detail-edit-button"
                         >
                             수정하기
                         </button>
+
                         <span className="divider divider-2">|</span>
+
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => {
+                                setModalAction("delete");
+                                setIsModalOpen(true);
+                            }}
                             className="detail-delete-button"
                         >
                             스터디 삭제하기
@@ -187,22 +256,51 @@ function Detail() {
                     </div>
                 </div>
 
+                {/* TITLE */}
                 <div className="detail-title-container">
                     <h2 className="detail-title">
-                        {nickname && studyName
-                            ? `${nickname}의 ${studyName}`
-                            : "스터디 상세"}
+                        {isEditing ? (
+                            <input
+                                className="edit-title-input"
+                                value={editTitle}
+                                onChange={(e) => setEditTitle(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        handleUpdate();
+                                    }
+                                }}
+                            />
+                        ) : nickname && studyName ? (
+                            `${nickname}의 ${studyName}`
+                        ) : (
+                            "스터디 상세"
+                        )}
                     </h2>
+
                     <div className="detail-intro-button">
-                        <NavButton to={"/Habit"}>오늘의 습관</NavButton>
-                        <NavButton to={"/Focus"}>오늘의 집중</NavButton>
+                        <NavButton to={"/habit"}>오늘의 습관</NavButton>
+                        <NavButton to={"/focus"}>오늘의 집중</NavButton>
                     </div>
                 </div>
 
+                {/* INTRO */}
                 <div className="detail-intro-box">
                     <h3>소개</h3>
 
-                    {intro ? (
+                    {isEditing ? (
+                        <textarea
+                            className="edit-intro-textarea"
+                            value={editIntro}
+                            onChange={(e) => setEditIntro(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleUpdate();
+                                }
+                            }}
+                        />
+                    ) : intro ? (
                         <p className="detail-intro">{intro}</p>
                     ) : (
                         <p className="detail-intro-empty">
@@ -211,34 +309,35 @@ function Detail() {
                     )}
 
                     <p className="detail-point-title">현재까지 획득한 포인트</p>
-
                     {pointError && <p className="point-error">{pointError}</p>}
-
                     <Tag type="point" value={points} theme="light" />
                 </div>
 
+                {/* HABIT */}
                 <div className="detail-habit-history">
                     <h2 className="habit-title">습관 기록표</h2>
 
                     {error && <p className="habit-error">{error}</p>}
 
-                    {habits.length === 0 && !loading && (
+                    {habitData.length === 0 && !loading && (
                         <div className="habit-empty-message">
                             아직 습관이 없어요.
                             <br />
                             오늘의 습관에서 습관을 생성해보세요.
                         </div>
                     )}
-                    {habits.length > 0 && (
+
+                    {habitData.length > 0 && (
                         <div className="habit-grid">
                             <div className="habit-name-cell empty"></div>
+
                             {days.map((day) => (
                                 <div key={day} className="day-cell">
                                     {day}
                                 </div>
                             ))}
 
-                            {habits.map((habit) => (
+                            {habitData.map((habit) => (
                                 <React.Fragment key={habit.id}>
                                     <div className="habit-name-cell">
                                         {habit.name}
@@ -264,7 +363,15 @@ function Detail() {
                 </div>
             </div>
 
-            {isModalOpen && <ModalPwd onClose={() => setIsModalOpen(false)} />}
+            {/* MODAL */}
+            {isModalOpen && (
+                <ModalPwd
+                    onClose={() => setIsModalOpen(false)}
+                    onVerified={handleVerified}
+                    actionType={modalAction}
+                    studyId={studyId}
+                />
+            )}
         </div>
     );
 }

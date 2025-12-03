@@ -12,6 +12,7 @@
     padding: 24px 24px 40px;
     border-radius: 20px;
     background-color: #fff;
+    margin-bottom: 57px;
 }
 
 .bg-list {
@@ -51,4 +52,8 @@
     font-size: 14px !important;
     font-weight: 400 !important;
     margin-top: 8px !important;
+}
+
+.study-make-button {
+    margin-top: 40px;
 }
