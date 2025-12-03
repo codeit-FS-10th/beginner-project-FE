@@ -40,19 +40,16 @@ function Home() {
                 setError(null);
             }
 
-            // 🔥 fetchStudies는 전체 응답을 그대로 반환한다고 가정
             const res = await fetchStudies({
                 page: pageToLoad,
                 limit: PAGE_SIZE,
             });
 
-            const items = res.items ?? []; // ✅ 리스트만 추출
+            const items = res.items ?? [];
             const totalPages = res.totalPages ?? 1;
 
-            // studies는 항상 "배열"만 저장
             setStudies((prev) => (append ? [...prev, ...items] : items));
 
-            // hasMore는 페이지 기반으로 계산
             setHasMore(pageToLoad < totalPages);
 
             setPage(pageToLoad);
@@ -73,11 +70,9 @@ function Home() {
         if (!hasMore || loadingMore) return;
         loadStudies({ pageToLoad: page + 1, append: true });
     };
-
     return (
         <div className="root-container">
             <div className="main-container">
-                {/* 최근 조회한 스터디 */}
                 <section className="recent-container">
                     <h2 className="section-title">최근 조회한 스터디</h2>
                     <div className="recent-list">
@@ -95,7 +90,6 @@ function Home() {
                     </div>
                 </section>
 
-                {/* 스터디 둘러보기 */}
                 <section className="study-container">
                     <div className="study-header">
                         <h2 className="section-title">스터디 둘러보기</h2>
