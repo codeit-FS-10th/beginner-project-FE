@@ -1,32 +1,38 @@
-.toast {
-  padding: 14px 18px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  font-style: medium;
-  animation: fadeInOut 2s forwards;
+.Toastify__toast-container {
+    z-index: 9999;
 }
 
-.toast.point {
-  color: #578246;
-  margin-left: 8px;
-  background-color: #e1edde;
+.custom-toast {
+    display: flex;
+    width: auto;
+    background: var(--pink-pink_FDE0E9, #fde0e9);
+    border-radius: 12px;
+    padding: 14px 28px;
+    color: var(--red-red_F50E0E, #f50e0e);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+    align-items: center;
 }
 
-/*숫자 강조*/
-.point_number {
-  font-weight: 700;
+.custom-toast-point {
+    width: auto;
+    background: var(--green-green_E1EDDE, #e1edde);
+    color: var(--green-green_text_578246, #578246);
+    font-family: Pretendard;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
-.toast.warning {
-  color: #f74747;
-  background-color: #fde0e9;
+.custom-toast-body {
+    font-weight: 500;
+    line-height: 1.4;
 }
 
-/*애니메이션*/
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translateY(-10px); }
-    10% { opacity: 1; transform: translateY(0); }
-    90% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-10px); }
+.Toastify__toast-icon {
+    display: none !important;
 }

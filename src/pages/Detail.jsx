@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
-import { useEffect } from "react";
 import { habitsFromApi } from "@mocks/habitcheck.js";
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
+import ModalPwd from "@organism/ModalPwd";
+import Sticker from "@molecule/Sticker/Sticker";
+import { useSearchParams } from "react-router-dom";
 
-function Detail({ study }) {
+function Detail() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
+    const [searchParams] = useSearchParams();
+    const studyId = searchParams.get("id"); // 🔥 ?id=1 에서 1 가져옴
+
     useEffect(() => {
-        if (!study) return;
-        addRecentStudy(study);
-    }, [study]);
+        if (!studyId) return;
+
+        // TODO: 나중에 여기서 studyId로 상세 API 호출하면 됨
+        // fetchStudyDetail(studyId) 이런 식으로
+    }, [studyId]);
 
     return (
         <div className="detail-conainer">
@@ -24,13 +32,22 @@ function Detail({ study }) {
                             공유하기
                         </button>
                         <span className="divider divider-1">|</span>
-                        <button className="detail-edit-button">수정하기</button>
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="detail-edit-button"
+                        >
+                            수정하기
+                        </button>
                         <span className="divider divider-2">|</span>
-                        <button className="detail-delete-button">
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="detail-delete-button"
+                        >
                             스터디 삭제하기
                         </button>
                     </div>
                 </div>
+
                 <div className="detail-intro">
                     <h2>연우의 개발공장</h2>
                     <div className="detail-intro-button">
@@ -38,9 +55,9 @@ function Detail({ study }) {
                         <button>오늘의 집중</button>
                     </div>
                 </div>
+
                 <div>
                     <h3>소개</h3>
-                    <p>asdasd</p>
                     <p>현재까지 획득한 포인트</p>
                     <Tag type="point" value="30" theme="light" />
                 </div>
@@ -55,6 +72,7 @@ function Detail({ study }) {
                                 {day}
                             </div>
                         ))}
+
                         {habitsFromApi.map((habit) => (
                             <React.Fragment key={habit.id}>
                                 <div className="habit-name-cell">
@@ -79,6 +97,8 @@ function Detail({ study }) {
                     </div>
                 </div>
             </div>
+
+            {isModalOpen && <ModalPwd onClose={() => setIsModalOpen(false)} />}
         </div>
     );
 }

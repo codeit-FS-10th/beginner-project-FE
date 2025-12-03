@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MOCK_STUDIES } from "@mocks/studyCardMock";
+import { fetchStudies } from "@api/service/studyservice";
 import { getRecentStudies } from "@utils/recentStudy";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
@@ -11,19 +11,42 @@ function Home() {
     const [sortOption, setSortOption] = useState("정렬 기준");
     const [searchText, setSearchText] = useState("");
     const [recentStudy, setRecentStudy] = useState([]);
+    const [studies, setStudies] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const filteredStudies = MOCK_STUDIES.filter((study) =>
-        study.studyName.toLowerCase().includes(searchText.toLowerCase())
-    );
+    // 🔍 검색 필터 (NAME이 없을 때도 안전하게 처리)
+    const filteredStudies = (studies ?? []).filter((study) => {
+        const name = study?.NAME ?? "";
+        return name.toLowerCase().includes(searchText.toLowerCase());
+    });
 
     useEffect(() => {
         const data = getRecentStudies();
         setRecentStudy(data);
     }, []);
 
+    useEffect(() => {
+        const loadStudies = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchStudies(); // 백엔드에서 받은 배열
+                setStudies(data);
+            } catch (err) {
+                console.error(err);
+                setError("스터디 목록을 불러오는 데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadStudies();
+    }, []);
+
     return (
         <div className="root-container">
             <div className="main-container">
+                {/* 최근 조회한 스터디 */}
                 <section className="recent-container">
                     <h2 className="section-title">최근 조회한 스터디</h2>
                     <div className="recent-list">
@@ -41,6 +64,7 @@ function Home() {
                     </div>
                 </section>
 
+                {/* 스터디 둘러보기 */}
                 <section className="study-container">
                     <div className="study-header">
                         <h2 className="section-title">스터디 둘러보기</h2>
@@ -62,12 +86,16 @@ function Home() {
                     </div>
 
                     <div className="study-list">
-                        {filteredStudies.length === 0 ? (
+                        {loading ? (
+                            <p>불러오는 중...</p>
+                        ) : error ? (
+                            <p>{error}</p>
+                        ) : filteredStudies.length === 0 ? (
                             <p>아직 둘러 볼 스터디가 없어요</p>
                         ) : (
                             <Card
-                                size={"lg"}
-                                theme={"light"}
+                                size="lg"
+                                theme="light"
                                 studyData={filteredStudies}
                             />
                         )}

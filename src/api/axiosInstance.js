@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,  
-    withCredentials: true,
+    // withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (res) => res,
     (err) => {
-        console.error("API Error:", err);
+        console.error("API Error:", err);   
         return Promise.reject(err);
     }
 );
