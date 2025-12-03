@@ -1,15 +1,34 @@
-// import api from "@api/axiosinstance.js";
+import api from "@api/axiosinstance.js";
 
-// export const fetchFocusInfo = (studyId, password) => {
-//     return api.get(`/study/${studyId}/focus`, {
-//         params: { password },
+export const fetchStudyDetail = (studyId, password) => {
+    return api.get(`/studies/${studyId}`, {
+        params: { password },
+    });
+};
+
+export const fetchFocusInfo = (studyId, password) => {
+    return api.get(`/studies/${studyId}/focus`, {
+        params: { password },
+    });
+};
+
+// export const finishFocus = (studyId, seconds) => {
+//     return api.post(`/studies/${studyId}/focus`, {
+//         timeSec: seconds,
 //     });
 // };
+export const finishFocus = (studyId, password, timeSec) => {
+    return api.post(
+        `/studies/${studyId}/focus`,
+        { timeSec },
+        { params: { password } }
+    );
+};
 
 // export const startFocus = (studyId, payload) => {
-//     return api.post(`/study/${studyId}/focus/start`, payload);
+//     return api.post(`/studies/${studyId}/focus/start`, payload);
 // };
 
 // export const finishFocus = (studyId) => {
-//     return api.post(`/study/${studyId}/focus/finish`);
+//     return api.post(`/studies/${studyId}/focus/finish`);
 // };

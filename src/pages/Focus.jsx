@@ -4,6 +4,7 @@ import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
 import PencilIcon from "@assets/Icons/PencilIcon";
+// import { fetchStudyDetail } from "@api/study"; // 방금 만든 함수
 
 const PHASE = {
     READY: "ready",
@@ -21,6 +22,11 @@ function Focus() {
 
     // ready / running / paused / finished
     const [phase, setPhase] = useState(PHASE.READY);
+
+    // 스터디 정보
+    const [studyInfo, setStudyInfo] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     // 총 포인트
     const [totalPoint, setTotalPoint] = useState(30);

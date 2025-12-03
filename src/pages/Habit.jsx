@@ -4,9 +4,12 @@ import Chip from "@atoms/chip/chip";
 import NavButton from "@atoms/button/NavButton";
 
 function Habit() {
+    //현재 시간
     const [time, setTime] = useState("");
-    const [habits, setHabits] = useState([]); // DB에서 가져온 습관 목록
+    //DB에서 가져온 습관 목록
+    const [habits, setHabits] = useState([]);
 
+    //현재시간
     const formatDateTime = () => {
         const now = new Date();
 
@@ -27,42 +30,44 @@ function Habit() {
         return `${year}-${month}-${day} ${ampm} ${hour}:${minute}`;
     };
 
+    //현재시간
     const updateTime = () => setTime(formatDateTime());
 
+    //오늘 요일 추출
     const getTodayColumn = () => {
         const days = ["SUN", "MON", "TUE", "WEN", "THU", "FRI", "SAT"];
         const today = new Date().getDay(); // 0~6 (0: 일요일)
         return days[today];
     };
+    //오늘 요일에 해당하는 습관정보가져오기
+    const handleHabitClick = async (habitId) => {
+        const todayColumn = getTodayColumn();
 
-    // const handleHabitClick = async (habitId) => {
-    //     const todayColumn = getTodayColumn();
+        try {
+            await api.patch(`/habits/${habitId}`, {
+                [todayColumn]: true,
+            });
 
-    //     try {
-    //         await api.patch(`/habits/${habitId}`, {
-    //             [todayColumn]: true,
-    //         });
-
-    //         setHabits((prev) =>
-    //             prev.map((habit) =>
-    //                 habit.id === habitId
-    //                     ? { ...habit, [todayColumn]: true }
-    //                     : habit
-    //             )
-    //         );
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
+            setHabits((prev) =>
+                prev.map((habit) =>
+                    habit.id === habitId
+                        ? { ...habit, [todayColumn]: true }
+                        : habit
+                )
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    //페이지 열자마자 현재시간 마운트
     useEffect(() => {
         updateTime();
         const timer = setInterval(updateTime, 1000);
         return () => clearInterval(timer);
     }, []);
-
+    // // 페이지 열자마자  습관 마운트//////////////////
     // useEffect(() => {
-    //     fetchHabits();
+    //     fetchTodayHabits();
     // }, []);
 
     return (
@@ -90,7 +95,7 @@ function Habit() {
                         <h2>오늘의 습관</h2>
 
                         <div className="habit-chip-list">
-                            {/* {habits.map((habit) => (
+                            {habits.map((habit) => (
                                 <Chip
                                     key={habit.id}
                                     onClick={() => handleHabitClick(habit.id)}
@@ -102,7 +107,7 @@ function Habit() {
                                 >
                                     {habit.name}
                                 </Chip>
-                            ))} */}
+                            ))}
                         </div>
                     </div>
                 </div>
