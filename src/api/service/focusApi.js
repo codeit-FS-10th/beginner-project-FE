@@ -12,11 +12,6 @@ export const fetchFocusInfo = (studyId, password) => {
     });
 };
 
-// export const finishFocus = (studyId, seconds) => {
-//     return api.post(`/studies/${studyId}/focus`, {
-//         timeSec: seconds,
-//     });
-// };
 export const finishFocus = (studyId, password, timeSec) => {
     return api.post(
         `/studies/${studyId}/focus`,
@@ -29,11 +24,3 @@ export const verifyStudyPassword = (studyId, password) => {
         password,
     });
 };
-
-// export const startFocus = (studyId, payload) => {
-//     return api.post(`/studies/${studyId}/focus/start`, payload);
-// };
-
-// export const finishFocus = (studyId) => {
-//     return api.post(`/studies/${studyId}/focus/finish`);
-// };

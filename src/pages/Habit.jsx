@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import "@styles/pages/habit.css";
 import Chip from "@atoms/chip/chip";
 import NavButton from "@atoms/button/NavButton";
@@ -8,6 +9,12 @@ function Habit() {
     const [time, setTime] = useState("");
     //DB에서 가져온 습관 목록
     const [habits, setHabits] = useState([]);
+
+    const [searchParams] = useSearchParams();
+
+    const navigate = useNavigate();
+
+    const studyId = searchParams.get("id");
 
     //현재시간
     const formatDateTime = () => {
@@ -70,6 +77,21 @@ function Habit() {
     //     fetchTodayHabits();
     // }, []);
 
+    const handleHomeClick = () => {
+        if (!studyId) return;
+
+        navigate(`/`, {
+            // state: { password },
+        });
+    };
+
+    const handleFocusClick = () => {
+        if (!studyId) return;
+
+        navigate(`/focus?id=${studyId}`, {
+            // state: { password },
+        });
+    };
     return (
         <div className="habit-container">
             <div className="habit-content">
@@ -78,8 +100,10 @@ function Habit() {
                         <h2>연우의 개발공장</h2>
                     </div>
                     <div className="habit-content-button">
-                        <NavButton to={"/focus"}>오늘의 집중</NavButton>
-                        <NavButton to={"/"}>홈</NavButton>
+                        <NavButton onClick={handleFocusClick}>
+                            오늘의 집중
+                        </NavButton>
+                        <NavButton onClick={handleHomeClick}>홈</NavButton>
                     </div>
                 </div>
 

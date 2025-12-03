@@ -1,6 +1,6 @@
 // src/pages/Focus.jsx
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
@@ -22,12 +22,10 @@ const PHASE = {
 };
 
 function Focus() {
-    const { studyId } = useParams();
+    const [searchParams] = useSearchParams();
+    const studyId = searchParams.get("id");
     const location = useLocation();
     const navigate = useNavigate();
-
-    // 비밀번호는 비밀번호 페이지에서 navigate할 때 state로 전달
-    const password = location.state?.password;
 
     // 수정 가능한 분 단위
     const [focusMinutes, setFocusMinutes] = useState(25);
@@ -68,33 +66,46 @@ function Focus() {
     };
 
     // ---------- 비밀번호 체크 + 초기 데이터 로딩 ----------
+    const password = location.state?.password ?? "1234"; //임시로
+    // const password = location.state?.password;
 
     // password 없이 직접 URL로 들어오면 비밀번호 페이지로 돌려보내기
-    // useEffect(() => {
-    //     if (!password) {
-    //         navigate(`/study/${studyId}/password`, { replace: true });
-    //     }
-    // }, [password, studyId, navigate]);
+    useEffect(() => {
+        if (!password) {
+            navigate(`/study/${studyId}/password`, { replace: true });
+        }
+    }, [password, studyId, navigate]);
 
     // 스터디 정보 + 현재 포인트 로딩
     useEffect(() => {
-        // if (!password) return;
+        if (!studyId || !password) return;
 
         const load = async () => {
             try {
                 setIsLoading(true);
                 setError(null);
 
-                // 스터디 정보 + 현재까지 포인트를 동시에 요청
-                const [detailRes, focusRes] = await Promise.all([
-                    fetchStudyDetail(studyId, password),
-                    fetchFocusInfo(studyId, password),
-                ]);
-
+                //스터디 정보 요청
+                const detailRes = await fetchStudyDetail(studyId, password);
                 setStudyInfo(detailRes.data);
-                setTotalPoint(focusRes.data.totalPoint);
+
+                //  포커스 정보 요청
+                try {
+                    const focusRes = await fetchFocusInfo(studyId, password);
+                    setTotalPoint(focusRes.data.totalPoint);
+                } catch (err) {
+                    // 포커스 정보가 아직 없는 경우 포인트 0으로 시작
+                    if (err.response?.status === 404) {
+                        console.warn(
+                            "포커스 정보 없음, totalPoint를 0으로 설정합니다."
+                        );
+                        setTotalPoint(0);
+                    } else {
+                        throw err;
+                    }
+                }
             } catch (err) {
-                console.error(err);
+                console.error("Focus 페이지 초기 로딩 실패:", err);
                 setError("집중 정보를 불러오지 못했습니다.");
             } finally {
                 setIsLoading(false);
@@ -103,7 +114,6 @@ function Focus() {
 
         load();
     }, [studyId, password]);
-
     // ---------- 타이머 조작 ----------
 
     // Start: ready 또는 paused에서 running으로
@@ -130,30 +140,52 @@ function Focus() {
         setRemainSeconds(focusMinutes * 60);
     };
 
-    // Stop → 서버에 포인트 적립 요청 → Toast → ready 리셋
     const handleStop = async () => {
         if (phase !== PHASE.FINISHED) return;
-        if (!password) return;
 
-        // 백엔드 스펙: timeSec(초)을 body로 보냄
-        const timeSec = focusMinutes * 60;
+        if (!studyId) {
+            console.error("finishFocus 실패: studyId 없음");
+            return;
+        }
+        if (!password) {
+            console.error("finishFocus 실패: password 없음");
+            return;
+        }
+        //사용자가 설정한 기본 집중 시간
+        const totalSec = focusMinutes * 60;
+        //실제로 집중한 시간(초)
+        const usedSec = totalSec - Math.max(remainSeconds, 0);
+        const timeSec = usedSec > 0 ? usedSec : totalSec;
 
         try {
+            console.log("finishFocus 요청:", {
+                studyId,
+                password,
+                timeSec,
+            });
+
             const res = await finishFocus(studyId, password, timeSec);
 
+            console.log("finishFocus 응답:", res.status, res.data);
+
+            //  Swagger 응답이 { point, totalPoint } 라고 가정
             const { point, totalPoint: newTotal } = res.data;
 
-            setLastEarnedPoint(point); // 이번에 얻은 포인트
-            setTotalPoint(newTotal); // 누적 포인트
-            setIsToastVisible(true);
+            setLastEarnedPoint(point ?? 0); // 이번에 얻은 포인트
+            setTotalPoint(newTotal ?? 0); // 누적 포인트
+            setIsToastVisible(true); // 토스트 표시
         } catch (err) {
-            console.error("포인트 적립 실패:", err);
+            console.error(
+                "포인트 적립 실패:",
+                err.response?.status,
+                err.response?.data ?? err.message
+            );
             alert("포인트 적립에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        } finally {
+            // 4) 타이머 상태 초기화
+            setPhase(PHASE.READY);
+            setRemainSeconds(focusMinutes * 60);
         }
-
-        // ready로 리셋
-        setPhase(PHASE.READY);
-        setRemainSeconds(focusMinutes * 60);
     };
 
     // 카운트다운: running + finished 상태에서 초 흐르기
@@ -209,7 +241,7 @@ function Focus() {
         if (!studyId) return;
 
         navigate(`/habit?id=${studyId}`, {
-            // state: { password },
+            state: { password },
         });
     };
 
@@ -217,7 +249,7 @@ function Focus() {
         if (!studyId) return;
 
         navigate(`/focus?id=${studyId}`, {
-            // state: { password },
+            state: { password },
         });
     };
 

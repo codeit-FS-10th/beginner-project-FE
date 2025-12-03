@@ -14,11 +14,8 @@ function Detail() {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     const [searchParams] = useSearchParams();
-
     const navigate = useNavigate();
-
     const studyId = searchParams.get("id");
-
     const location = useLocation();
     const stateStudy = location.state?.study;
 
