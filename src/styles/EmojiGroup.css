@@ -1,0 +1,15 @@
+.emoji-group {
+    display: flex;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 15px;
+    padding: 12px;
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.emoji-group__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+}
