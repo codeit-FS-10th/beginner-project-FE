@@ -2,27 +2,71 @@ import React, { useEffect, useState } from "react";
 import NavButton from "@atoms/button/NavButton";
 import Tag from "@atoms/tag/Tag";
 import "@styles/pages/detail.css";
-import { habitsFromApi } from "@mocks/habitcheck.js";
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/Sticker/Sticker";
+<<<<<<< HEAD
 import { useSearchParams, useNavigate } from "react-router-dom";
+=======
+import { useLocation, useSearchParams } from "react-router-dom";
+import { fetchTodayHabits } from "@api/service/habitservice";
+import { addRecentStudy } from "@utils/recentStudy";
+>>>>>>> 1b3010fadc46d6ef04fe66c26a888dc151bd7eae
 
 function Detail() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     const [searchParams] = useSearchParams();
+<<<<<<< HEAD
     const navigate = useNavigate();
     const studyId = searchParams.get("id"); // 🔥 ?id=1 에서 1 가져옴
+=======
+    const studyId = searchParams.get("id");
+
+    const location = useLocation();
+    const stateStudy = location.state?.study;
+
+    const [study, setStudy] = useState(null);
+
+    const [habitData, setHabitData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const normalizeHabits = (rawHabits) =>
+        rawHabits.map((habit) => ({
+            id: habit.HABIT_ID,
+            name: habit.NAME,
+            월: habit.MON ? 1 : 0,
+            화: habit.TUE ? 1 : 0,
+            수: habit.WED ? 1 : 0,
+            목: habit.THU ? 1 : 0,
+            금: habit.FRI ? 1 : 0,
+            토: habit.SAT ? 1 : 0,
+            일: habit.SUN ? 1 : 0,
+        }));
+>>>>>>> 1b3010fadc46d6ef04fe66c26a888dc151bd7eae
 
     useEffect(() => {
         if (!studyId) return;
 
-        // TODO: 나중에 여기서 studyId로 상세 API 호출하면 됨
-        // fetchStudyDetail(studyId) 이런 식으로
+        const loadHabits = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchTodayHabits(studyId);
+                setHabitData(normalizeHabits(data));
+            } catch (err) {
+                console.error(err);
+                setError("습관 데이터를 불러오는 데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadHabits();
     }, [studyId]);
 
+<<<<<<< HEAD
     const handleHabitClick = () => {
         if (!studyId) return;
 
@@ -38,6 +82,20 @@ function Detail() {
             // state: { password },
         });
     };
+=======
+    const habits = habitData;
+
+    useEffect(() => {
+        if (stateStudy) {
+            setStudy(stateStudy);
+        }
+    }, [stateStudy]);
+
+    useEffect(() => {
+        if (!study) return;
+        addRecentStudy(study);
+    }, [study]);
+>>>>>>> 1b3010fadc46d6ef04fe66c26a888dc151bd7eae
 
     return (
         <div className="detail-conainer">
@@ -87,36 +145,47 @@ function Detail() {
                 <div className="detail-habit-history">
                     <h2 className="habit-title">습관 기록표</h2>
 
-                    <div className="habit-grid">
-                        <div className="habit-name-cell empty"></div>
-                        {days.map((day) => (
-                            <div key={day} className="day-cell">
-                                {day}
-                            </div>
-                        ))}
+                    {error && <p className="habit-error">{error}</p>}
 
-                        {habitsFromApi.map((habit) => (
-                            <React.Fragment key={habit.id}>
-                                <div className="habit-name-cell">
-                                    {habit.name}
+                    {habits.length === 0 && !loading && (
+                        <div className="habit-empty-message">
+                            아직 습관이 없어요.
+                            <br />
+                            오늘의 습관에서 습관을 생성해보세요.
+                        </div>
+                    )}
+                    {habits.length > 0 && (
+                        <div className="habit-grid">
+                            <div className="habit-name-cell empty"></div>
+                            {days.map((day) => (
+                                <div key={day} className="day-cell">
+                                    {day}
                                 </div>
+                            ))}
 
-                                {days.map((day) => {
-                                    const done = habit[day] === 1;
-                                    return (
-                                        <div
-                                            key={day}
-                                            className={`sticker-cell ${
-                                                done ? "done" : "empty"
-                                            }`}
-                                        >
-                                            <span className="sticker-dot" />
-                                        </div>
-                                    );
-                                })}
-                            </React.Fragment>
-                        ))}
-                    </div>
+                            {habits.map((habit) => (
+                                <React.Fragment key={habit.id}>
+                                    <div className="habit-name-cell">
+                                        {habit.name}
+                                    </div>
+
+                                    {days.map((day) => {
+                                        const done = habit[day] === 1;
+                                        return (
+                                            <div
+                                                key={day}
+                                                className={`sticker-cell ${
+                                                    done ? "done" : "empty"
+                                                }`}
+                                            >
+                                                <Sticker active={done} />
+                                            </div>
+                                        );
+                                    })}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
