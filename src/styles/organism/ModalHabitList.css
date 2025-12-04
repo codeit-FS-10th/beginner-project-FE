@@ -7,9 +7,9 @@
     align-items: center;
 }
 
-.modal-container {
+.modal-habit-container {
     width: 648px;
-    height: 369px;
+    height: auto;
     border-radius: 20px;
     background: #fff;
 }

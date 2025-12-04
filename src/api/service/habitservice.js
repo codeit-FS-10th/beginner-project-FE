@@ -1,5 +1,9 @@
-import api from "@api/axiosinstance.js";
+import api from "../axiosInstance.js";
 
+export const fetchWeekHabits = async (studyId) => {
+    const res = await api.get(`/studies/${studyId}/habits`);
+    return res.data;
+};
 // 오늘의 습관 조회
 export const fetchTodayHabits = async (studyId, password) => {
     const res = await api.get(`/studies/${studyId}/habits/today`, {
@@ -7,7 +11,6 @@ export const fetchTodayHabits = async (studyId, password) => {
     });
     return res.data;
 };
-
 // 오늘의 습관 생성
 export const createHabit = async (studyId, payload) => {
     const res = await api.post(`/studies/${studyId}/habits`, payload);

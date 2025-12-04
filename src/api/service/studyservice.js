@@ -7,32 +7,40 @@ export const fetchStudies = async ({ page = 1, limit = 6 } = {}) => {
         return res.data;
 };
 
+export const fetchStudyDetail = async (studyId) => {
+    const res = await api.get(`/studies/${studyId}`);
+    return res.data;
+};
+
 export const createStudy = async (payload) => {
     const res = await api.post("/studies", payload);
     return res.data;
 };
 
+export const fetchStudyPoints = async (studyId) => {
+    if (!studyId) {
+        throw new Error("studyId가 없습니다.");
+    }
 
-// export const fetchRecentstudy = () => {
-//     return api.get("/study/recent");
-// };
+    const res = await api.get(`/studies/${studyId}/points`);
+    return res.data; 
+};
 
-// export const createStudy = (payload) => {
-//     return api.post("/study", payload);
-// };
+export const verifyStudyPassword = async (studyId, password) => {
+    const res = await api.post(`/studies/${studyId}/verify-password`, {
+        password,
+    });
+    return res.data; // { verified: true }
+};
 
-// export const fetchStudyDetail = (studyId) => {
-//     return api.get(`/study/${studyId}`);
-// };
+// 스터디 수정하기
+export const updateStudy = async (studyId, payload) => {
+    const res = await api.patch(`/studies/${studyId}`, payload);
+    return res.data;
+};
 
-// export const updateStudy = (studyId, payload) => {
-//     return api.patch(`/study/${studyId}`, payload);
-// };
-
-// export const deleteStudy = (studyId, password) => {
-//     return api.delete(`/study/${studyId}`, { data: { password } });
-// };
-
-// export const fetchBackgroundList = () => {
-//     return api.get("/study/backgrounds");
-// };
+// 스터디 삭제하기
+export const deleteStudy = async (studyId) => {
+    const res = await api.delete(`/studies/${studyId}`);
+    return res.data;
+};

@@ -12,3 +12,13 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.nav-btn-children {
+    color: var(--gray-gray_818181, #818181);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
 import "@styles/atoms/Dropdown.css";
+import { ToggleIcon } from "@assets/Icons";
 
 export default function Dropdown({
     items = [],
@@ -37,6 +38,7 @@ export default function Dropdown({
                 onClick={() => setIsOpen((prev) => !prev)}
             >
                 {label}
+                <ToggleIcon className="dropdown-icon" />
             </button>
 
             <ul className={`dropdown-content ${isOpen ? "show" : ""}`}>

@@ -149,14 +149,15 @@ function Study() {
                     {errors.passwordConfirm && (
                         <p className="error-text">{errors.passwordConfirm}</p>
                     )}
-
-                    <BaseButton
-                        type="default"
-                        size="full"
-                        disabled={submitting}
-                    >
-                        {submitting ? "만드는 중..." : "만들기"}
-                    </BaseButton>
+                    <div className="study-make-button">
+                        <BaseButton
+                            type="default"
+                            size="full"
+                            disabled={submitting}
+                        >
+                            {submitting ? "만드는 중..." : "만들기"}
+                        </BaseButton>
+                    </div>
                 </form>
             </section>
         </div>

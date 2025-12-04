@@ -1,5 +1,5 @@
-import bg1 from "@img/mockimg/profiles_background1.svg";
-import bg2 from "@img/mockimg/profiles_background2.svg";
+import bg1 from "@img/mockImg/profiles_background1.svg";
+import bg2 from "@img/mockImg/profiles_background2.svg";
 
 export const mockBackgrounds = [
     { id: 1, image: bg1 },
