@@ -18,9 +18,8 @@ import Tag from "@atoms/tag/Tag";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/sticker/Sticker";
 import NavButton from "@atoms/button/NavButton";
-import EmojiGroup from "@molecule/Emoji/EmojiGroup";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
-import EmojiBar from "../components/molecule/emoji/EmojiBar";
+import EmojiBar from "@molecule/emoji/EmojiBar";
 
 function Detail() {
     const navigate = useNavigate();
