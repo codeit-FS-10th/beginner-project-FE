@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { fetchStudies, fetchStudyPoints } from "@api/service/studyservice";
-import { fetchEmoji } from "@api/service/Emojiservice";
+import { fetchStudies } from "@api/service/studyservice";
 import { getRecentStudies } from "@utils/recentStudy";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
@@ -60,48 +59,32 @@ function Home() {
 
     // 최근 조회한 스터디 (localStorage 기반) - 이모지 데이터 추가
     useEffect(() => {
-        const loadRecentStudiesWithEmojis = async () => {
+        const loadRecentStudiesWithEmojis = () => {
             const data = getRecentStudies();
             if (!data || data.length === 0) {
                 setRecentStudy([]);
                 return;
             }
 
-            // 각 최근 스터디의 이모지 데이터 가져오기
-            const recentWithEmojis = await Promise.all(
-                data.map(async (study) => {
-                    try {
-                        const studyId = study.STUDY_ID;
-                        if (!studyId) {
-                            return { ...study, reactionData: [] };
-                        }
+            // 각 최근 스터디의 이모지 데이터 포맷팅
+            const recentWithEmojis = data.map((study) => {
+                const reactionData = (study.emojis || []).map((item) => {
+                    const code = (item.code || "").toLowerCase();
+                    const emoji = codeToEmoji(code);
 
-                        const emojiList = await fetchEmoji(studyId);
-                        const rawEmojis = Array.isArray(emojiList)
-                            ? emojiList
-                            : [];
+                    return {
+                        id: code,
+                        emoji: emoji,
+                        value: item.counting || 0,
+                    };
+                });
 
-                        const reactionData = rawEmojis.map((item) => {
-                            const code = (item.CODE || "").toLowerCase();
-                            const emoji = codeToEmoji(code);
-
-                            return {
-                                id: code,
-                                emoji: emoji,
-                                value: item.COUNTING || 0,
-                            };
-                        });
-
-                        return {
-                            ...study,
-                            reactionData: reactionData,
-                        };
-                    } catch (err) {
-                        console.error("최근 스터디 이모지 불러오기 실패:", err);
-                        return { ...study, reactionData: [] };
-                    }
-                })
-            );
+                return {
+                    ...study,
+                    point: study.totalPoint || 0,
+                    reactionData: reactionData,
+                };
+            });
 
             setRecentStudy(recentWithEmojis);
         };
@@ -127,58 +110,25 @@ function Home() {
             const items = res.items ?? [];
             const totalPages = res.totalPages ?? 1;
 
-            // 각 스터디 포인트 및 이모지 조회
-            const itemsWithData = await Promise.all(
-                items.map(async (study) => {
-                    try {
-                        const studyId = study.STUDY_ID;
+            // 응답에서 이미 totalPoint와 emojis를 받으므로 포맷팅만 수행
+            const itemsWithData = items.map((study) => {
+                const reactionData = (study.emojis || []).map((item) => {
+                    const code = (item.code || "").toLowerCase();
+                    const emoji = codeToEmoji(code);
 
-                        if (!studyId) {
-                            return { ...study, point: 0, reactionData: [] };
-                        }
+                    return {
+                        id: code,
+                        emoji: emoji,
+                        value: item.counting || 0,
+                    };
+                });
 
-                        // 포인트 조회
-                        const pointData = await fetchStudyPoints(studyId);
-                        const totalPoint = pointData?.totalPoint ?? 0;
-
-                        // 이모지 조회
-                        let reactionData = [];
-                        try {
-                            const emojiList = await fetchEmoji(studyId);
-                            const rawEmojis = Array.isArray(emojiList)
-                                ? emojiList
-                                : [];
-
-                            reactionData = rawEmojis.map((item) => {
-                                const code = (item.CODE || "").toLowerCase();
-                                const emoji = codeToEmoji(code);
-
-                                return {
-                                    id: code,
-                                    emoji: emoji,
-                                    value: item.COUNTING || 0,
-                                };
-                            });
-                        } catch (emojiErr) {
-                            console.error("이모지 불러오기 실패:", emojiErr);
-                            reactionData = [];
-                        }
-
-                        return {
-                            ...study,
-                            point: totalPoint,
-                            reactionData: reactionData,
-                        };
-                    } catch (err) {
-                        console.error("데이터 불러오기 실패:", err);
-                        return {
-                            ...study,
-                            point: 0,
-                            reactionData: [],
-                        };
-                    }
-                })
-            );
+                return {
+                    ...study,
+                    point: study.totalPoint || 0,
+                    reactionData: reactionData,
+                };
+            });
 
             setStudies((prev) =>
                 append ? [...prev, ...itemsWithData] : itemsWithData
@@ -204,9 +154,6 @@ function Home() {
     // 정렬 옵션 변경
     const handleSortChange = (option) => {
         setSortOption(option);
-        // 필요하면 정렬 바꿀 때 첫 페이지로 다시 불러오고 싶으면 아래 두 줄 주석 해제
-        // setPage(1);
-        // loadStudies({ pageToLoad: 1, append: false });
     };
 
     // 더보기

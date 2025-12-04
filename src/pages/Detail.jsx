@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-    fetchStudyPoints,
     updateStudy,
     deleteStudy,
     fetchStudyDetail,
 } from "@api/service/studyservice";
 
-import { fetchEmoji, postEmoji } from "@api/service/Emojiservice";
+import { postEmoji } from "@api/service/Emojiservice";
 
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
@@ -122,20 +121,20 @@ function Detail() {
         try {
             setEmojiError(null);
 
-            const list = await fetchEmoji(studyId);
-            const raw = Array.isArray(list) ? list : [];
+            const data = await fetchStudyDetail(studyId);
+            const raw = Array.isArray(data.emojis) ? data.emojis : [];
 
             const normalized = raw.map((item) => {
-                // CODE를 소문자로 변환하여 사용
-                const code = (item.CODE || "").toLowerCase();
-                // CODE를 이모지로 변환
+                // code를 소문자로 변환하여 사용
+                const code = (item.code || "").toLowerCase();
+                // code를 이모지로 변환
                 const emoji = codeToEmoji(code);
 
                 return {
                     id: code,
                     code: code,
                     emoji: emoji,
-                    count: item.COUNTING || 0,
+                    count: item.counting || 0,
                     me: false,
                 };
             });
@@ -179,33 +178,37 @@ function Detail() {
 
     useEffect(() => {
         loadEmoji();
-    }, [studyId]);
+    }, []);
 
     useEffect(() => {
         const loadStudyDetail = async () => {
             try {
                 const data = await fetchStudyDetail(studyId);
                 setStudy(data);
+                
+                // 응답에 totalPoint 포함되어 있음
+                setPoints(data?.totalPoint ?? 0);
+                
+                // 응답에 emojis 포함되어 있으므로 처리
+                const raw = Array.isArray(data.emojis) ? data.emojis : [];
+                const normalized = raw.map((item) => {
+                    const code = (item.code || "").toLowerCase();
+                    const emoji = codeToEmoji(code);
+
+                    return {
+                        id: code,
+                        code: code,
+                        emoji: emoji,
+                        count: item.counting || 0,
+                        me: false,
+                    };
+                });
+                setReactions(normalized);
             } catch (err) {
                 console.error("스터디 정보 불러오기 실패", err);
             }
         };
         loadStudyDetail();
-    }, [studyId]);
-
-    useEffect(() => {
-        if (!studyId) return;
-
-        const loadPoints = async () => {
-            try {
-                const data = await fetchStudyPoints(studyId);
-                setPoints(data?.totalPoint ?? 0);
-            } catch {
-                setPointError("포인트 불러오기 실패");
-            }
-        };
-
-        loadPoints();
     }, [studyId]);
 
     const normalizeHabits = (rawHabits) =>
