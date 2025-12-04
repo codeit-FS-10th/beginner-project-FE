@@ -1,7 +1,8 @@
 import BaseButton from "@atoms/button/BaseButton";
 import "@styles/organism/ModalHabitList.css";
+import Chip from "@atoms/chip/chip";
 
-function ModalList() {
+function ModalHabitList() {
     return (
         <div className="modal-overlay">
             <div className="modal-container">
@@ -9,7 +10,10 @@ function ModalList() {
                     <header className="modal-header">
                         <h2>습관 목록</h2>
                     </header>
-                    <div className="modal-body"></div>
+                    <div className="modal-body">
+                        <div></div>
+                        <Chip>하이</Chip>
+                    </div>
 
                     <footer className="modal-footer">
                         <BaseButton type="cancle" size="md">
@@ -25,4 +29,4 @@ function ModalList() {
     );
 }
 
-export default ModalList;
+export default ModalHabitList;

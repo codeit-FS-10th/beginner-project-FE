@@ -1,25 +1,44 @@
 import api from "@api/axiosinstance.js";
 
-export const fetchTodayHabits = (studyId, password) => {
-    return api.get(`/studies/${studyId}/habits/today`, {
+// 오늘의 습관 조회
+export const fetchTodayHabits = async (studyId, password) => {
+    const res = await api.get(`/studies/${studyId}/habits/today`, {
         params: { password },
     });
+    return res.data;
 };
 
-export const createHabit = (studyId, payload) => {
-    return api.post(`/studies/${studyId}/habits`, payload);
+// 오늘의 습관 생성
+export const createHabit = async (studyId, payload) => {
+    const res = await api.post(`/studies/${studyId}/habits`, payload);
+    return res.data;
 };
 
-export const updateHabit = (studyId, habitId, payload) => {
-    return api.patch(`/studies/${studyId}/habits/${habitId}`, payload);
+// 오늘의 습관 수정
+export const updateHabit = async (studyId, habitId, payload) => {
+    const res = await api.patch(
+        `/studies/${studyId}/habits/${habitId}`,
+        payload
+    );
+    return res.data;
 };
 
-export const deleteHabit = (studyId, habitId) => {
-    return api.delete(`/studies/${studyId}/habits/${habitId}`);
+// 오늘의 습관 삭제
+export const deleteHabit = async (studyId, habitId) => {
+    const res = await api.delete(`/studies/${studyId}/habits/${habitId}`);
+    return res.data;
 };
 
-export const toggleHabitCheck = (studyId, habitId, dateString) => {
-    return api.patch(`/studies/${studyId}/habits/${habitId}/check`, {
-        date: dateString,
+// 체크 토글
+export const toggleHabitCheck = async (studyId, habitId, isDone) => {
+    const res = await api.patch(`/studies/${studyId}/habits/${habitId}/today`, {
+        isDone,
     });
+    return res.data;
+};
+
+// 스터디 상세 조회: GET /studies/{studyId}
+export const fetchStudyDetail = async (studyId) => {
+    const res = await api.get(`/studies/${studyId}`);
+    return res.data; // Swagger 예시 보면 DATA 안 쓰고 바로 JSON 주는 형태니까 data 그대로 리턴
 };

@@ -85,16 +85,24 @@ function Focus() {
                 setIsLoading(true);
                 setError(null);
 
-                //스터디 정보 요청
+                // 🔹 스터디 정보 요청
                 const detailRes = await fetchStudyDetail(studyId, password);
-                setStudyInfo(detailRes.data);
+                console.log("스터디 상세조회:", detailRes);
 
-                //  포커스 정보 요청
+                // detailRes가 res.data 일 수도, res 객체일 수도 있으니 둘 다 대응
+                const data = detailRes.data ?? detailRes;
+
+                // 🔹 Habit 페이지와 똑같이 정규화
+                setStudyInfo({
+                    nickname: data.NICKNAME ?? data.nickname,
+                    name: data.NAME ?? data.name,
+                });
+
+                // 🔹 포커스 정보 요청
                 try {
                     const focusRes = await fetchFocusInfo(studyId, password);
                     setTotalPoint(focusRes.data.totalPoint);
                 } catch (err) {
-                    // 포커스 정보가 아직 없는 경우 포인트 0으로 시작
                     if (err.response?.status === 404) {
                         console.warn(
                             "포커스 정보 없음, totalPoint를 0으로 설정합니다."
@@ -114,6 +122,7 @@ function Focus() {
 
         load();
     }, [studyId, password]);
+
     // ---------- 타이머 조작 ----------
 
     // Start: ready 또는 paused에서 running으로
@@ -248,7 +257,7 @@ function Focus() {
     const handleHomeClick = () => {
         if (!studyId) return;
 
-        navigate(`/focus?id=${studyId}`, {
+        navigate(`/detail?id=${studyId}`, {
             state: { password },
         });
     };
@@ -262,21 +271,19 @@ function Focus() {
                     {/* Header */}
                     <div className="focus-content-header">
                         <div className="focus-header-title">
-                            {isLoading && <h2>로딩 중...</h2>}
-                            {error && !isLoading && <h2>에러 발생</h2>}
-                            {!isLoading && !error && (
-                                <h2>
-                                    {studyInfo?.NICKNAME ??
-                                        studyInfo?.NAME ??
-                                        "오늘의 집중"}
-                                </h2>
-                            )}
+                            <h2>
+                                {studyInfo
+                                    ? `${studyInfo.nickname}의 ${studyInfo.name}`
+                                    : "스터디 이름 로딩 중..."}
+                            </h2>
                         </div>
                         <div className="focus-content-button">
                             <NavButton onClick={handleHabitClick}>
                                 오늘의 습관
                             </NavButton>
-                            <NavButton onClick={handleHomeClick}>홈</NavButton>
+                            <NavButton onClick={handleHomeClick}>
+                                스터디 홈
+                            </NavButton>
                         </div>
                     </div>
 

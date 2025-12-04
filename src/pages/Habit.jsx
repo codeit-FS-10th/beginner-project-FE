@@ -1,25 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
+import {
+    fetchTodayHabits,
+    toggleHabitCheck,
+    createHabit,
+    updateHabit,
+    deleteHabit,
+    fetchStudyDetail,
+} from "@api/service/habitService";
+import ModalHabitList from "@organism/ModalHabitList";
 import "@styles/pages/habit.css";
-import Chip from "@atoms/chip/chip";
+import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
 
 function Habit() {
-    //현재 시간
+    // 현재 시간
     const [time, setTime] = useState("");
-    //DB에서 가져온 습관 목록
+    // 오늘의 습관 리스트
     const [habits, setHabits] = useState([]);
+    // 모달 열림/닫힘
+    const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
+    // 스터디 정보
+    const [studyInfo, setStudyInfo] = useState(null);
 
     const [searchParams] = useSearchParams();
-
     const navigate = useNavigate();
+    const location = useLocation();
 
     const studyId = searchParams.get("id");
+    const password = location.state?.password ?? "1234"; // 임시 비번
 
-    //현재시간
+    /** 현재 날짜 YYYY-MM-DD */
+    const getTodayDateString = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+    };
+
+    /** 현재 시간 업데이트 */
     const formatDateTime = () => {
         const now = new Date();
-
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, "0");
         const day = String(now.getDate()).padStart(2, "0");
@@ -28,77 +50,116 @@ function Habit() {
         const minute = String(now.getMinutes()).padStart(2, "0");
         const ampm = hour < 12 ? "오전" : "오후";
 
-        if (hour === 0) {
-            hour = 12;
-        } else if (hour > 12) {
-            hour = hour - 12;
-        }
+        if (hour === 0) hour = 12;
+        else if (hour > 12) hour -= 12;
 
         return `${year}-${month}-${day} ${ampm} ${hour}:${minute}`;
     };
 
-    //현재시간
-    const updateTime = () => setTime(formatDateTime());
-
-    //오늘 요일 추출
-    const getTodayColumn = () => {
-        const days = ["SUN", "MON", "TUE", "WEN", "THU", "FRI", "SAT"];
-        const today = new Date().getDay(); // 0~6 (0: 일요일)
-        return days[today];
-    };
-    //오늘 요일에 해당하는 습관정보가져오기
-    const handleHabitClick = async (habitId) => {
-        const todayColumn = getTodayColumn();
-
-        try {
-            await api.patch(`/habits/${habitId}`, {
-                [todayColumn]: true,
-            });
-
-            setHabits((prev) =>
-                prev.map((habit) =>
-                    habit.id === habitId
-                        ? { ...habit, [todayColumn]: true }
-                        : habit
-                )
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    //페이지 열자마자 현재시간 마운트
+    /** 1초마다 현재 시간 변경 */
     useEffect(() => {
-        updateTime();
-        const timer = setInterval(updateTime, 1000);
+        setTime(formatDateTime());
+        const timer = setInterval(() => setTime(formatDateTime()), 1000);
         return () => clearInterval(timer);
     }, []);
-    // // 페이지 열자마자  습관 마운트//////////////////
-    // useEffect(() => {
-    //     fetchTodayHabits();
-    // }, []);
 
-    const handleHomeClick = () => {
+    /** 오늘의 습관 불러오기 */
+    const loadHabits = async () => {
+        if (!studyId) {
+            console.warn(
+                "studyId가 없습니다. 오늘의 습관을 불러오지 않습니다."
+            );
+            return;
+        }
+
+        try {
+            const data = await fetchTodayHabits(studyId, password);
+            console.log("오늘의 습관 API 응답:", data);
+
+            const list = (data.habits ?? []).map((habit) => ({
+                id: habit.HABIT_ID,
+                name: habit.NAME,
+                isDone: habit.isDone,
+            }));
+
+            setHabits(list);
+        } catch (error) {
+            console.error("오늘의 습관 조회 실패:", error?.response || error);
+        }
+    };
+    /** 스터디 상세 정보 불러오기 */
+    const loadStudyDetail = async () => {
         if (!studyId) return;
 
-        navigate(`/`, {
-            // state: { password },
-        });
+        try {
+            const data = await fetchStudyDetail(studyId);
+            console.log("스터디 상세조회:", data);
+
+            setStudyInfo({
+                nickname: data.NICKNAME ?? data.nickname,
+                name: data.NAME ?? data.name,
+            });
+        } catch (error) {
+            console.error("스터디 상세조회 실패:", error?.response || error);
+        }
     };
 
-    const handleFocusClick = () => {
-        if (!studyId) return;
+    /** 마운트 시 loadHabits 호출 */
+    useEffect(() => {
+        loadHabits();
+        loadStudyDetail();
+    }, [studyId, password]);
 
-        navigate(`/focus?id=${studyId}`, {
-            // state: { password },
+    /** 습관 체크/해제 토글 */
+    const handleHabitClick = async (habitId) => {
+        console.log("칩 클릭됨! habitId:", habitId);
+        console.log("클릭 직전 habits:", habits);
+
+        const target = habits.find((h) => h.id === habitId);
+
+        if (!target) {
+            console.warn("해당 habitId를 가진 습관을 찾지 못함:", habitId);
+            return;
+        }
+
+        const newDone = !target.isDone;
+        console.log("토글될 isDone 값:", newDone);
+
+        // UI 먼저 토글
+        setHabits((prev) => {
+            const updated = prev.map((habit) =>
+                habit.id === habitId ? { ...habit, isDone: newDone } : habit
+            );
+            console.log("업데이트된 habits:", updated);
+            return updated;
         });
+
+        // API 호출
+        try {
+            const res = await toggleHabitCheck(studyId, habitId, newDone);
+            // console.log("체크 API 응답:", res);
+            // console.log("서버에 저장된 isDone:", res.isDone);
+        } catch (e) {
+            console.error("체크 실패:", e?.response || e);
+        }
     };
+
+    /** 이동 버튼 */
+    const handleHomeClick = () => navigate("/");
+    const handleFocusClick = () => navigate(`/focus?id=${studyId}`);
+
     return (
         <div className="habit-container">
             <div className="habit-content">
                 <div className="habit-content-header">
                     <div className="habit-header-title">
-                        <h2>연우의 개발공장</h2>
+                        <h2>
+                            {studyInfo
+                                ? `${studyInfo.nickname}의 ${studyInfo.name}`
+                                : "스터디 이름 로딩 중..."}
+                        </h2>
                     </div>
+
                     <div className="habit-content-button">
                         <NavButton onClick={handleFocusClick}>
                             오늘의 집중
@@ -114,28 +175,51 @@ function Habit() {
                     </div>
                 </div>
 
+                {/* 오늘의 습관 리스트 */}
                 <div className="habit-today">
                     <div className="habit-box">
-                        <h2>오늘의 습관</h2>
+                        <div className="habit-title-row">
+                            <h2>오늘의 습관</h2>
+
+                            <button
+                                type="button"
+                                className="habit-edit-button"
+                                onClick={() => setIsHabitModalOpen(true)}
+                            >
+                                목록 수정
+                            </button>
+                        </div>
 
                         <div className="habit-chip-list">
-                            {habits.map((habit) => (
-                                <Chip
-                                    key={habit.id}
-                                    onClick={() => handleHabitClick(habit.id)}
-                                    variant={
-                                        habit[getTodayColumn()]
-                                            ? "active"
-                                            : "default"
-                                    }
-                                >
-                                    {habit.name}
-                                </Chip>
-                            ))}
+                            {habits.length === 0 ? (
+                                <div className="habit-empty">
+                                    <p>아직 습관이 없어요</p>
+                                    <p>목록 수정을 눌러 습관을 생성해보세요</p>
+                                </div>
+                            ) : (
+                                habits.map((habit) => (
+                                    <Chip
+                                        key={habit.id}
+                                        onClick={() =>
+                                            handleHabitClick(habit.id)
+                                        }
+                                        variant={
+                                            habit.isDone ? "active" : "default"
+                                        }
+                                    >
+                                        {habit.name}
+                                    </Chip>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* 모달 렌더 */}
+            {isHabitModalOpen && (
+                <ModalHabitList onClose={() => setIsHabitModalOpen(false)} />
+            )}
         </div>
     );
 }

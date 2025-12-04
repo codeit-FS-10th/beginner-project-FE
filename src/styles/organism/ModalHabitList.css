@@ -17,6 +17,12 @@
 .modal-content {
     padding: 40px 24px;
 }
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .modal-header h2 {
     color: var(--black-black_414141, #414141);
     text-align: center;
