@@ -5,17 +5,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* overflow-y: auto; */
 }
 
 .modal-habit-container {
     width: 648px;
-    height: auto;
+    height: 861px;
     border-radius: 20px;
     background: #fff;
+    /* flex-direction: column; */
 }
 
 .modal-habit-content {
     padding: 40px 24px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 .modal-habit-body {
     display: flex;
@@ -32,8 +37,72 @@
     font-weight: 800;
     line-height: normal;
 }
-
-.modal-habit-footer {
+.habit-item-list {
+    width: 100%;
+    max-height: 572px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 8px; /* 선택: 스크롤바랑 살짝 띄우기 */
+}
+.habit-item {
+    width: 400px;
+    min-height: 54px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+    color: #818181;
+}
+.habit-input {
+    width: 400px;
+    min-height: 54px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+    color: #818181;
+}
+.habit-add-btn {
+    display: flex;
+    width: 400px;
+    height: 54px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    border: 2px solid #414141;
+    background: rgba(255, 255, 255, 0);
+    margin-left: -80px;
+}
+.habit-item-wrapper-btn {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 8px;
+    /* 👉 Chip + DeleteButton 묶음도 가운데로 */
+    justify-content: center;
+    width: 100%; /* 또는 원하는 만큼: width: fit-content; */
+}
+.modal-footer {
     display: flex;
     gap: 24px;
     justify-content: center;
