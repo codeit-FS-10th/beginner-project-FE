@@ -1,4 +1,4 @@
-import React from "react";
+// EmojiGroup.jsx
 import EmojiButton from "./EmojiButton";
 import "@styles/EmojiGroup.css";
 
@@ -9,10 +9,11 @@ export default function EmojiGroup({ reactions, onEmojiClick }) {
                 {reactions.map((item) => (
                     <EmojiButton
                         key={item.id}
+                        variant="normal"
                         emoji={item.emoji}
                         count={item.count}
                         isActive={item.me}
-                        onClick={() => onEmojiClick?.(item.emoji)}
+                        onClick={() => onEmojiClick?.(item.code)}
                     />
                 ))}
             </div>
