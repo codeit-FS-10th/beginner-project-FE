@@ -103,6 +103,19 @@ function Detail() {
         }
     };
 
+    // CODE를 이모지로 변환하는 함수
+    const codeToEmoji = (code) => {
+        if (!code) return "";
+        try {
+            // "1f600" 형식을 "1F600"으로 변환 후 코드 포인트로 변환
+            const codePoint = parseInt(code.toUpperCase(), 16);
+            return String.fromCodePoint(codePoint);
+        } catch (err) {
+            console.error("이모지 변환 실패:", code, err);
+            return "";
+        }
+    };
+
     const loadEmoji = async () => {
         if (!studyId) return;
 
@@ -112,12 +125,20 @@ function Detail() {
             const list = await fetchEmoji(studyId);
             const raw = Array.isArray(list) ? list : [];
 
-            const normalized = raw.map((item) => ({
-                id: item.UNICODE,
-                emoji: item.UNICODE,
-                count: item.COUNTING,
-                me: false,
-            }));
+            const normalized = raw.map((item) => {
+                // CODE를 소문자로 변환하여 사용
+                const code = (item.CODE || "").toLowerCase();
+                // CODE를 이모지로 변환
+                const emoji = codeToEmoji(code);
+
+                return {
+                    id: code,
+                    code: code,
+                    emoji: emoji,
+                    count: item.COUNTING || 0,
+                    me: false,
+                };
+            });
 
             setReactions(normalized);
         } catch (err) {
@@ -127,12 +148,29 @@ function Detail() {
         }
     };
 
-    const handleEmojiAction = async (unicode) => {
+    const handleEmojiAction = async (emojiData) => {
         if (!studyId) return;
 
         try {
-            await postEmoji(studyId, unicode);
+            // emojiData가 객체인 경우 (EmojiPickerWrapper에서 온 경우)
+            // 또는 문자열인 경우 (기존 이모지 클릭인 경우)
+            let code;
+            if (typeof emojiData === "object" && emojiData.code) {
+                code = emojiData.code.toLowerCase();
+            } else if (typeof emojiData === "string") {
+                code = emojiData.toLowerCase();
+            } else {
+                console.error("잘못된 이모지 데이터:", emojiData);
+                return;
+            }
 
+            // CODE를 이모지 문자로 변환햣
+            const emojiChar = codeToEmoji(code);
+
+            // 서버에 { code, emoji } 형태로 전송
+            await postEmoji(studyId, { code, emoji: emojiChar });
+
+            // 변경된 상태를 다시 불러와 갱신
             await loadEmoji();
         } catch (err) {
             console.error("이모지 업데이트 실패", err);

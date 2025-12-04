@@ -1,59 +1,58 @@
 .tag {
-  border-radius: 999px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  display: inline-block;
-  inline-size: max-content;
+    border-radius: 999px;
+    font-style: normal;
+    font-weight: 500;
+    display: inline-block;
+    inline-size: max-content;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* tag type별 - point,reaction */
 .tag--type-point {
-  padding: 6px 12px;
+    padding: 6px 12px;
 }
 .tag--type-reaction {
-  padding: 6px 8px;
+    padding: 6px 8px;
 }
 /* 사이즈별 */
 .tag--type-point .tag--size-sm {
-  height: 86px;
+    height: 86px;
 }
 .tag--type-point .tag--size-lg {
-  height: 116px;
+    height: 116px;
 }
 .tag--type-reaction .tag--size-sm {
-  height: 48px;
+    height: 48px;
 }
 .tag--type-reaction .tag--size-lg {
-  height: 56px;
+    height: 56px;
 }
 /* tag theme - dark,light  */
 .tag--theme-dark {
-  color: #ffffff;
-  background-color: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .tag--theme-light {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* tag size - sm,lg  */
 .tag--emoji-sm {
-  width: 12px;
+    width: 12px;
 }
 .tag--emoji-lg {
-  width: 16px;
+    width: 16px;
 }
 .tag--label-sm {
-  font-size: 12px;
-  margin-left: 5px;
+    font-size: 12px;
+    margin-left: 5px;
 }
 .tag--label-lg {
-  font-size: 16px;
-  margin-left: 5px;
+    font-size: 12px;
+    margin-left: 5px;
 }

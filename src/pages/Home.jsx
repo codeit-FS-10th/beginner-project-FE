@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { fetchStudies, fetchStudyPoints } from "@api/service/studyservice";
+import { fetchEmoji } from "@api/service/Emojiservice";
 import { getRecentStudies } from "@utils/recentStudy";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
 import Card from "@molecule/card/Card";
+import searchIcon from "@assets/Img/searchIcon.svg";
 
 import "@styles/pages/home.css";
 
@@ -43,10 +45,68 @@ function Home() {
 
     const getPoint = (study) => Number(study.point ?? 0);
 
-    // 최근 조회한 스터디 (localStorage 기반)
+    // CODE를 이모지로 변환하는 함수
+    const codeToEmoji = (code) => {
+        if (!code) return "";
+        try {
+            // "1f600" 형식을 "1F600"으로 변환 후 코드 포인트로 변환
+            const codePoint = parseInt(code.toUpperCase(), 16);
+            return String.fromCodePoint(codePoint);
+        } catch (err) {
+            console.error("이모지 변환 실패:", code, err);
+            return "";
+        }
+    };
+
+    // 최근 조회한 스터디 (localStorage 기반) - 이모지 데이터 추가
     useEffect(() => {
-        const data = getRecentStudies();
-        setRecentStudy(data || []);
+        const loadRecentStudiesWithEmojis = async () => {
+            const data = getRecentStudies();
+            if (!data || data.length === 0) {
+                setRecentStudy([]);
+                return;
+            }
+
+            // 각 최근 스터디의 이모지 데이터 가져오기
+            const recentWithEmojis = await Promise.all(
+                data.map(async (study) => {
+                    try {
+                        const studyId = study.STUDY_ID;
+                        if (!studyId) {
+                            return { ...study, reactionData: [] };
+                        }
+
+                        const emojiList = await fetchEmoji(studyId);
+                        const rawEmojis = Array.isArray(emojiList)
+                            ? emojiList
+                            : [];
+
+                        const reactionData = rawEmojis.map((item) => {
+                            const code = (item.CODE || "").toLowerCase();
+                            const emoji = codeToEmoji(code);
+
+                            return {
+                                id: code,
+                                emoji: emoji,
+                                value: item.COUNTING || 0,
+                            };
+                        });
+
+                        return {
+                            ...study,
+                            reactionData: reactionData,
+                        };
+                    } catch (err) {
+                        console.error("최근 스터디 이모지 불러오기 실패:", err);
+                        return { ...study, reactionData: [] };
+                    }
+                })
+            );
+
+            setRecentStudy(recentWithEmojis);
+        };
+
+        loadRecentStudiesWithEmojis();
     }, []);
 
     // 스터디 목록 불러오기
@@ -67,35 +127,61 @@ function Home() {
             const items = res.items ?? [];
             const totalPages = res.totalPages ?? 1;
 
-            // 각 스터디 포인트 조회
-            const itemsWithPoints = await Promise.all(
+            // 각 스터디 포인트 및 이모지 조회
+            const itemsWithData = await Promise.all(
                 items.map(async (study) => {
                     try {
                         const studyId = study.STUDY_ID;
 
                         if (!studyId) {
-                            return { ...study, point: 0 };
+                            return { ...study, point: 0, reactionData: [] };
                         }
 
+                        // 포인트 조회
                         const pointData = await fetchStudyPoints(studyId);
                         const totalPoint = pointData?.totalPoint ?? 0;
+
+                        // 이모지 조회
+                        let reactionData = [];
+                        try {
+                            const emojiList = await fetchEmoji(studyId);
+                            const rawEmojis = Array.isArray(emojiList)
+                                ? emojiList
+                                : [];
+
+                            reactionData = rawEmojis.map((item) => {
+                                const code = (item.CODE || "").toLowerCase();
+                                const emoji = codeToEmoji(code);
+
+                                return {
+                                    id: code,
+                                    emoji: emoji,
+                                    value: item.COUNTING || 0,
+                                };
+                            });
+                        } catch (emojiErr) {
+                            console.error("이모지 불러오기 실패:", emojiErr);
+                            reactionData = [];
+                        }
 
                         return {
                             ...study,
                             point: totalPoint,
+                            reactionData: reactionData,
                         };
                     } catch (err) {
-                        console.error("포인트 불러오기 실패:", err);
+                        console.error("데이터 불러오기 실패:", err);
                         return {
                             ...study,
                             point: 0,
+                            reactionData: [],
                         };
                     }
                 })
             );
 
             setStudies((prev) =>
-                append ? [...prev, ...itemsWithPoints] : itemsWithPoints
+                append ? [...prev, ...itemsWithData] : itemsWithData
             );
 
             setHasMore(pageToLoad < totalPages);
@@ -183,13 +269,20 @@ function Home() {
                     </div>
 
                     <div className="study-controls">
-                        <input
-                            className="study-search-input"
-                            type="text"
-                            placeholder="검색"
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                        />
+                        <div className="study-search-wrapper">
+                            <img
+                                src={searchIcon}
+                                alt="검색"
+                                className="study-search-icon"
+                            />
+                            <input
+                                className="study-search-input"
+                                type="text"
+                                placeholder="검색"
+                                value={searchText}
+                                onChange={(e) => setSearchText(e.target.value)}
+                            />
+                        </div>
                         <Dropdown
                             items={[
                                 SORT_OPTIONS.NEWEST,

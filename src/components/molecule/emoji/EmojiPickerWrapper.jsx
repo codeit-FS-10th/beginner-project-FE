@@ -9,7 +9,7 @@ export default function EmojiPickerWrapper({ onSelect, children }) {
     const handleEmojiClick = (emojiData) => {
         onSelect?.({
             emoji: emojiData.emoji, // "🤣"
-            code: emojiData.unified, // "1F923"
+            code: emojiData.unified?.toLowerCase(), // "1f923" (소문자로 변환)
         });
         setOpen(false);
     };
