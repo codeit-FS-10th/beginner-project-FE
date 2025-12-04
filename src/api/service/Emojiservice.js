@@ -1,4 +1,4 @@
-import api from "../axiosInstance.js"
+import api from "../axiosInstance.js";
 
 export const fetchEmoji = async (studyId) => {
     const res = await api.get(`/studies/${studyId}/emoji`);
@@ -7,8 +7,11 @@ export const fetchEmoji = async (studyId) => {
 };
 
 export const postEmoji = async (studyId, unicode) => {
+    const code = unicode.code.toUpperCase();
+
     const res = await api.post(`/studies/${studyId}/emoji`, {
-        unicode, 
+        code,
     });
+
     return res.data;
 };
