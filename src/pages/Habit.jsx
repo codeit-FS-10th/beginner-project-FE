@@ -7,7 +7,7 @@ import {
     updateHabit,
     deleteHabit,
     fetchStudyDetail,
-} from "@api/service/habitService";
+} from "@api/service/habitservice";
 import ModalHabitList from "@organism/ModalHabitList";
 import "@styles/pages/habit.css";
 import Chip from "@atoms/chip/Chip";

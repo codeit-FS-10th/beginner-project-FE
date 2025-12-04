@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import ReactionAddButton from "@atoms/button/ReactionAddButton";
-
 import {
     fetchStudyPoints,
     updateStudy,
@@ -12,7 +9,6 @@ import {
 import { fetchEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
-
 import { addRecentStudy } from "@utils/recentStudy";
 
 import "@styles/pages/detail.css";
@@ -25,6 +21,8 @@ import EmojiGroup from "@molecule/Emoji/EmojiGroup";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 function Detail() {
+    const navigate = useNavigate();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalAction, setModalAction] = useState(null); // edit | delete
     const [isEditing, setIsEditing] = useState(false);
@@ -37,8 +35,8 @@ function Detail() {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
     const studyId = searchParams.get("id");
+
     const location = useLocation();
     const stateStudy = location.state?.study;
 
@@ -176,7 +174,7 @@ function Detail() {
             try {
                 setLoading(true);
 
-                const data = await fetchWeekHabits(studyId);
+                const data = await fetchTodayHabits(studyId);
                 setHabitData(normalizeHabits(data));
             } catch {
                 setError("습관 데이터 불러오기 실패");
@@ -187,24 +185,6 @@ function Detail() {
 
         loadHabits();
     }, [studyId]);
-
-    const handleHabitClick = () => {
-        if (!studyId) return;
-
-        navigate(`/habit?id=${studyId}`, {
-            // state: { password },
-        });
-    };
-
-    const handleFocusClick = () => {
-        if (!studyId) return;
-
-        navigate(`/focus?id=${studyId}`, {
-            // state: { password },
-        });
-    };
-
-    const habits = habitData;
 
     useEffect(() => {
         if (stateStudy) {
@@ -296,12 +276,8 @@ function Detail() {
                     </h2>
 
                     <div className="detail-intro-button">
-                        <NavButton onClick={handleHabitClick}>
-                            오늘의 습관
-                        </NavButton>
-                        <NavButton onClick={handleFocusClick}>
-                            오늘의 집중
-                        </NavButton>
+                        <NavButton to={"/habit"}>오늘의 습관</NavButton>
+                        <NavButton to={"/focus"}>오늘의 집중</NavButton>
                     </div>
                 </div>
 
