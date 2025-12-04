@@ -3,31 +3,32 @@ import { fetchStudies, fetchStudyPoints } from "@api/service/studyservice";
 import { getRecentStudies } from "@utils/recentStudy";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
-
 import Card from "@molecule/card/Card";
+
 import "@styles/pages/home.css";
 
+const SORT_OPTIONS = {
+    DEFAULT: "정렬 기준",
+    NEWEST: "최근 순",
+    OLDEST: "오래된 순",
+    POINT_DESC: "많은 포인트 순",
+    POINT_ASC: "적은 포인트 순",
+};
+
+const LIMIT = 6; // 한 페이지당 6개 (필요하면 숫자만 바꾸면 됨)
+
 function Home() {
-    const [sortOption, setSortOption] = useState("정렬 기준");
+    const [sortOption, setSortOption] = useState(SORT_OPTIONS.DEFAULT);
+    const [page, setPage] = useState(1);
+
     const [searchText, setSearchText] = useState("");
     const [recentStudy, setRecentStudy] = useState([]);
     const [studies, setStudies] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
 
     const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
-
-    const PAGE_SIZE = 6;
-
-    const SORT_OPTIONS = {
-        DEFAULT: "정렬 기준",
-        NEWEST: "최근 순",
-        OLDEST: "오래된 순",
-        POINT_DESC: "많은 포인트 순",
-        POINT_ASC: "적은 포인트 순",
-    };
 
     const getCreatedAt = (study) => {
         const raw =
@@ -42,11 +43,13 @@ function Home() {
 
     const getPoint = (study) => Number(study.point ?? 0);
 
+    // 최근 조회한 스터디 (localStorage 기반)
     useEffect(() => {
         const data = getRecentStudies();
-        setRecentStudy(data);
+        setRecentStudy(data || []);
     }, []);
 
+    // 스터디 목록 불러오기
     const loadStudies = async ({ pageToLoad = 1, append = false } = {}) => {
         try {
             if (append) {
@@ -58,12 +61,13 @@ function Home() {
 
             const res = await fetchStudies({
                 page: pageToLoad,
-                limit: PAGE_SIZE,
+                limit: LIMIT,
             });
 
             const items = res.items ?? [];
             const totalPages = res.totalPages ?? 1;
 
+            // 각 스터디 포인트 조회
             const itemsWithPoints = await Promise.all(
                 items.map(async (study) => {
                     try {
@@ -105,15 +109,27 @@ function Home() {
         }
     };
 
+    // 첫 로딩 때 1페이지 가져오기
     useEffect(() => {
         loadStudies({ pageToLoad: 1, append: false });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // 정렬 옵션 변경
+    const handleSortChange = (option) => {
+        setSortOption(option);
+        // 필요하면 정렬 바꿀 때 첫 페이지로 다시 불러오고 싶으면 아래 두 줄 주석 해제
+        // setPage(1);
+        // loadStudies({ pageToLoad: 1, append: false });
+    };
+
+    // 더보기
     const handleLoadMore = () => {
         if (!hasMore || loadingMore) return;
         loadStudies({ pageToLoad: page + 1, append: true });
     };
 
+    // 검색 필터링
     const filteredStudies = useMemo(() => {
         return (studies ?? []).filter((study) => {
             const name = study?.NAME ?? "";
@@ -121,30 +137,19 @@ function Home() {
         });
     }, [studies, searchText]);
 
+    // 정렬 적용
     const sortedStudies = useMemo(() => {
         const arr = [...filteredStudies];
 
         switch (sortOption) {
-            case SORT_OPTIONS.NEWEST: {
-                return arr.sort((a, b) => {
-                    const aDate = getCreatedAt(a);
-                    const bDate = getCreatedAt(b);
-                    return bDate - aDate;
-                });
-            }
-            case SORT_OPTIONS.OLDEST: {
-                return arr.sort((a, b) => {
-                    const aDate = getCreatedAt(a);
-                    const bDate = getCreatedAt(b);
-                    return aDate - bDate;
-                });
-            }
-            case SORT_OPTIONS.POINT_DESC: {
+            case SORT_OPTIONS.NEWEST:
+                return arr.sort((a, b) => getCreatedAt(b) - getCreatedAt(a));
+            case SORT_OPTIONS.OLDEST:
+                return arr.sort((a, b) => getCreatedAt(a) - getCreatedAt(b));
+            case SORT_OPTIONS.POINT_DESC:
                 return arr.sort((a, b) => getPoint(b) - getPoint(a));
-            }
-            case SORT_OPTIONS.POINT_ASC: {
+            case SORT_OPTIONS.POINT_ASC:
                 return arr.sort((a, b) => getPoint(a) - getPoint(b));
-            }
             default:
                 return arr;
         }
@@ -153,6 +158,7 @@ function Home() {
     return (
         <div className="root-container">
             <div className="main-container">
+                {/* 최근 조회한 스터디 */}
                 <section className="recent-container">
                     <h2 className="section-title">최근 조회한 스터디</h2>
                     <div className="recent-list">
@@ -170,6 +176,7 @@ function Home() {
                     </div>
                 </section>
 
+                {/* 스터디 둘러보기 */}
                 <section className="study-container">
                     <div className="study-header">
                         <h2 className="section-title">스터디 둘러보기</h2>
@@ -191,7 +198,7 @@ function Home() {
                                 SORT_OPTIONS.POINT_ASC,
                             ]}
                             label={sortOption}
-                            onSelect={(option) => setSortOption(option)}
+                            onSelect={handleSortChange}
                         />
                     </div>
 

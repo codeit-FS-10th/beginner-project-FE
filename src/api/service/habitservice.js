@@ -1,9 +1,16 @@
 import api from "../axiosInstance.js"
 
-export const fetchTodayHabits =  async (studyId) => {
+export const fetchWeekHabits =  async (studyId) => {
     const res = await api.get(`/studies/${studyId}/habits`);
     return res.data;
 };
+
+export const fetchTodayHabits =  async (studyId) => {
+    const res = await api.get(`/studies/${studyId}/habits/today`);
+    return res.data;
+};
+
+
 
 
 // export const createHabit = (studyId, payload) => {
