@@ -1,10 +1,13 @@
 .root-container {
     display: flex;
     justify-content: center;
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
 .main-container {
     max-width: 1200px;
+    width: 100%;
     padding-top: 40px;
     display: flex;
     flex-direction: column;
@@ -91,4 +94,56 @@
     border-radius: 15px;
     border: 1px solid #ddd;
     background: #fff;
+}
+
+@media (max-width: 744px) {
+    .root-container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .main-container {
+        padding-top: 24px;
+        gap: 24px;
+    }
+
+    .recent-container,
+    .study-container {
+        padding: 24px;
+    }
+
+    .recent-container {
+        height: auto; /* 높이 고정 제거 */
+    }
+
+    .recent-list {
+        gap: 16px;
+        flex-wrap: wrap; /* 카드 여러 줄 배치 */
+    }
+
+    .study-controls {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .study-search {
+        width: 100%;
+    }
+
+    .study-sort {
+        width: 160px;
+    }
+
+    .study-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr)); /* 3 → 2개 */
+        gap: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .root-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 }

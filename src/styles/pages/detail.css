@@ -9,6 +9,8 @@
     padding: 40px;
     margin-top: 40px;
     margin-bottom: 73px;
+    margin-left: 24px;
+    margin-right: 24px;
     align-items: flex-start;
     border-radius: 20px;
     background: #fff;
@@ -198,4 +200,18 @@
     font-style: normal;
     font-weight: 800;
     line-height: normal;
+}
+
+@media (max-width: 744px) {
+    .detail-content {
+        margin-left: 24px;
+        margin-right: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .detail-content {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
 }

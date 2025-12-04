@@ -1,11 +1,14 @@
 .gnb-header {
     background-color: #f6f4ef;
 }
+
 .gnb {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 220px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 24px;
 }
 
 .gnb-logo {
@@ -13,17 +16,17 @@
     height: 60px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 744px) {
+    .gnb {
+        padding: 20px 24px;
+    }
+}
+
+@media (max-width: 480px) {
     .gnb {
         padding: 20px 24px;
     }
 
-    /* .gnb.gnb--home .btn.btn--lg {
-    width: 140px;
-  } */
-}
-
-@media (max-width: 480px) {
     .gnb-logo {
         width: 106px;
         height: 35px;
