@@ -56,12 +56,12 @@ function ModalHabitList({ studyId, onClose, onSubmit }) {
     return (
         <div className="modal-overlay">
             <div className="modal-habit-container">
-                <div className="modal-content">
-                    <header className="modal-header">
+                <div className="modal-habit-content">
+                    <header className="modal-habit-header">
                         <h2>습관 목록</h2>
                     </header>
 
-                    <div className="modal-body">
+                    <div className="modal-habit-body">
                         {habits.length === 0 ? (
                             <p className="empty-text">오늘 습관이 없어요.</p>
                         ) : (
@@ -94,7 +94,7 @@ function ModalHabitList({ studyId, onClose, onSubmit }) {
                             </div>
                         )}
                     </div>
-                    <footer className="modal-footer">
+                    <footer className="modal-habitfooter">
                         <BaseButton type="cancle" size="xl" onClick={onClose}>
                             취소
                         </BaseButton>
