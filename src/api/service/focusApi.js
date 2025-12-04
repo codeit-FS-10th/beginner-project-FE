@@ -1,4 +1,4 @@
-import api from "@api/axiosinstance.js";
+import api from "@api/axiosInstance.js";
 
 export const fetchStudyDetail = (studyId, password) => {
     return api.get(`/studies/${studyId}`, {
