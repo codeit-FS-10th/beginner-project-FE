@@ -84,13 +84,9 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                 const safeDay = day ?? 0;
                 const safeGoal = INTRO ?? "";
 
-                // 🔹 현재는 기존 background 그대로 사용
-                const bg = background ?? null;
-
-                // 🔹 나중에 IMAGE를 배경으로 쓸 때 이렇게 바꿀 예정 (지금은 주석만)
-                // const bg = IMAGE
-                //     ? { type: "image", value: IMAGE }
-                //     : background ?? null;
+                const bg = IMAGE
+                    ? { type: "image", value: IMAGE }
+                    : background ?? null;
 
                 const reactions = Array.isArray(reactionData)
                     ? reactionData
