@@ -1,37 +1,52 @@
 import { useState } from "react";
 
-// initial: 서버에서 불러온 초기 이모지 리스트 (없으면 [])
-export function useEmojiReactions(initial = []) {
+export function useEmojiReactions(studyId, initial = []) {
     const [reactions, setReactions] = useState(initial);
 
-    // 기존 이모지 클릭 → count + 1
-    const handleEmojiClick = (emoji) => {
+    const sendToServer = async (code) => {
+        try {
+            const res = await fetch(`/api/studies/${studyId}/emoji`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code }),
+            });
+
+            if (!res.ok) {
+                console.error("emoji post 실패", await res.text());
+            }
+        } catch (err) {
+            console.error("emoji post 에러", err);
+        }
+    };
+
+    const handleEmojiClick = (code) => {
+        sendToServer(code);
         setReactions((prev) =>
             prev.map((item) =>
-                item.emoji === emoji ? { ...item, count: item.count + 1 } : item
+                item.code === code ? { ...item, count: item.count + 1 } : item
             )
         );
     };
 
-    // "추가" 버튼 → 픽커에서 이모지 선택
-    const handleAddEmoji = (emoji) => {
+    const handleAddEmoji = ({ emoji, code }) => {
+        sendToServer(code);
+
         setReactions((prev) => {
-            const exists = prev.find((item) => item.emoji === emoji);
+            const exists = prev.find((item) => item.code === code);
 
             if (exists) {
-                // 이미 있으면 count만 +1
                 return prev.map((item) =>
-                    item.emoji === emoji
+                    item.code === code
                         ? { ...item, count: item.count + 1 }
                         : item
                 );
             }
 
-            // 없으면 새로 추가
             return [
                 ...prev,
                 {
-                    id: Date.now(), // 프론트 임시 id
+                    id: code,
+                    code,
                     emoji,
                     count: 1,
                     me: true,

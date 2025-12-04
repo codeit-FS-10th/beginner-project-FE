@@ -5,8 +5,12 @@ export default function EmojiPickerWrapper({ onSelect, children }) {
     const [open, setOpen] = useState(false);
 
     const toggle = () => setOpen((v) => !v);
+
     const handleEmojiClick = (emojiData) => {
-        onSelect?.(emojiData.emoji);
+        onSelect?.({
+            emoji: emojiData.emoji, // "🤣"
+            code: emojiData.unified, // "1F923"
+        });
         setOpen(false);
     };
 
