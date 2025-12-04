@@ -8,7 +8,7 @@ import {
 
 import { fetchEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
-import { fetchTodayHabits } from "@api/service/habitservice";
+import { fetchWeekHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
 
 import "@styles/pages/detail.css";
@@ -53,7 +53,6 @@ function Detail() {
     const studyName = study?.NAME ?? "";
     const intro = study?.INTRO ?? "";
 
-    // 🟦 비밀번호 검증 후 실행되는 콜백
     const handleVerified = async (actionType) => {
         if (actionType === "edit") {
             setIsEditing(true);
@@ -66,18 +65,18 @@ function Detail() {
         }
     };
 
-    // 🟥 DELETE 요청 실행
     const handleDelete = async () => {
         try {
             await deleteStudy(studyId);
-            showSuccessToast("스터디가 삭제되었습니다.");
+            showSuccessToast("스터디가 정상적으로 삭제 되었습니다.", {
+                toastType: "point",
+            });
             navigate("/");
         } catch (err) {
             showErrorToast("삭제 실패");
         }
     };
 
-    // 🟩 PATCH 수정 실행
     const handleUpdate = async () => {
         try {
             await updateStudy(studyId, {
@@ -93,7 +92,9 @@ function Detail() {
                 INTRO: editIntro,
             });
 
-            showSuccessToast("수정 완료!");
+            showSuccessToast("수정 완료!", {
+                toastType: "point",
+            });
             setIsEditing(false);
         } catch (err) {
             showErrorToast("수정 실패");
@@ -138,7 +139,6 @@ function Detail() {
         loadEmoji();
     }, [studyId]);
 
-    // 🟦 포인트
     useEffect(() => {
         if (!studyId) return;
 
@@ -154,7 +154,6 @@ function Detail() {
         loadPoints();
     }, [studyId]);
 
-    // 🟦 습관 기록표
     const normalizeHabits = (rawHabits) =>
         rawHabits.map((habit) => ({
             id: habit.HABIT_ID,
@@ -187,7 +186,6 @@ function Detail() {
         loadHabits();
     }, [studyId]);
 
-    // 최근 조회 저장
     useEffect(() => {
         if (stateStudy) {
             setStudy(stateStudy);
@@ -212,7 +210,6 @@ function Detail() {
     return (
         <div className="detail-conainer">
             <div className="detail-content">
-                {/* HEADER */}
                 <div className="detail-content-header">
                     <div className="detail-content-first">
                         <EmojiGroup
