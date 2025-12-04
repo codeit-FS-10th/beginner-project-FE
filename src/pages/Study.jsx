@@ -112,7 +112,7 @@ function Study() {
                     <div className="bg-list">
                         {mockBackgrounds.map((bg, index) => (
                             <button
-                                key={`${bg.id}-${index}`} // 🔥 key 유니크하게
+                                key={`${bg.id}-${index}`}
                                 type="button"
                                 className={`bg-item ${
                                     selectedBg?.id === bg.id
@@ -121,7 +121,14 @@ function Study() {
                                 }`}
                                 onClick={() => setSelectedBg(bg)}
                             >
-                                <img src={bg.image} alt="background" />
+                                {bg.image ? (
+                                    <img src={bg.image} alt="background" />
+                                ) : (
+                                    <div
+                                        className="bg-color-box"
+                                        style={{ backgroundColor: bg.color }}
+                                    />
+                                )}
                             </button>
                         ))}
                     </div>
