@@ -109,7 +109,7 @@ export default function Study() {
 
     return (
         <>
-            <Toast />
+            {/* <Toast /> */}
 
             <div className="study-root-container">
                 <div className="study-main-container">

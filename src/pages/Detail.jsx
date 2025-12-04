@@ -185,10 +185,10 @@ function Detail() {
             try {
                 const data = await fetchStudyDetail(studyId);
                 setStudy(data);
-                
+
                 // 응답에 totalPoint 포함되어 있음
                 setPoints(data?.totalPoint ?? 0);
-                
+
                 // 응답에 emojis 포함되어 있으므로 처리
                 const raw = Array.isArray(data.emojis) ? data.emojis : [];
                 const normalized = raw.map((item) => {
