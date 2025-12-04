@@ -3,12 +3,14 @@ import { useState } from "react";
 export function useEmojiReactions(studyId, initial = []) {
     const [reactions, setReactions] = useState(initial);
 
-    const sendToServer = async (code) => {
+    const sendToServer = async (rawCode) => {
+        const code = rawCode.toUpperCase();
+
         try {
             const res = await fetch(`/api/studies/${studyId}/emoji`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ code }),
+                body: JSON.stringify({ code }), // 항상 대문자 코드로 보냄
             });
 
             if (!res.ok) {
@@ -19,24 +21,33 @@ export function useEmojiReactions(studyId, initial = []) {
         }
     };
 
-    const handleEmojiClick = (code) => {
+    const handleEmojiClick = (rawCode) => {
+        const code = rawCode.toUpperCase();
+
         sendToServer(code);
+
         setReactions((prev) =>
             prev.map((item) =>
-                item.code === code ? { ...item, count: item.count + 1 } : item
+                item.code.toUpperCase() === code
+                    ? { ...item, count: item.count + 1 }
+                    : item
             )
         );
     };
 
-    const handleAddEmoji = ({ emoji, code }) => {
+    const handleAddEmoji = ({ emoji, code: rawCode }) => {
+        const code = rawCode.toUpperCase();
+
         sendToServer(code);
 
         setReactions((prev) => {
-            const exists = prev.find((item) => item.code === code);
+            const exists = prev.find(
+                (item) => item.code.toUpperCase() === code
+            );
 
             if (exists) {
                 return prev.map((item) =>
-                    item.code === code
+                    item.code.toUpperCase() === code
                         ? { ...item, count: item.count + 1 }
                         : item
                 );
@@ -45,7 +56,7 @@ export function useEmojiReactions(studyId, initial = []) {
             return [
                 ...prev,
                 {
-                    id: code,
+                    id: code, // id도 통일해서 사용
                     code,
                     emoji,
                     count: 1,

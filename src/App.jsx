@@ -15,10 +15,10 @@ function App() {
             <Toast />
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/Detail" element={<Detail />} />
-                <Route path="/Habit" element={<Habit />} />
-                <Route path="/Study" element={<Study />} />
-                <Route path="/Focus" element={<Focus />} />
+                <Route path="/detail" element={<Detail />} />
+                <Route path="/habit" element={<Habit />} />
+                <Route path="/study" element={<Study />} />
+                <Route path="/focus" element={<Focus />} />
             </Routes>
         </>
     );

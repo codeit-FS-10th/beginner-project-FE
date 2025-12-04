@@ -1,10 +1,10 @@
-import api from "../axiosInstance.js"
+import api from "../axiosInstance.js";
 
 export const fetchStudies = async ({ page = 1, limit = 6 } = {}) => {
     const res = await api.get("/studies", {
         params: { page, limit },
     });
-        return res.data;
+    return res.data;
 };
 
 export const fetchStudyDetail = async (studyId) => {
@@ -23,7 +23,7 @@ export const fetchStudyPoints = async (studyId) => {
     }
 
     const res = await api.get(`/studies/${studyId}/points`);
-    return res.data; 
+    return res.data;
 };
 
 export const verifyStudyPassword = async (studyId, password) => {
