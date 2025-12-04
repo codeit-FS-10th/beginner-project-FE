@@ -148,6 +148,7 @@
         1fr
         repeat(7, auto);
     align-items: center;
+    overflow-y: auto;
 }
 
 .habit-name-cell {
