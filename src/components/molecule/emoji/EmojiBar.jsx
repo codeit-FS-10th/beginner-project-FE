@@ -22,8 +22,6 @@ export default function EmojiBar({ reactions, onEmojiClick, onAddEmoji }) {
                         emoji={item.emoji}
                         count={item.count}
                         isActive={item.me}
-                        // ⚠️ 기존: onEmojiClick?.(item.emoji)
-                        // ✅ 변경: code 기준으로 클릭 전달
                         onClick={() => onEmojiClick?.(item.code)}
                     />
                 ))}
