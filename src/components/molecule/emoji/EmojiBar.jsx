@@ -1,3 +1,4 @@
+// EmojiBar.jsx
 import { useState } from "react";
 import EmojiButton from "./EmojiButton";
 import EmojiGroup from "./EmojiGroup";
@@ -17,10 +18,13 @@ export default function EmojiBar({ reactions, onEmojiClick, onAddEmoji }) {
                 {preview.map((item) => (
                     <EmojiButton
                         key={item.id}
+                        variant="normal"
                         emoji={item.emoji}
                         count={item.count}
                         isActive={item.me}
-                        onClick={() => onEmojiClick?.(item.emoji)}
+                        // ⚠️ 기존: onEmojiClick?.(item.emoji)
+                        // ✅ 변경: code 기준으로 클릭 전달
+                        onClick={() => onEmojiClick?.(item.code)}
                     />
                 ))}
 

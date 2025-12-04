@@ -6,7 +6,8 @@ import {
     fetchStudyDetail,
 } from "@api/service/studyservice";
 
-import { fetchEmoji } from "@api/service/Emojiservice";
+import { fetchEmoji, postEmoji } from "@api/service/Emojiservice";
+
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
@@ -17,8 +18,8 @@ import Tag from "@atoms/tag/Tag";
 import ModalPwd from "@organism/ModalPwd";
 import Sticker from "@molecule/sticker/Sticker";
 import NavButton from "@atoms/button/NavButton";
-import EmojiGroup from "@molecule/Emoji/EmojiGroup";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
+import EmojiBar from "@molecule/emoji/EmojiBar";
 
 function Detail() {
     const navigate = useNavigate();
@@ -29,8 +30,6 @@ function Detail() {
 
     const [editTitle, setEditTitle] = useState("");
     const [editIntro, setEditIntro] = useState("");
-
-    const [reactions, setReactions] = useState([]);
 
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -48,6 +47,9 @@ function Detail() {
 
     const [points, setPoints] = useState(0);
     const [pointError, setPointError] = useState(null);
+
+    const [reactions, setReactions] = useState([]); // 이모지 리스트
+    const [emojiError, setEmojiError] = useState(null); // 에러 메시지
 
     const nickname = study?.NICKNAME ?? "";
     const studyName = study?.NAME ?? "";
@@ -101,7 +103,46 @@ function Detail() {
         }
     };
 
-    // 🟦 스터디 디테일 가져오기
+    const loadEmoji = async () => {
+        if (!studyId) return;
+
+        try {
+            setEmojiError(null);
+
+            const list = await fetchEmoji(studyId);
+            const raw = Array.isArray(list) ? list : [];
+
+            const normalized = raw.map((item) => ({
+                id: item.UNICODE,
+                emoji: item.UNICODE,
+                count: item.COUNTING,
+                me: false,
+            }));
+
+            setReactions(normalized);
+        } catch (err) {
+            console.error("이모지 불러오기 실패", err);
+            setEmojiError("이모지 불러오기 실패");
+            setReactions([]);
+        }
+    };
+
+    const handleEmojiAction = async (unicode) => {
+        if (!studyId) return;
+
+        try {
+            await postEmoji(studyId, unicode);
+
+            await loadEmoji();
+        } catch (err) {
+            console.error("이모지 업데이트 실패", err);
+        }
+    };
+
+    useEffect(() => {
+        loadEmoji();
+    }, [studyId]);
+
     useEffect(() => {
         const loadStudyDetail = async () => {
             try {
@@ -112,31 +153,6 @@ function Detail() {
             }
         };
         loadStudyDetail();
-    }, [studyId]);
-
-    // 🟦 이모지
-    useEffect(() => {
-        if (!studyId) return;
-
-        const loadEmoji = async () => {
-            try {
-                const raw = await fetchEmoji(studyId);
-                const arr = Array.isArray(raw) ? raw : raw?.data ?? [];
-
-                const mapped = arr.map((item, index) => ({
-                    id: index,
-                    emoji: item.UNICODE,
-                    count: item.COUNTING ?? 0,
-                    me: false,
-                }));
-
-                setReactions(mapped);
-            } catch {
-                setReactions([]);
-            }
-        };
-
-        loadEmoji();
     }, [studyId]);
 
     useEffect(() => {
@@ -174,7 +190,7 @@ function Detail() {
             try {
                 setLoading(true);
 
-                const data = await fetchTodayHabits(studyId);
+                const data = await fetchWeekHabits(studyId);
                 setHabitData(normalizeHabits(data));
             } catch {
                 setError("습관 데이터 불러오기 실패");
@@ -212,10 +228,10 @@ function Detail() {
             <div className="detail-content">
                 <div className="detail-content-header">
                     <div className="detail-content-first">
-                        <EmojiGroup
+                        <EmojiBar
                             reactions={reactions}
-                            onEmojiClick={() => {}}
-                            onAddEmoji={() => {}}
+                            onEmojiClick={handleEmojiAction} // 기존 이모지 클릭
+                            onAddEmoji={handleEmojiAction} // 새 이모지 선택
                         />
                     </div>
 
