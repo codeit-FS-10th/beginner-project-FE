@@ -5,7 +5,7 @@ import { fetchTodayHabits } from "@api/service/habitservice";
 import Chip from "@atoms/chip/Chip";
 import DeleteButton from "../atoms/button/DeleteButton";
 
-function ModalList({ studyId, onClose, onSubmit }) {
+function ModalHabitList({ studyId, onClose, onSubmit }) {
     const [habits, setHabits] = useState([]);
     const [selected, setSelected] = useState(new Set());
 

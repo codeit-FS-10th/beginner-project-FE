@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
-import NavButton from "@atoms/button/NavButton";
-import Tag from "@atoms/tag/Tag";
-import "@styles/pages/detail.css";
+
 import ReactionAddButton from "@atoms/button/ReactionAddButton";
-import ModalPwd from "@organism/ModalPwd";
-import Sticker from "@molecule/Sticker/Sticker";
-import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
-import { fetchTodayHabits } from "@api/service/habitservice";
-=======
+
 import {
     fetchStudyPoints,
     updateStudy,
@@ -19,7 +12,7 @@ import {
 import { fetchEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
->>>>>>> 04d83c6f45e1936016fb8f639722f5f3be60c2a3
+
 import { addRecentStudy } from "@utils/recentStudy";
 
 import "@styles/pages/detail.css";
@@ -32,8 +25,6 @@ import EmojiGroup from "@molecule/Emoji/EmojiGroup";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 function Detail() {
-    const navigate = useNavigate();
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalAction, setModalAction] = useState(null); // edit | delete
     const [isEditing, setIsEditing] = useState(false);
@@ -185,7 +176,7 @@ function Detail() {
             try {
                 setLoading(true);
 
-                const data = await fetchTodayHabits(studyId);
+                const data = await fetchWeekHabits(studyId);
                 setHabitData(normalizeHabits(data));
             } catch {
                 setError("습관 데이터 불러오기 실패");
@@ -197,7 +188,6 @@ function Detail() {
         loadHabits();
     }, [studyId]);
 
-<<<<<<< HEAD
     const handleHabitClick = () => {
         if (!studyId) return;
 
@@ -216,8 +206,6 @@ function Detail() {
 
     const habits = habitData;
 
-=======
->>>>>>> 04d83c6f45e1936016fb8f639722f5f3be60c2a3
     useEffect(() => {
         if (stateStudy) {
             setStudy(stateStudy);
@@ -308,17 +296,12 @@ function Detail() {
                     </h2>
 
                     <div className="detail-intro-button">
-<<<<<<< HEAD
                         <NavButton onClick={handleHabitClick}>
                             오늘의 습관
                         </NavButton>
                         <NavButton onClick={handleFocusClick}>
                             오늘의 집중
                         </NavButton>
-=======
-                        <NavButton to={"/habit"}>오늘의 습관</NavButton>
-                        <NavButton to={"/focus"}>오늘의 집중</NavButton>
->>>>>>> 04d83c6f45e1936016fb8f639722f5f3be60c2a3
                     </div>
                 </div>
 

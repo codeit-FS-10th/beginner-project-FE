@@ -30,6 +30,68 @@ function Habit() {
     const studyId = searchParams.get("id");
     const password = location.state?.password ?? "1234"; // 임시 비번
 
+    // //////////////////////////////////////
+
+    // useEffect(() => {
+    //     const createHabitsDebug = async () => {
+    //         try {
+    //             const habitsToCreate = [
+    //                 "커피 마시기",
+    //                 "노래 듣기",
+    //                 "도서관 가기",
+    //                 "청소하기",
+    //                 "이마트가서 장보기",
+    //                 "여행가기",
+    //                 "칙구랑 약속",
+    //                 "드라이브",
+    //                 "영화보기",
+    //                 "설겆이",
+    //                 "기차타기",
+    //             ];
+
+    //             for (const habitName of habitsToCreate) {
+    //                 const res = await fetch(
+    //                     `https://beginner-project-be.onrender.com/api/studies/3/habits`,
+    //                     {
+    //                         method: "POST",
+    //                         headers: {
+    //                             "Content-Type": "application/json",
+    //                         },
+    //                         body: JSON.stringify({ name: habitName }),
+    //                     }
+    //                 );
+
+    //                 const data = await res.json();
+    //                 console.log(`디버그 - 습관 생성됨: ${habitName}`, data);
+    //             }
+
+    //             console.log("디버그 - 습관 3개 모두 생성 완료!");
+    //         } catch (error) {
+    //             console.error("디버그 - 습관 생성 실패:", error);
+    //         }
+    //     };
+
+    //     createHabitsDebug();
+    // }, []);
+
+    // useEffect(() => {
+    //     const fetchTodayHabitsDebug = async () => {
+    //         try {
+    //             const res = await fetch(
+    //                 `https://beginner-project-be.onrender.com/api/studies/3/habits/today`
+    //             );
+    //             const data = await res.json();
+    //             console.log("디버그 - 오늘의 습관 목록:", data);
+    //         } catch (error) {
+    //             console.error("디버그 - 오늘의 습관 불러오기 실패:", error);
+    //         }
+    //     };
+
+    //     fetchTodayHabitsDebug();
+    // }, []);
+
+    // ////////////////////////////////////////
+
     /** 현재 날짜 YYYY-MM-DD */
     const getTodayDateString = () => {
         const now = new Date();
