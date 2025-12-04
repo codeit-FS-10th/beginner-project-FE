@@ -222,6 +222,9 @@ function Detail() {
             showErrorToast("링크 복사에 실패했습니다.");
         }
     };
+    /** 이동 버튼 */
+    const handleHabitClick = () => navigate(`/habit?id=${studyId}`);
+    const handleFocusClick = () => navigate(`/focus?id=${studyId}`);
 
     return (
         <div className="detail-conainer">
@@ -292,8 +295,12 @@ function Detail() {
                     </h2>
 
                     <div className="detail-intro-button">
-                        <NavButton to={"/habit"}>오늘의 습관</NavButton>
-                        <NavButton to={"/focus"}>오늘의 집중</NavButton>
+                        <NavButton onClick={handleHabitClick}>
+                            오늘의 습관
+                        </NavButton>
+                        <NavButton onClick={handleFocusClick}>
+                            오늘의 집중
+                        </NavButton>
                     </div>
                 </div>
 
