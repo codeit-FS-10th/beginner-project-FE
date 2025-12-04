@@ -164,8 +164,13 @@ function Detail() {
                 return;
             }
 
-            await postEmoji(studyId, code);
+            // CODE를 이모지 문자로 변환햣
+            const emojiChar = codeToEmoji(code);
 
+            // 서버에 { code, emoji } 형태로 전송
+            await postEmoji(studyId, { code, emoji: emojiChar });
+
+            // 변경된 상태를 다시 불러와 갱신
             await loadEmoji();
         } catch (err) {
             console.error("이모지 업데이트 실패", err);
