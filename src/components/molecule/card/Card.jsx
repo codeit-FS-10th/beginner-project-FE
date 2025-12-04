@@ -134,7 +134,10 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                                         theme={changeTagTheme(bg)}
                                     />
                                 </div>
-                                <span style={changeFontColor(bg)}>
+                                <span
+                                    className="Card-day-text"
+                                    style={changeFontColor(bg)}
+                                >
                                     {safeDay}일째 진행 중
                                 </span>
                             </header>

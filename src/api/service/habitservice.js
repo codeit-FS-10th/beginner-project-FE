@@ -10,9 +10,6 @@ export const fetchTodayHabits =  async (studyId) => {
     return res.data;
 };
 
-
-
-
 // export const createHabit = (studyId, payload) => {
 //     return api.post(`/studies/${studyId}/habits`, payload);
 // };

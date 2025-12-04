@@ -26,6 +26,7 @@
 }
 .recent-container {
     height: 302px;
+    overflow: hidden;
 }
 
 .section-title {
@@ -43,6 +44,12 @@
 .recent-list {
     display: flex;
     gap: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.recent-list > * {
+    flex-shrink: 0;
 }
 
 .study-controls {
@@ -75,6 +82,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
     margin-bottom: 60px;
+    overflow: hidden;
 }
 
 .pagination {
@@ -84,29 +92,54 @@
     gap: 12px;
 }
 
-.study-search-input {
+.study-search-wrapper {
+    position: relative;
     display: flex;
+    align-items: center;
     width: 335px;
-    padding: 12px 20px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    height: 42px;
+    padding: 0;
     border-radius: 15px;
     border: 1px solid #ddd;
     background: #fff;
 }
 
-@media (max-width: 744px) {
-    .root-container {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
+.study-search-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: 20px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
 
-    .main-container {
-        padding-top: 24px;
+.study-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 12px 20px 12px 0;
+    font-size: 14px;
+    color: #414141;
+}
+
+.study-search-input::placeholder {
+    color: #818181;
+}
+
+@media (max-width: 1024px) {
+    .study-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 24px;
     }
 
+    .study-list .card--lg {
+        width: 100%;
+        height: auto;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 744px) {
     .recent-container,
     .study-container {
         padding: 24px;
@@ -114,17 +147,18 @@
 
     .recent-container {
         height: auto; /* 높이 고정 제거 */
+        overflow: hidden;
     }
 
     .recent-list {
         gap: 16px;
-        flex-wrap: wrap; /* 카드 여러 줄 배치 */
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
     }
 
-    .study-controls {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
+    .recent-list > * {
+        flex-shrink: 0;
     }
 
     .study-search {
@@ -134,16 +168,37 @@
     .study-sort {
         width: 160px;
     }
-
-    .study-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr)); /* 3 → 2개 */
-        gap: 18px;
-    }
 }
 
 @media (max-width: 480px) {
-    .root-container {
-        padding-left: 16px;
-        padding-right: 16px;
+    .study-controls {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-end;
+    }
+
+    .recent-container,
+    .study-container {
+        padding: 16px;
+    }
+
+    .study-list {
+        display: flex;
+        flex-direction: column;
+    }
+    .study-list .card--lg {
+        width: 312px;
+        height: 180px;
+        padding: 16px;
+    }
+    .recent-list .card--lg {
+        width: 240px;
+        height: 180px;
+    }
+    .tag {
+        margin-bottom: 8px;
+    }
+    .Card-day-text {
+        margin-top: 4px;
     }
 }

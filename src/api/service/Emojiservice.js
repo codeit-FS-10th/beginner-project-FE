@@ -6,9 +6,9 @@ export const fetchEmoji = async (studyId) => {
     return Array.isArray(list) ? list : [];
 };
 
-export const postEmoji = async (studyId, unicode) => {
+export const postEmoji = async (studyId, code) => {
     const res = await api.post(`/studies/${studyId}/emoji`, {
-        unicode, 
+        code, 
     });
     return res.data;
 };
