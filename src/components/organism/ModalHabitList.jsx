@@ -9,27 +9,28 @@ import {
     updateHabit,
 } from "@api/service/habitservice";
 
-import Chip from "@atoms/chip/Chip";
 import DeleteButton from "../atoms/button/DeleteButton";
 
 function ModalHabitList({ onClose, onSubmit }) {
+    // 1. 라우터 훅
     const [searchParams] = useSearchParams();
     const location = useLocation();
     const studyId = searchParams.get("id");
     const password = location.state?.password ?? "1234";
 
+    // 2. state 선언
     const [habits, setHabits] = useState([]);
-    const [selected, setSelected] = useState(new Set());
 
     const [showInput, setShowInput] = useState(false);
     const [newHabitName, setNewHabitName] = useState("");
-    const [isCreating, setIsCreating] = useState(false);
 
-    //  수정 기능 추가
     const [editingId, setEditingId] = useState(null);
     const [editValue, setEditValue] = useState("");
     const [editedHabits, setEditedHabits] = useState({});
 
+    const [deletedIds, setDeletedIds] = useState(new Set());
+
+    // 3. 오늘의 습관 로딩 함수
     const loadHabits = async () => {
         try {
             const data = await fetchTodayHabits(studyId, password);
@@ -38,130 +39,144 @@ function ModalHabitList({ onClose, onSubmit }) {
                 id: habit.HABIT_ID,
                 name: habit.NAME,
                 isDone: habit.isDone,
+                isNew: false,
             }));
 
             setHabits(list);
-
-            const preSelected = new Set(
-                list.filter((h) => h.isDone).map((h) => h.id)
-            );
-            setSelected(preSelected);
         } catch (error) {
             console.error("오늘의 습관 조회 실패:", error);
         }
     };
 
+    // 4. 마운트 & studyId/password 변경 시 로딩
     useEffect(() => {
         loadHabits();
     }, [studyId, password]);
 
-    const toggleHabit = (habitId) => {
-        setSelected((prev) => {
-            const newSet = new Set(prev);
-            newSet.has(habitId) ? newSet.delete(habitId) : newSet.add(habitId);
-            return newSet;
-        });
-    };
-
+    // 5. 수정완료(저장) 핸들러
     const handleSubmit = async () => {
-        // 1. 수정된 습관이 하나도 없으면 → 서버 호출 없이 그냥 닫기
-        const entries = Object.entries(editedHabits);
-        if (entries.length === 0) {
-            if (onSubmit) {
-                await onSubmit(); // 부모에서 loadHabits 해주는 콜백
-            }
+        const entries = Object.entries(editedHabits); // { id: name } → [ [id, name], ... ]
+        const deleted = Array.from(deletedIds); // Set → 배열
+        const newHabits = habits.filter((h) => h.isNew); // 새로 만든 습관들
+
+        // 변경이 하나도 없으면 그냥 닫기
+        if (
+            entries.length === 0 &&
+            deleted.length === 0 &&
+            newHabits.length === 0
+        ) {
             onClose();
             return;
         }
 
         try {
-            // 2. 수정된 습관이 있을 때만 updateHabit 호출
-            const promises = entries.map(([habitId, name]) =>
-                updateHabit(studyId, habitId, { name })
+            // isNew 가 아닌 것만 PATCH 대상으로 필터링
+            const updatePromises = entries
+                .filter(([habitId]) => {
+                    const target = habits.find(
+                        (h) => String(h.id) === String(habitId)
+                    );
+                    return target && !target.isNew;
+                })
+                .map(([habitId, name]) =>
+                    updateHabit(studyId, habitId, { name })
+                );
+
+            const deletePromises = deleted.map((habitId) =>
+                deleteHabit(studyId, habitId)
             );
 
-            await Promise.all(promises);
+            const createPromises = newHabits.map((h) =>
+                createHabit(studyId, { name: h.name })
+            );
 
-            // 3. 부모(Habit)에서 다시 오늘의 습관 조회
+            await Promise.all([
+                ...updatePromises,
+                ...deletePromises,
+                ...createPromises,
+            ]);
+
             if (onSubmit) {
                 await onSubmit();
             }
-
-            onClose();
         } catch (error) {
             console.error("습관 수정 전체 저장 실패:", error);
-            // 필요하면 여기서 토스트 띄워도 됨
+        } finally {
+            onClose();
         }
     };
 
+    // 6. 추가/삭제 핸들러
     const handleClickAddButton = () => {
         setShowInput(true);
     };
 
-    const handleNewHabitKeyDown = async (e) => {
+    const handleNewHabitKeyDown = (e) => {
         if (e.key !== "Enter") return;
         e.preventDefault();
-
-        if (isCreating) return;
 
         const trimmed = newHabitName.trim();
         if (!trimmed) return;
 
-        try {
-            setIsCreating(true);
+        setHabits((prev) => [
+            ...prev,
+            {
+                id: `temp-${Date.now()}`, // 임시 ID (서버에 없는 값)
+                name: trimmed,
+                isDone: false,
+                isNew: true,
+            },
+        ]);
 
-            await createHabit(studyId, { name: trimmed });
-
-            await loadHabits();
-            setNewHabitName("");
-            setShowInput(false);
-        } catch (error) {
-            console.error("새 습관 생성 실패:", error);
-        } finally {
-            setIsCreating(false);
-        }
+        setNewHabitName("");
+        setShowInput(false);
     };
 
-    //  습관 삭제
-    const handleDeleteHabit = async (habitId, e) => {
+    // 습관 삭제
+    const handleDeleteHabit = (habit, e) => {
         e?.stopPropagation();
-        try {
-            await deleteHabit(studyId, habitId);
-            await loadHabits();
-        } catch (error) {
-            console.error("습관 삭제 실패:", error);
+
+        // 화면에서만 삭제
+        setHabits((prev) => prev.filter((h) => h.id !== habit.id));
+
+        // 서버에 이미 있던 습관만 삭제 예약 목록에 추가
+        if (!habit.isNew) {
+            setDeletedIds((prev) => {
+                const next = new Set(prev);
+                next.add(habit.id);
+                return next;
+            });
         }
     };
 
-    //  습관 수정
+    // 7. 수정 관련 핸들러
     const startEdit = (habit, e) => {
         e?.stopPropagation();
         setEditingId(habit.id);
         setEditValue(habit.name);
     };
 
-    // 수정 값 입력
     const handleEditChange = (e) => {
         setEditValue(e.target.value);
     };
 
-    // 수정 모드
     const handleEditKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            submitEdit(); // 이제 여기서는 서버 안 감
+            submitEdit();
         }
         if (e.key === "Escape") {
             cancelEdit();
         }
     };
 
-    // 칩 수정 모드를 취소, 원래 상태로
+    // 수정 취소
     const cancelEdit = () => {
         setEditingId(null);
         setEditValue("");
     };
-    // 수정값 보내기
+
+    // 수정값 확정 (state만 변경, API X)
     const submitEdit = () => {
         const trimmed = editValue.trim();
         if (!trimmed) {
@@ -174,7 +189,7 @@ function ModalHabitList({ onClose, onSubmit }) {
             prev.map((h) => (h.id === editingId ? { ...h, name: trimmed } : h))
         );
 
-        // 나중에 "수정완료"를 눌렀을 때 서버에 보낼 수정 목록 저장
+        // 나중에 수정완료 버튼 눌렀을 때 서버에 보낼 수정 목록 저장
         setEditedHabits((prev) => ({
             ...prev,
             [editingId]: trimmed,
@@ -220,7 +235,7 @@ function ModalHabitList({ onClose, onSubmit }) {
                                     {/* 삭제버튼 */}
                                     <DeleteButton
                                         onClick={(e) =>
-                                            handleDeleteHabit(habit.id, e)
+                                            handleDeleteHabit(habit, e)
                                         }
                                     />
                                 </div>
@@ -242,15 +257,15 @@ function ModalHabitList({ onClose, onSubmit }) {
                                 </div>
                             )}
                         </div>
-                        {/* 습관 add버튼 */}
-                        <button
-                            className="habit-add-btn"
-                            type="button"
-                            onClick={handleClickAddButton}
-                        >
-                            +
-                        </button>
                     </div>
+                    {/* 습관 add버튼 */}
+                    <button
+                        className="habit-add-btn"
+                        type="button"
+                        onClick={handleClickAddButton}
+                    >
+                        +
+                    </button>
                     {/*  수정완료, 취소 버튼*/}
                     <footer className="modal-footer">
                         <BaseButton type="cancle" size="xl" onClick={onClose}>
