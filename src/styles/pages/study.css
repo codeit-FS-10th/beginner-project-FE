@@ -127,14 +127,15 @@
         padding-left: 24px;
         padding-right: 24px;
     }
+    .bg-list {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
 }
 
 @media (max-width: 480px) {
     .study-root-container {
         padding-left: 16px;
         padding-right: 16px;
-    }
-    .bg-list {
-        grid-template-columns: repeat(2, 1fr);
     }
 }
