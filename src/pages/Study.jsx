@@ -1,11 +1,15 @@
 import "@styles/pages/study.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { mockBackgrounds } from "@mocks/studyBackgrounds";
 import BaseButton from "@atoms/button/BaseButton";
 import Input from "../components/atoms/input/Input";
-import { createStudy } from "@api/service/studyservice";
+import {
+    createStudy,
+    fetchStudyDetail,
+    updateStudy,
+} from "@api/service/studyservice";
 
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast.jsx";
 
@@ -14,6 +18,19 @@ const passwordRegex =
 
 export default function Study() {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // edit mode detection: support location.state or query param ?mode=edit
+    const searchParams = new URLSearchParams(location.search);
+    const isEditMode =
+        (location.state && location.state.mode === "edit") ||
+        searchParams.get("mode") === "edit";
+    const editStudyId =
+        (location.state && location.state.studyId) ||
+        searchParams.get("id") ||
+        (location.state &&
+            location.state.study &&
+            location.state.study.STUDY_ID);
 
     const [nickname, setNickname] = useState("");
     const [studyName, setStudyName] = useState("");
@@ -32,6 +49,51 @@ export default function Study() {
     });
 
     const [submitting, setSubmitting] = useState(false);
+
+    useEffect(() => {
+        // if edit mode and we have study data via location.state, populate fields
+        const initFromState = async () => {
+            if (!isEditMode) return;
+
+            if (location.state && location.state.study) {
+                const s = location.state.study;
+                setNickname(s.NICKNAME ?? s.nickname ?? "");
+                setStudyName(s.NAME ?? s.name ?? "");
+                setIntro(s.INTRO ?? s.intro ?? "");
+                const image = s.IMAGE ?? s.image ?? null;
+                if (image) {
+                    const found = mockBackgrounds.find(
+                        (b) => b.image === image
+                    );
+                    setSelectedBg(found ?? { id: "custom", image });
+                }
+                return;
+            }
+
+            // if edit mode and we have study id, fetch detail
+            if (editStudyId) {
+                try {
+                    const data = await fetchStudyDetail(editStudyId);
+                    const s = data?.study ?? data;
+                    setNickname(s.NICKNAME ?? s.nickname ?? "");
+                    setStudyName(s.NAME ?? s.name ?? "");
+                    setIntro(s.INTRO ?? s.intro ?? "");
+                    const image = s.IMAGE ?? s.image ?? null;
+                    if (image) {
+                        const found = mockBackgrounds.find(
+                            (b) => b.image === image
+                        );
+                        setSelectedBg(found ?? { id: "custom", image });
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+        };
+
+        initFromState();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isEditMode, editStudyId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,17 +124,20 @@ export default function Study() {
             newErrors.selectedBg = "*배경을 선택해주세요";
         }
 
-        if (!password.trim()) {
-            newErrors.password = "*비밀번호를 입력해주세요";
-        } else if (!passwordRegex.test(password)) {
-            newErrors.password =
-                "*비밀번호는 8~15자, 한글/영문 포함, 특수문자 1개 이상이어야 합니다";
-        }
+        // password validation only for create mode
+        if (!isEditMode) {
+            if (!password.trim()) {
+                newErrors.password = "*비밀번호를 입력해주세요";
+            } else if (!passwordRegex.test(password)) {
+                newErrors.password =
+                    "*비밀번호는 8~15자, 한글/영문 포함, 특수문자 1개 이상이어야 합니다";
+            }
 
-        if (!passwordConfirm.trim()) {
-            newErrors.passwordConfirm = "*비밀번호 확인을 입력해주세요";
-        } else if (password !== passwordConfirm) {
-            newErrors.passwordConfirm = "*비밀번호가 일치하지 않습니다";
+            if (!passwordConfirm.trim()) {
+                newErrors.passwordConfirm = "*비밀번호 확인을 입력해주세요";
+            } else if (password !== passwordConfirm) {
+                newErrors.passwordConfirm = "*비밀번호가 일치하지 않습니다";
+            }
         }
 
         setErrors(newErrors);
@@ -86,7 +151,8 @@ export default function Study() {
         const payload = {
             name: trimmedStudyName,
             nickname: trimmedNickname,
-            password,
+            // include password only when provided (create or explicit change)
+            ...(password ? { password } : {}),
             intro: trimmedIntro,
             image: selectedBg?.image ?? null,
         };
@@ -94,14 +160,22 @@ export default function Study() {
         try {
             setSubmitting(true);
 
-            await createStudy(payload);
-
-            showSuccessToast("스터디가 생성되었습니다!");
+            if (isEditMode && editStudyId) {
+                await updateStudy(editStudyId, payload);
+                showSuccessToast("스터디 정보가 수정되었습니다!");
+            } else {
+                await createStudy(payload);
+                showSuccessToast("스터디가 생성되었습니다!");
+            }
 
             navigate("/", { replace: true });
         } catch (err) {
             console.error(err);
-            showErrorToast("스터디 생성에 실패했습니다.");
+            showErrorToast(
+                isEditMode
+                    ? "스터디 수정에 실패했습니다."
+                    : "스터디 생성에 실패했습니다."
+            );
         } finally {
             setSubmitting(false);
         }
@@ -116,7 +190,9 @@ export default function Study() {
                     <section className="study-section">
                         <form className="study-form" onSubmit={handleSubmit}>
                             <h2 className="study-header-title">
-                                스터디 만들기
+                                {isEditMode
+                                    ? "스터디 수정하기"
+                                    : "스터디 만들기"}
                             </h2>
 
                             {/* 닉네임 */}
@@ -185,27 +261,33 @@ export default function Study() {
                                 </p>
                             )}
 
-                            {/* 비밀번호 */}
-                            <p>비밀번호</p>
-                            <Input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="비밀번호를 입력해 주세요"
-                                error={errors.password}
-                            />
+                            {/* 비밀번호 입력은 생성 모드에서만 표시 */}
+                            {!isEditMode && (
+                                <>
+                                    <p>비밀번호</p>
+                                    <Input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                        placeholder="비밀번호를 입력해 주세요"
+                                        error={errors.password}
+                                    />
 
-                            {/* 비밀번호 확인 */}
-                            <p>비밀번호 확인</p>
-                            <Input
-                                type="password"
-                                value={passwordConfirm}
-                                onChange={(e) =>
-                                    setPasswordConfirm(e.target.value)
-                                }
-                                placeholder="비밀번호를 다시 한 번 입력해 주세요"
-                                error={errors.passwordConfirm}
-                            />
+                                    {/* 비밀번호 확인 */}
+                                    <p>비밀번호 확인</p>
+                                    <Input
+                                        type="password"
+                                        value={passwordConfirm}
+                                        onChange={(e) =>
+                                            setPasswordConfirm(e.target.value)
+                                        }
+                                        placeholder="비밀번호를 다시 한 번 입력해 주세요"
+                                        error={errors.passwordConfirm}
+                                    />
+                                </>
+                            )}
 
                             {/* 버튼 */}
                             <div className="study-make-button">
@@ -214,7 +296,13 @@ export default function Study() {
                                     size="full"
                                     disabled={submitting}
                                 >
-                                    {submitting ? "만드는 중..." : "만들기"}
+                                    {submitting
+                                        ? isEditMode
+                                            ? "수정 중..."
+                                            : "만드는 중..."
+                                        : isEditMode
+                                        ? "수정하기"
+                                        : "만들기"}
                                 </BaseButton>
                             </div>
                         </form>
