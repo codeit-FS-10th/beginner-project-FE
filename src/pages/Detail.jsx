@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    updateStudy,
-    deleteStudy,
-    fetchStudyDetail,
-} from "@api/service/studyservice";
+import { deleteStudy, fetchStudyDetail } from "@api/service/studyservice";
 
 import { postEmoji } from "@api/service/Emojiservice";
 
@@ -25,10 +21,6 @@ function Detail() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalAction, setModalAction] = useState(null); // edit | delete
-    const [isEditing, setIsEditing] = useState(false);
-
-    const [editTitle, setEditTitle] = useState("");
-    const [editIntro, setEditIntro] = useState("");
 
     const days = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -56,9 +48,12 @@ function Detail() {
 
     const handleVerified = async (actionType) => {
         if (actionType === "edit") {
-            setIsEditing(true);
-            setEditTitle(studyName);
-            setEditIntro(intro);
+            // 비밀번호 확인 후 수정 페이지로 이동 (기존 Study.jsx를 수정 모드로 사용)
+            // Study 페이지는 location.state 또는 query param으로 edit 모드를 인식합니다.
+            navigate(`/study`, {
+                state: { mode: "edit", studyId: studyId, study },
+            });
+            return;
         }
 
         if (actionType === "delete") {
@@ -75,30 +70,6 @@ function Detail() {
             navigate("/");
         } catch (err) {
             showErrorToast("삭제 실패");
-        }
-    };
-
-    const handleUpdate = async () => {
-        try {
-            await updateStudy(studyId, {
-                name: editTitle,
-                nickname: nickname,
-                intro: editIntro,
-                image: study?.image || "",
-            });
-
-            setStudy({
-                ...study,
-                NAME: editTitle,
-                INTRO: editIntro,
-            });
-
-            showSuccessToast("수정 완료!", {
-                toastType: "point",
-            });
-            setIsEditing(false);
-        } catch (err) {
-            showErrorToast("수정 실패");
         }
     };
 
@@ -125,9 +96,7 @@ function Detail() {
             const raw = Array.isArray(data.emojis) ? data.emojis : [];
 
             const normalized = raw.map((item) => {
-                // code를 소문자로 변환하여 사용
                 const code = (item.code || "").toLowerCase();
-                // code를 이모지로 변환
                 const emoji = codeToEmoji(code);
 
                 return {
@@ -151,8 +120,6 @@ function Detail() {
         if (!studyId) return;
 
         try {
-            // emojiData가 객체인 경우 (EmojiPickerWrapper에서 온 경우)
-            // 또는 문자열인 경우 (기존 이모지 클릭인 경우)
             let code;
             if (typeof emojiData === "object" && emojiData.code) {
                 code = emojiData.code.toLowerCase();
@@ -163,13 +130,10 @@ function Detail() {
                 return;
             }
 
-            // CODE를 이모지 문자로 변환햣
             const emojiChar = codeToEmoji(code);
 
-            // 서버에 { code, emoji } 형태로 전송
             await postEmoji(studyId, { code, emoji: emojiChar });
 
-            // 변경된 상태를 다시 불러와 갱신
             await loadEmoji();
         } catch (err) {
             console.error("이모지 업데이트 실패", err);
@@ -316,23 +280,9 @@ function Detail() {
                 {/* TITLE */}
                 <div className="detail-title-container">
                     <h2 className="detail-title">
-                        {isEditing ? (
-                            <input
-                                className="edit-title-input"
-                                value={editTitle}
-                                onChange={(e) => setEditTitle(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        e.preventDefault();
-                                        handleUpdate();
-                                    }
-                                }}
-                            />
-                        ) : nickname && studyName ? (
-                            `${nickname}의 ${studyName}`
-                        ) : (
-                            "스터디 상세"
-                        )}
+                        {nickname && studyName
+                            ? `${nickname}의 ${studyName}`
+                            : "스터디 상세"}
                     </h2>
 
                     <div className="detail-intro-button">
@@ -349,19 +299,7 @@ function Detail() {
                 <div className="detail-intro-box">
                     <h3>소개</h3>
 
-                    {isEditing ? (
-                        <textarea
-                            className="edit-intro-textarea"
-                            value={editIntro}
-                            onChange={(e) => setEditIntro(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && !e.shiftKey) {
-                                    e.preventDefault();
-                                    handleUpdate();
-                                }
-                            }}
-                        />
-                    ) : intro ? (
+                    {intro ? (
                         <p className="detail-intro">{intro}</p>
                     ) : (
                         <p className="detail-intro-empty">

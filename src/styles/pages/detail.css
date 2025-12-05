@@ -150,12 +150,12 @@
 .habit-grid {
     display: grid;
     width: 100%;
-        /* 습관명은 최소 120px, 나머지 요일은 최소 64px까지 축소 가능하도록 설정
+    /* 습관명은 최소 120px, 나머지 요일은 최소 64px까지 축소 가능하도록 설정
            최대는 비례(flexible)로 줄어들어 가로 스크롤 대신 내부가 줄어듭니다. */
-        grid-template-columns: minmax(120px, 1fr) repeat(7, minmax(64px, 1fr));
-        column-gap: 8px;
+    grid-template-columns: minmax(120px, 1fr) repeat(7, minmax(64px, 1fr));
+    column-gap: 8px;
     align-items: center;
-        overflow-x: hidden; /* 스크롤 대신 내부 요소가 줄어들게 함 */
+    overflow-x: hidden; /* 스크롤 대신 내부 요소가 줄어들게 함 */
 }
 
 .habit-name-cell {
@@ -168,10 +168,9 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-        /* 너무 길면 말줄임 처리하여 겹치지 않도록 함 */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    /* 너무 길면 말줄임 처리하여 겹치지 않도록 함 */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .day-cell {
@@ -187,7 +186,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-        box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .sticker-cell {
@@ -195,7 +194,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-        box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .sticker-dot {
