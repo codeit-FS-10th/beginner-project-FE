@@ -10,6 +10,7 @@ import {
     fetchStudyDetail,
     updateStudy,
 } from "@api/service/studyservice";
+import { addRecentStudy } from "@utils/recentStudy";
 
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast.jsx";
 
@@ -163,6 +164,10 @@ export default function Study() {
             if (isEditMode && editStudyId) {
                 await updateStudy(editStudyId, payload);
                 showSuccessToast("스터디 정보가 수정되었습니다!");
+
+                // 수정 후 최근 스터디 목록도 업데이트
+                const updatedStudy = await fetchStudyDetail(editStudyId);
+                addRecentStudy(updatedStudy);
             } else {
                 await createStudy(payload);
                 showSuccessToast("스터디가 생성되었습니다!");

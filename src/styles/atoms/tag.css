@@ -12,7 +12,9 @@
 
 /* tag type별 - point,reaction */
 .tag--type-point {
-    padding: 6px 12px;
+    padding: 4px 8px;
+    min-width: 70px;
+    height: 20px;
 }
 .tag--type-reaction {
     padding: 6px 8px;
