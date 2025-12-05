@@ -57,7 +57,7 @@ function Focus() {
 
     // ---------- 유틸 ----------
 
-    // MM:SS 또는 -MM:SS 포맷
+    // MM:SS 또는 -MM:SS 포맷 (필요하면 다른 곳에서 사용)
     const formatTime = (seconds) => {
         const abs = Math.abs(seconds);
         const m = String(Math.floor(abs / 60)).padStart(2, "0");
@@ -65,9 +65,39 @@ function Focus() {
         return seconds < 0 ? `-${m}:${s}` : `${m}:${s}`;
     };
 
+    // MM, SS 분리
+    const getTimeParts = (seconds) => {
+        const abs = Math.abs(seconds);
+        const m = String(Math.floor(abs / 60)).padStart(2, "0");
+        const s = String(abs % 60).padStart(2, "0");
+        return { m, s };
+    };
+
+    // 타이머 편집 시작 (버튼 클릭 시)
+    const startEditTimer = () => {
+        if (phase !== PHASE.READY) return; // ready에서만 수정
+        setEditValue(String(focusMinutes));
+        setIsEditing(true);
+    };
+
+    // 타이머 편집 완료 (blur 시 확정)
+    const confirmEditTimer = () => {
+        const num = Number(editValue);
+
+        if (!Number.isFinite(num) || num <= 0) {
+            alert("1분 이상 입력해주세요.");
+            setEditValue(String(focusMinutes));
+        } else {
+            setFocusMinutes(num);
+            setRemainSeconds(num * 60);
+        }
+
+        setIsEditing(false);
+    };
+    const isEditButtonEnabled = phase === PHASE.READY && !isEditing;
+
     // ---------- 비밀번호 체크 + 초기 데이터 로딩 ----------
-    const password = location.state?.password ?? "1234"; //임시로
-    // const password = location.state?.password;
+    const password = location.state?.password ?? "1234"; // 임시
 
     // password 없이 직접 URL로 들어오면 비밀번호 페이지로 돌려보내기
     useEffect(() => {
@@ -85,20 +115,19 @@ function Focus() {
                 setIsLoading(true);
                 setError(null);
 
-                // 🔹 스터디 정보 요청
+                // 스터디 정보 요청
                 const detailRes = await fetchStudyDetail(studyId, password);
                 console.log("스터디 상세조회:", detailRes);
 
-                // detailRes가 res.data 일 수도, res 객체일 수도 있으니 둘 다 대응
                 const data = detailRes.data ?? detailRes;
 
-                // 🔹 Habit 페이지와 똑같이 정규화
+                // Habit 페이지와 동일하게 정규화
                 setStudyInfo({
                     nickname: data.NICKNAME ?? data.nickname,
                     name: data.NAME ?? data.name,
                 });
 
-                // 🔹 포커스 정보 요청
+                // 포커스 정보 요청
                 try {
                     const focusRes = await fetchFocusInfo(studyId, password);
                     setTotalPoint(focusRes.data.totalPoint);
@@ -149,6 +178,7 @@ function Focus() {
         setRemainSeconds(focusMinutes * 60);
     };
 
+    // Stop (집중 완료 → 포인트 적립)
     const handleStop = async () => {
         if (phase !== PHASE.FINISHED) return;
 
@@ -160,9 +190,10 @@ function Focus() {
             console.error("finishFocus 실패: password 없음");
             return;
         }
-        //사용자가 설정한 기본 집중 시간
+
+        // 사용자가 설정한 기본 집중 시간
         const totalSec = focusMinutes * 60;
-        //실제로 집중한 시간(초)
+        // 실제 집중한 시간(초)
         const usedSec = totalSec - Math.max(remainSeconds, 0);
         const timeSec = usedSec > 0 ? usedSec : totalSec;
 
@@ -177,7 +208,7 @@ function Focus() {
 
             console.log("finishFocus 응답:", res.status, res.data);
 
-            //  Swagger 응답이 { point, totalPoint } 라고 가정
+            // Swagger 응답이 { point, totalPoint } 라고 가정
             const { point, totalPoint: newTotal } = res.data;
 
             setLastEarnedPoint(point ?? 0); // 이번에 얻은 포인트
@@ -191,7 +222,7 @@ function Focus() {
             );
             alert("포인트 적립에 실패했습니다. 잠시 후 다시 시도해주세요.");
         } finally {
-            // 4) 타이머 상태 초기화
+            // 타이머 상태 초기화
             setPhase(PHASE.READY);
             setRemainSeconds(focusMinutes * 60);
         }
@@ -231,6 +262,10 @@ function Focus() {
     ]
         .filter(Boolean)
         .join(" ");
+
+    // 현재 시간 분/초 (UI용)
+    const { m: minuteStr, s: secondStr } = getTimeParts(remainSeconds);
+    const isNegative = remainSeconds < 0;
 
     // 포인트 Toast 자동 숨김
     useEffect(() => {
@@ -302,69 +337,80 @@ function Focus() {
 
                         {/* 타이머 수정 & 표시 */}
                         <div className="focus-timmer-wrap">
-                            {/*  버튼은 ready에서만 */}
-                            {phase === PHASE.READY && !isEditing && (
-                                <button
-                                    type="button"
-                                    className="focus-timer-edit-btn"
-                                    onClick={() => {
-                                        setEditValue(String(focusMinutes));
-                                        setIsEditing(true);
-                                    }}
-                                >
-                                    <PencilIcon />
-                                </button>
-                            )}
+                            {/* 버튼은 ready + 편집 중이 아닐 때만 */}
+                            <button
+                                type="button"
+                                className={`focus-timer-edit-btn ${
+                                    isEditButtonEnabled
+                                        ? ""
+                                        : "focus-timer-edit-btn--hidden"
+                                }`}
+                                onClick={
+                                    isEditButtonEnabled
+                                        ? startEditTimer
+                                        : undefined
+                                }
+                                disabled={!isEditButtonEnabled}
+                            >
+                                <PencilIcon />
+                            </button>
 
                             {/* 타이머 숫자 */}
                             <div className={timerClassName}>
-                                {formatTime(remainSeconds)}
-                            </div>
+                                {/* 음수일 때 - 표시 (혹시 모를 확장용) */}
+                                {isNegative && (
+                                    <span className="focus-timmer-sign">-</span>
+                                )}
 
-                            {/* 시간 수정 input (ready + editing) */}
-                            {phase === PHASE.READY && isEditing && (
-                                <div className="focus-timer-edit-input">
-                                    <input
-                                        type="number"
-                                        min={1}
-                                        value={editValue}
-                                        onChange={(e) =>
-                                            setEditValue(e.target.value)
-                                        }
-                                    />
-                                    <span>:00</span>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            const num = Number(editValue);
-                                            if (
-                                                !Number.isFinite(num) ||
-                                                num <= 0
-                                            ) {
-                                                alert("1분 이상 입력해주세요.");
-                                                return;
+                                {phase === PHASE.READY && isEditing ? (
+                                    <>
+                                        {/* 분: 편집 중에는 input으로, UI는 그대로 */}
+                                        <input
+                                            type="number"
+                                            className="focus-timmer-input"
+                                            min={1}
+                                            value={editValue}
+                                            autoFocus
+                                            onChange={(e) =>
+                                                setEditValue(e.target.value)
                                             }
-
-                                            setFocusMinutes(num);
-                                            setRemainSeconds(num * 60);
-                                            setIsEditing(false);
-                                        }}
-                                    >
-                                        확인
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setIsEditing(false);
-                                            setEditValue(String(focusMinutes));
-                                        }}
-                                    >
-                                        취소
-                                    </button>
-                                </div>
-                            )}
+                                            onBlur={confirmEditTimer}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    e.preventDefault();
+                                                    e.currentTarget.blur();
+                                                }
+                                                if (e.key === "Escape") {
+                                                    e.preventDefault();
+                                                    setIsEditing(false);
+                                                    setEditValue(
+                                                        String(focusMinutes)
+                                                    );
+                                                }
+                                            }}
+                                        />
+                                        <span className="focus-timmer-colon">
+                                            :
+                                        </span>
+                                        <span className="focus-timmer-sec">
+                                            {secondStr}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <>
+                                        {/* 평소에는 span으로 렌더링 */}
+                                        <span className="focus-timmer-min">
+                                            {minuteStr}
+                                        </span>
+                                        <span className="focus-timmer-colon">
+                                            :
+                                        </span>
+                                        <span className="focus-timmer-sec">
+                                            {secondStr}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
                         </div>
 
                         {/* 버튼 영역 */}

@@ -1,3 +1,7 @@
+/* =========================
+ * Layout
+ * =======================*/
+
 .focus-container {
     width: 100%;
     display: flex;
@@ -68,8 +72,12 @@
     width: 100%;
 }
 
+/* =========================
+ * Timer 영역
+ * =======================*/
+
 .focus-timmer-wrap {
-    border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+    border: none;
     padding: 20px;
     margin: 100px auto 94px;
     border-radius: 20px;
@@ -91,22 +99,84 @@
     align-self: end;
 }
 
+.focus-timer-edit-btn--hidden {
+    visibility: hidden; /* 자리는 유지하면서 안 보이게 */
+    pointer-events: none; /* 혹시 모를 클릭도 방지 */
+}
+
+/* 기본 타이머 글자 */
 .focus-timmer {
     color: var(--black-black_414141, #414141);
     text-align: center;
     font-size: 150px;
     font-weight: 800;
+
+    /* 분/콜론/초를 한 줄로 정렬 */
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
 }
 
-/* 10초 이하 위험 색상 */
+/* 10초 이하 빨간색 */
 .focus-timmer--danger {
     color: #ff3b30;
 }
 
-/* finished 상태 (연한 회색) */
+/* finished 상태 */
 .focus-timmer--finished {
     color: #b9b9b9;
 }
+
+/* 음수 표시용(필요시) */
+.focus-timmer-sign {
+    font: inherit;
+}
+
+/* 분 숫자(span) – 인풋과 폭 맞추기 */
+.focus-timmer-min {
+    display: inline-block;
+    width: 3ch;
+    text-align: right;
+}
+
+/* 분 인풋 – span이랑 최대한 똑같이 */
+.focus-timmer-input {
+    display: inline-block;
+    width: 3ch;
+    text-align: right;
+
+    font: inherit;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+}
+
+/* Chrome, Safari, Edge */
+.focus-timmer-input::-webkit-inner-spin-button,
+.focus-timmer-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.focus-timmer-input {
+    -moz-appearance: textfield;
+}
+
+/* 콜론, 초 스타일 */
+.focus-timmer-colon,
+.focus-timmer-sec {
+    font: inherit;
+}
+.focus-timmer-sec {
+    width: 3ch;
+    text-align: left;
+}
+/* =========================
+ * Timer 버튼 영역
+ * =======================*/
 
 .focus-start-button {
     display: flex;
@@ -115,6 +185,7 @@
     gap: 32px;
 }
 
+/* (예전 인풋 박스 레이아웃 – 지금은 사용 안 하지만 남겨둬도 무방)
 .focus-timer-edit-input {
     margin-top: 16px;
     display: flex;
@@ -130,6 +201,11 @@
     border: 1px solid #ddd;
     text-align: right;
 }
+*/
+
+/* =========================
+ * Toast
+ * =======================*/
 
 /* Toast 공통 위치 */
 .focus-toast-wrap {
