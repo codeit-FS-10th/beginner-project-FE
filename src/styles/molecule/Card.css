@@ -11,7 +11,7 @@
 }
 .card--lg {
     height: 183px;
-    padding: 24px;
+    padding: 30px;
 }
 
 /* 카드헤더 - title + point 태그 + day  */
@@ -34,7 +34,7 @@
 .title-box.title-box-lg {
     display: flex;
     flex-direction: row;
-
+    padding-bottom: 10px;
     justify-content: space-between;
 }
 
@@ -43,8 +43,7 @@
 } */
 .title-box p {
     font-weight: 700;
-    margin-bottom: 16px;
-    min-width: 220px;
+    min-width: 193px;
     max-width: 230px;
     min-height: 36px;
 }
@@ -66,9 +65,7 @@
     overflow: hidden;
     margin-top: 30px;
     height: 54px;
-    /* force a line-height that divides the fixed height evenly so lines are not half-cut */
     line-height: calc(54px / 3);
-    /* 긴 단어(공백 없는 문자열)도 컨테이너 폭에 맞춰 줄바꿈 처리 */
     overflow-wrap: anywhere;
     word-break: break-word;
 }
@@ -96,16 +93,10 @@
     line-height: normal;
 }
 
-/* 배경이 이미지일 때 텍스트 색상 변경 */
-.card--text-light {
-}
-
-.card--text-light .auther {
-}
-
 @media (max-width: 480px) {
     .title-box.title-box-lg {
         flex-direction: column-reverse;
+        padding-bottom: 0;
     }
     .title-box p {
         margin-bottom: 4px;
