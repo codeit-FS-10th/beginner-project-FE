@@ -49,7 +49,7 @@
 }
 
 .recent-list > * {
-    min-width: 298px;
+    min-width: 292px;
 }
 
 .study-controls {
@@ -153,10 +153,6 @@
         overflow-y: hidden;
     }
 
-    .recent-list > * {
-        flex-shrink: 0;
-    }
-
     .study-search {
         width: 100%;
     }
@@ -169,6 +165,9 @@
 @media (max-width: 480px) {
     .section-title {
         font-size: 16px;
+    }
+    .study-search-wrapper {
+        max-width: 100%;
     }
     .study-controls {
         flex-direction: column;

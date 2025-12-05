@@ -1,8 +1,13 @@
 import api from "../axiosInstance.js";
 
-export const fetchStudies = async ({ page = 1, limit = 6, sort = "newest" } = {}) => {
+export const fetchStudies = async ({
+    page = 1,
+    limit = 6,
+    sort = "newest",
+    search = "",
+} = {}) => {
     const res = await api.get("/studies", {
-        params: { page, limit, sort },
+        params: { page, limit, sort, search },
     });
     return res.data;
 };
@@ -33,12 +38,10 @@ export const verifyStudyPassword = async (studyId, password) => {
     return res.data;
 };
 
-
 export const updateStudy = async (studyId, payload) => {
     const res = await api.patch(`/studies/${studyId}`, payload);
     return res.data;
 };
-
 
 export const deleteStudy = async (studyId) => {
     const res = await api.delete(`/studies/${studyId}`);
