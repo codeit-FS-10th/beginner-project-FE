@@ -2,7 +2,6 @@
     width: 100%;
     max-width: 648px;
     padding-top: 40px;
-    padding-right: 24px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -124,16 +123,16 @@
     margin-bottom: 3rem;
 }
 @media (max-width: 744px) {
-    .study-main-container {
+    .study-root-container {
         padding-left: 24px;
         padding-right: 24px;
     }
 }
 
 @media (max-width: 480px) {
-    .study-main-container {
-        padding-left: 12px;
-        padding-right: 12px;
+    .study-root-container {
+        padding-left: 16px;
+        padding-right: 16px;
     }
     .bg-list {
         grid-template-columns: repeat(2, 1fr);
