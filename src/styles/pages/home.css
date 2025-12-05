@@ -176,6 +176,10 @@
         gap: 16px;
         align-items: flex-end;
     }
+    .root-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
 
     .recent-container,
     .study-container {
