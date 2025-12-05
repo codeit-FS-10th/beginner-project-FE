@@ -28,6 +28,7 @@ function ModalHabitList({ onClose, onSubmit }) {
     //  수정 기능 추가
     const [editingId, setEditingId] = useState(null);
     const [editValue, setEditValue] = useState("");
+    const [editedHabits, setEditedHabits] = useState({});
 
     const loadHabits = async () => {
         try {
@@ -62,11 +63,35 @@ function ModalHabitList({ onClose, onSubmit }) {
         });
     };
 
-    const handleSubmit = () => {
-        if (onSubmit) {
-            onSubmit();
+    const handleSubmit = async () => {
+        // 1. 수정된 습관이 하나도 없으면 → 서버 호출 없이 그냥 닫기
+        const entries = Object.entries(editedHabits);
+        if (entries.length === 0) {
+            if (onSubmit) {
+                await onSubmit(); // 부모에서 loadHabits 해주는 콜백
+            }
+            onClose();
+            return;
         }
-        onClose();
+
+        try {
+            // 2. 수정된 습관이 있을 때만 updateHabit 호출
+            const promises = entries.map(([habitId, name]) =>
+                updateHabit(studyId, habitId, { name })
+            );
+
+            await Promise.all(promises);
+
+            // 3. 부모(Habit)에서 다시 오늘의 습관 조회
+            if (onSubmit) {
+                await onSubmit();
+            }
+
+            onClose();
+        } catch (error) {
+            console.error("습관 수정 전체 저장 실패:", error);
+            // 필요하면 여기서 토스트 띄워도 됨
+        }
     };
 
     const handleClickAddButton = () => {
@@ -121,33 +146,41 @@ function ModalHabitList({ onClose, onSubmit }) {
     };
 
     // 수정 모드
-    const handleEditKeyDown = async (e) => {
+    const handleEditKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            await submitEdit();
+            submitEdit(); // 이제 여기서는 서버 안 감
         }
         if (e.key === "Escape") {
             cancelEdit();
         }
     };
+
     // 칩 수정 모드를 취소, 원래 상태로
     const cancelEdit = () => {
         setEditingId(null);
         setEditValue("");
     };
     // 수정값 보내기
-    const submitEdit = async () => {
+    const submitEdit = () => {
         const trimmed = editValue.trim();
-        if (!trimmed) return;
-
-        try {
-            await updateHabit(studyId, editingId, { name: trimmed });
-            await loadHabits();
-        } catch (error) {
-            console.error("습관 수정 실패:", error);
-        } finally {
+        if (!trimmed) {
             cancelEdit();
+            return;
         }
+
+        // 화면에 보이는 habits만 먼저 수정
+        setHabits((prev) =>
+            prev.map((h) => (h.id === editingId ? { ...h, name: trimmed } : h))
+        );
+
+        // 나중에 "수정완료"를 눌렀을 때 서버에 보낼 수정 목록 저장
+        setEditedHabits((prev) => ({
+            ...prev,
+            [editingId]: trimmed,
+        }));
+
+        cancelEdit();
     };
 
     return (
