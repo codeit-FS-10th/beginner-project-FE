@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { fetchStudies } from "@api/service/studyservice";
 import { getRecentStudies } from "@utils/recentStudy";
+import { useDebounce } from "@hooks/useDebounce";
 import LoadMoreButton from "@atoms/button/LoadMoreButton";
 import Dropdown from "@atoms/dropdown/Dropdown";
 import Card from "@molecule/card/Card";
@@ -16,10 +17,12 @@ const SORT_OPTIONS = {
     POINT_ASC: "적은 포인트 순",
 };
 
-const LIMIT = 6; // 한 페이지당 6개 (필요하면 숫자만 바꾸면 됨)
+const LIMIT = 6;
 
 function Home() {
     const [sortOption, setSortOption] = useState(SORT_OPTIONS.DEFAULT);
+    const [sortParam, setSortParam] = useState("newest");
+
     const [page, setPage] = useState(1);
 
     const [searchText, setSearchText] = useState("");
@@ -30,6 +33,8 @@ function Home() {
 
     const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
+
+    const debouncedSearchText = useDebounce(searchText, 400);
 
     const getCreatedAt = (study) => {
         const raw =
@@ -44,11 +49,9 @@ function Home() {
 
     const getPoint = (study) => Number(study.point ?? 0);
 
-    // CODE를 이모지로 변환하는 함수
     const codeToEmoji = (code) => {
         if (!code) return "";
         try {
-            // "1f600" 형식을 "1F600"으로 변환 후 코드 포인트로 변환
             const codePoint = parseInt(code.toUpperCase(), 16);
             return String.fromCodePoint(codePoint);
         } catch (err) {
@@ -57,7 +60,6 @@ function Home() {
         }
     };
 
-    // 최근 조회한 스터디 (localStorage 기반) - 이모지 데이터 추가
     useEffect(() => {
         const loadRecentStudiesWithEmojis = () => {
             const data = getRecentStudies();
@@ -66,7 +68,6 @@ function Home() {
                 return;
             }
 
-            // 각 최근 스터디의 이모지 데이터 포맷팅
             const recentWithEmojis = data.map((study) => {
                 const reactionData = (study.emojis || []).map((item) => {
                     const code = (item.code || "").toLowerCase();
@@ -92,8 +93,11 @@ function Home() {
         loadRecentStudiesWithEmojis();
     }, []);
 
-    // 스터디 목록 불러오기
-    const loadStudies = async ({ pageToLoad = 1, append = false } = {}) => {
+    const loadStudies = async ({
+        pageToLoad = 1,
+        append = false,
+        sort = sortParam,
+    } = {}) => {
         try {
             if (append) {
                 setLoadingMore(true);
@@ -105,12 +109,12 @@ function Home() {
             const res = await fetchStudies({
                 page: pageToLoad,
                 limit: LIMIT,
+                sort,
             });
 
             const items = res.items ?? [];
             const totalPages = res.totalPages ?? 1;
 
-            // 응답에서 이미 totalPoint와 emojis를 받으므로 포맷팅만 수행
             const itemsWithData = items.map((study) => {
                 const reactionData = (study.emojis || []).map((item) => {
                     const code = (item.code || "").toLowerCase();
@@ -145,53 +149,55 @@ function Home() {
         }
     };
 
-    // 첫 로딩 때 1페이지 가져오기
     useEffect(() => {
-        loadStudies({ pageToLoad: 1, append: false });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        loadStudies({ pageToLoad: 1, append: false, sort: sortParam });
+    }, [sortParam]);
 
-    // 정렬 옵션 변경
     const handleSortChange = (option) => {
         setSortOption(option);
+
+        const sortKey = mapSortOptionToParam(option);
+        setSortParam(sortKey);
+
+        setPage(1);
     };
 
-    // 더보기
     const handleLoadMore = () => {
         if (!hasMore || loadingMore) return;
-        loadStudies({ pageToLoad: page + 1, append: true });
+        loadStudies({
+            pageToLoad: page + 1,
+            append: true,
+            sort: sortParam, // ✅ 현재 정렬 기준 유지
+        });
     };
 
-    // 검색 필터링
     const filteredStudies = useMemo(() => {
         return (studies ?? []).filter((study) => {
             const name = study?.NAME ?? "";
-            return name.toLowerCase().includes(searchText.toLowerCase());
+            return name
+                .toLowerCase()
+                .includes(debouncedSearchText.toLowerCase());
         });
-    }, [studies, searchText]);
+    }, [studies, debouncedSearchText]);
 
-    // 정렬 적용
-    const sortedStudies = useMemo(() => {
-        const arr = [...filteredStudies];
-
-        switch (sortOption) {
+    const mapSortOptionToParam = (option) => {
+        switch (option) {
             case SORT_OPTIONS.NEWEST:
-                return arr.sort((a, b) => getCreatedAt(b) - getCreatedAt(a));
+                return "newest";
             case SORT_OPTIONS.OLDEST:
-                return arr.sort((a, b) => getCreatedAt(a) - getCreatedAt(b));
+                return "oldest";
             case SORT_OPTIONS.POINT_DESC:
-                return arr.sort((a, b) => getPoint(b) - getPoint(a));
+                return "point_desc";
             case SORT_OPTIONS.POINT_ASC:
-                return arr.sort((a, b) => getPoint(a) - getPoint(b));
+                return "point_asc";
             default:
-                return arr;
+                return "newest";
         }
-    }, [filteredStudies, sortOption]);
+    };
 
     return (
         <div className="root-container">
             <div className="main-container">
-                {/* 최근 조회한 스터디 */}
                 <section className="recent-container">
                     <h2 className="section-title">최근 조회한 스터디</h2>
                     <div className="recent-list">
@@ -209,7 +215,6 @@ function Home() {
                     </div>
                 </section>
 
-                {/* 스터디 둘러보기 */}
                 <section className="study-container">
                     <div className="study-header">
                         <h2 className="section-title">스터디 둘러보기</h2>
@@ -247,13 +252,13 @@ function Home() {
                             <p>불러오는 중...</p>
                         ) : error ? (
                             <p>{error}</p>
-                        ) : sortedStudies.length === 0 ? (
+                        ) : filteredStudies.length === 0 ? (
                             <p>아직 둘러 볼 스터디가 없어요</p>
                         ) : (
                             <Card
                                 size="lg"
                                 theme="light"
-                                studyData={sortedStudies}
+                                studyData={filteredStudies}
                             />
                         )}
                     </div>
