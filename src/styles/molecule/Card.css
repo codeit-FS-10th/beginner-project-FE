@@ -88,6 +88,13 @@
     line-height: normal;
 }
 
+/* 배경이 이미지일 때 텍스트 색상 변경 */
+.card--text-light {
+}
+
+.card--text-light .auther {
+}
+
 @media (max-width: 480px) {
     .title-box.title-box-lg {
         flex-direction: column-reverse;
