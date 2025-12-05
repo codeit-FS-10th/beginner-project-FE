@@ -14,6 +14,12 @@ import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
 
 function Habit() {
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const studyId = searchParams.get("id");
+    const password = location.state?.password ?? "1234"; // 임시 비번
     // 현재 시간
     const [time, setTime] = useState("");
     // 오늘의 습관 리스트
@@ -22,69 +28,6 @@ function Habit() {
     const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
     // 스터디 정보
     const [studyInfo, setStudyInfo] = useState(null);
-
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const studyId = searchParams.get("id");
-    const password = location.state?.password ?? "1234"; // 임시 비번
-
-    // //////////////////////////////////////
-
-    // useEffect(() => {
-    //     const createHabitsDebug = async () => {
-    //         try {
-    //             const habitsToCreate = [
-    //                 "커피 마시기",
-    //                 "노래 듣기",
-    //                 "도서관 가기",
-    //                 "청소하기",
-    //                 "이마트가서 장보기",
-    //             ];
-
-    //             for (const habitName of habitsToCreate) {
-    //                 const res = await fetch(
-    //                     `https://beginner-project-be.onrender.com/api/studies/3/habits`,
-    //                     {
-    //                         method: "POST",
-    //                         headers: {
-    //                             "Content-Type": "application/json",
-    //                         },
-    //                         body: JSON.stringify({ name: habitName }),
-    //                     }
-    //                 );
-
-    //                 const data = await res.json();
-    //                 console.log(`디버그 - 습관 생성됨: ${habitName}`, data);
-    //             }
-
-    //             console.log("디버그 - 습관 3개 모두 생성 완료!");
-    //         } catch (error) {
-    //             console.error("디버그 - 습관 생성 실패:", error);
-    //         }
-    //     };
-
-    //     createHabitsDebug();
-    // }, []);
-
-    // useEffect(() => {
-    //     const fetchTodayHabitsDebug = async () => {
-    //         try {
-    //             const res = await fetch(
-    //                 `https://beginner-project-be.onrender.com/api/studies/3/habits/today`
-    //             );
-    //             const data = await res.json();
-    //             console.log("디버그 - 오늘의 습관 목록:", data);
-    //         } catch (error) {
-    //             console.error("디버그 - 오늘의 습관 불러오기 실패:", error);
-    //         }
-    //     };
-
-    //     fetchTodayHabitsDebug();
-    // }, []);
-
-    // ////////////////////////////////////////
 
     /** 현재 날짜 YYYY-MM-DD */
     const getTodayDateString = () => {
@@ -201,7 +144,7 @@ function Habit() {
     };
 
     /** 이동 버튼 */
-    const handleHomeClick = () => navigate("/");
+    const handleDetailClick = () => navigate(`/detail?id=${studyId}`);
     const handleFocusClick = () => navigate(`/focus?id=${studyId}`);
 
     return (
@@ -220,7 +163,9 @@ function Habit() {
                         <NavButton onClick={handleFocusClick}>
                             오늘의 집중
                         </NavButton>
-                        <NavButton onClick={handleHomeClick}>홈</NavButton>
+                        <NavButton onClick={handleDetailClick}>
+                            스터디 홈
+                        </NavButton>
                     </div>
                 </div>
 
@@ -274,7 +219,10 @@ function Habit() {
 
             {/* 모달 렌더 */}
             {isHabitModalOpen && (
-                <ModalHabitList onClose={() => setIsHabitModalOpen(false)} />
+                <ModalHabitList
+                    onClose={() => setIsHabitModalOpen(false)}
+                    onSubmit={loadHabits}
+                />
             )}
         </div>
     );
