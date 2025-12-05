@@ -1,8 +1,8 @@
 import api from "../axiosInstance.js";
 
-export const fetchStudies = async ({ page = 1, limit = 6 } = {}) => {
+export const fetchStudies = async ({ page = 1, limit = 6, sort = "newest" } = {}) => {
     const res = await api.get("/studies", {
-        params: { page, limit },
+        params: { page, limit, sort },
     });
     return res.data;
 };
@@ -30,16 +30,16 @@ export const verifyStudyPassword = async (studyId, password) => {
     const res = await api.post(`/studies/${studyId}/verify-password`, {
         password,
     });
-    return res.data; // { verified: true }
+    return res.data;
 };
 
-// 스터디 수정하기
+
 export const updateStudy = async (studyId, payload) => {
     const res = await api.patch(`/studies/${studyId}`, payload);
     return res.data;
 };
 
-// 스터디 삭제하기
+
 export const deleteStudy = async (studyId) => {
     const res = await api.delete(`/studies/${studyId}`);
     return res.data;

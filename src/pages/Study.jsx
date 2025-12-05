@@ -7,7 +7,7 @@ import BaseButton from "@atoms/button/BaseButton";
 import Input from "../components/atoms/input/Input";
 import { createStudy } from "@api/service/studyservice";
 
-import Toast, { showErrorToast, showSuccessToast } from "@atoms/Toast";
+import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast.jsx";
 
 const passwordRegex =
     /^(?=.*[A-Za-z\uAC00-\uD7A3])(?=.*[^A-Za-z0-9\uAC00-\uD7A3\s]).{8,15}$/;
@@ -109,7 +109,7 @@ export default function Study() {
 
     return (
         <>
-            <Toast />
+            {/* <Toast /> */}
 
             <div className="study-root-container">
                 <div className="study-main-container">

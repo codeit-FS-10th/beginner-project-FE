@@ -58,6 +58,18 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
         return "light";
     };
 
+    // 배경 타입에 따른 CSS 클래스 반환
+    const getFontColorClass = (background) => {
+        if (!background) return "";
+        if (background.type === "color") {
+            return "";
+        }
+        if (background.type === "image") {
+            return "card--text-light";
+        }
+        return "";
+    };
+
     const safeStudyData = Array.isArray(studyData) ? studyData : [];
 
     return (
@@ -109,18 +121,12 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                         <article>
                             <header>
                                 <div
-                                    className={`title-box title-box-${size} title-box-${theme}`}
+                                    className={`title-box title-box-${size} title-box-${theme} ${getFontColorClass(
+                                        bg
+                                    )}`}
                                 >
-                                    <p
-                                        className={`title-${size}`}
-                                        style={changeFontColor(bg)}
-                                    >
-                                        <span
-                                            className="auther"
-                                            style={changeFontColor(bg)}
-                                        >
-                                            {author}
-                                        </span>
+                                    <p className={`title-${size}`}>
+                                        <span className="auther">{author}</span>
                                         {title && `의 ${title}`}
                                     </p>
                                     <Tag
@@ -130,17 +136,15 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                                         theme={changeTagTheme(bg)}
                                     />
                                 </div>
-                                <span
-                                    className="Card-day-text"
-                                    style={changeFontColor(bg)}
-                                >
+                                <span className="Card-day-text">
                                     {safeDay}일째 진행 중
                                 </span>
                             </header>
 
                             <p
-                                className={`goal-${size}`}
-                                style={changeFontColor(bg)}
+                                className={`goal-${size} ${getFontColorClass(
+                                    bg
+                                )}`}
                             >
                                 {safeGoal}
                             </p>
