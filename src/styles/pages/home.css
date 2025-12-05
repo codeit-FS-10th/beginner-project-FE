@@ -49,7 +49,6 @@
 }
 
 .recent-list > * {
-    flex: 1;
     min-width: 298px;
 }
 
