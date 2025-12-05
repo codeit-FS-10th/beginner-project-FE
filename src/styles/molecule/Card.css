@@ -10,7 +10,6 @@
     padding: 16px;
 }
 .card--lg {
-    width: 298px;
     height: 183px;
     padding: 24px;
 }
@@ -44,7 +43,10 @@
 } */
 .title-box p {
     font-weight: 700;
-    margin: 0;
+    margin-bottom: 16px;
+    min-width: 220px;
+    max-width: 230px;
+    min-height: 36px;
 }
 
 .title-sm {
@@ -61,8 +63,14 @@
     margin-bottom: 11px;
 }
 .goal-lg {
+    overflow: hidden;
     margin-top: 30px;
-    margin-bottom: 54px;
+    height: 54px;
+    /* force a line-height that divides the fixed height evenly so lines are not half-cut */
+    line-height: calc(54px / 3);
+    /* 긴 단어(공백 없는 문자열)도 컨테이너 폭에 맞춰 줄바꿈 처리 */
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* .title-box-dark > * {
@@ -104,6 +112,5 @@
     }
     .goal-lg {
         margin-top: 11px;
-        margin-bottom: 12px;
     }
 }

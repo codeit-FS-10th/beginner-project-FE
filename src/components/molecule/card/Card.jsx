@@ -150,7 +150,7 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                             </p>
 
                             <ul className="card--reactions">
-                                {reactions.map((reaction) => (
+                                {reactions.slice(0, 5).map((reaction) => (
                                     <li key={reaction.id} className="tag">
                                         <Tag
                                             type="reaction"
