@@ -17,7 +17,6 @@
     align-items: flex-start;
     border-radius: 20px;
     background: #fff;
-    box-sizing: border-box;
 }
 
 /* 항상 컨테이너 패딩을 사용하므로 큰 화면에서 추가 마진 불필요 */
@@ -137,6 +136,7 @@
     font-style: normal;
     font-weight: 500;
     margin-bottom: 24px;
+    line-height: 26px; /* 185.714% */
 }
 
 .detail-point-title {
@@ -150,12 +150,9 @@
 .habit-grid {
     display: grid;
     width: 100%;
-    /* 습관명은 최소 120px, 나머지 요일은 최소 64px까지 축소 가능하도록 설정
-           최대는 비례(flexible)로 줄어들어 가로 스크롤 대신 내부가 줄어듭니다. */
-    grid-template-columns: minmax(120px, 1fr) repeat(7, minmax(64px, 1fr));
-    column-gap: 8px;
+    grid-template-columns: minmax(246px, 1fr) repeat(7, minmax(118px, 1fr));
     align-items: center;
-    overflow-x: hidden; /* 스크롤 대신 내부 요소가 줄어들게 함 */
+    overflow-x: hidden;
 }
 
 .habit-name-cell {
@@ -168,7 +165,6 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    /* 너무 길면 말줄임 처리하여 겹치지 않도록 함 */
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -221,7 +217,6 @@
 }
 
 @media (max-width: 744px) {
-    /* 작은 화면에서 컨테이너 패딩을 유지하되, 내부 padding 축소 */
     .detail-conainer {
         padding: 0 24px;
     }
@@ -229,33 +224,39 @@
         padding: 24px;
     }
 
-    /* habit-grid 반응형 조정: 요일과 스티커가 줄어들 수 있게 minmax로 설정 */
     .habit-grid {
-        grid-template-columns: minmax(100px, 1fr) repeat(7, minmax(56px, 1fr));
         overflow-x: hidden;
     }
 
-    .habit-name-cell {
-        padding: 0 24px;
-        font-size: 16px;
-    }
-
     .sticker-cell {
-        padding: 14px; /* 태블릿은 좌우 동일한 패딩 유지 */
+        padding: 14px;
     }
 }
 
 @media (max-width: 480px) {
+    .detail-content-header {
+        flex-direction: column-reverse;
+    }
     .detail-conainer {
         padding: 0 12px;
     }
+
+    /* 상위 버튼들임 */
     .detail-content {
         padding: 16px;
     }
+    .detail-buttons {
+        justify-content: flex-end;
+        margin-bottom: 16px;
+        font-size: 12px;
+    }
+    .detail-title-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+    /*  */
 
-    /* 모바일에서 최소 크기로 고정: 요일 더 작아져도 컬럼이 줄어들도록 설정 */
     .habit-grid {
-        grid-template-columns: minmax(80px, 1fr) repeat(7, minmax(48px, 1fr));
         overflow-x: hidden;
     }
 
@@ -268,6 +269,6 @@
     }
 
     .sticker-cell {
-        padding: 14px; /* 모바일에서도 패딩은 14px 고정 */
+        padding: 14px;
     }
 }
