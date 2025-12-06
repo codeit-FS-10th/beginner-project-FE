@@ -65,9 +65,12 @@
     overflow: hidden;
     margin-top: 30px;
     height: 54px;
-    line-height: calc(54px / 3);
+    line-height: calc(54px / 2);
     overflow-wrap: anywhere;
     word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;   /* 제한 줄수 */
+    -webkit-box-orient: vertical;
 }
 
 /* .title-box-dark > * {
