@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import "@styles/atoms/Input.css";
 
 import eyeClosed from "@img/eye1.svg";
 import eyeOpen from "@img/eye2.svg";
 
-export default function Input({
-    label,
-    value,
-    onChange,
-    type = "text",
-    placeholder = "",
-    error = "",
-    showToggle,
-    multiline = false,
-    ...rest
-}) {
+const Input = forwardRef(function Input(
+    {
+        label,
+        value,
+        onChange,
+        type = "text",
+        placeholder = "",
+        error = "",
+        showToggle,
+        multiline = false,
+        shake = false,
+        ...rest
+    },
+    ref
+) {
     const [show, setShow] = useState(false);
 
     const shouldShowToggle = type === "password" ? true : showToggle;
@@ -29,7 +33,7 @@ export default function Input({
     const Tag = multiline ? "textarea" : "input";
 
     return (
-        <div className="input-wrapper">
+        <div className={`input-wrapper ${shake ? "shake" : ""}`}>
             {label && <label className="input-label">{label}</label>}
 
             <div
@@ -38,6 +42,7 @@ export default function Input({
                 }`}
             >
                 <Tag
+                    ref={ref}
                     type={multiline ? undefined : actualType}
                     value={value}
                     onChange={onChange}
@@ -61,4 +66,6 @@ export default function Input({
             {error && <p className="input-error-message">{error}</p>}
         </div>
     );
-}
+});
+
+export default Input;
