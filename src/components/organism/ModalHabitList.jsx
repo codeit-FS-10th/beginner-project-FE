@@ -267,7 +267,7 @@ function ModalHabitList({ onClose, onSubmit }) {
                         +
                     </button>
                     {/*  수정완료, 취소 버튼*/}
-                    <footer className="modal-footer">
+                    <footer className="modal-habit.footer">
                         <BaseButton type="cancle" size="xl" onClick={onClose}>
                             취소
                         </BaseButton>
