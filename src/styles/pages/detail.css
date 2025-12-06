@@ -86,7 +86,7 @@
     padding: 24px;
     border-radius: 20px;
     border: 1px solid var(--gray-gray_DDDDDD, #ddd);
-    height: 463px;
+    min-height: 463px;
 }
 
 .habit-title {
@@ -156,6 +156,7 @@
     grid-template-columns: minmax(160px, 1fr) repeat(7, minmax(74px, 1fr));
     align-items: center;
     overflow-x: hidden;
+
 }
 
 .habit-name-cell {
@@ -261,7 +262,7 @@
     }
 
     .habit-grid {
-        overflow: auto;
+        overflow-x: auto;
     }
 
     .habit-name-cell {
