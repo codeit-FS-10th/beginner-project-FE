@@ -2,6 +2,10 @@ import bg1 from "@img/mockImg/card_background1.jpg";
 import bg2 from "@img/mockImg/card_background2.jpg";
 import bg3 from "@img/mockImg/card_background3.jpg";
 import bg4 from "@img/mockImg/card_background4.jpg";
+import bg5 from "@img/mockImg/card_background5.jpg";
+import bg6 from "@img/mockImg/card_background6.jpg";
+import bg7 from "@img/mockImg/card_background7.jpg";
+import bg8 from "@img/mockImg/card_background8.jpg";
 
 // 카드 배경 이미지
 

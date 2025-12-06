@@ -97,7 +97,7 @@
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin: 24px 0 16px;
+    margin: 16px 0 8px;
 }
 
 .select-background {
@@ -110,6 +110,12 @@
     font-size: 14px !important;
     font-weight: 400 !important;
     margin-top: 8px !important;
+}
+
+.study-form .input-error-message {
+    color: #c41013;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .study-make-button {
