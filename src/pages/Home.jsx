@@ -179,19 +179,21 @@ function Home() {
             <div className="main-container">
                 <section className="recent-container">
                     <h2 className="section-title">최근 조회한 스터디</h2>
-                    <div className="recent-list">
-                        {recentStudy.length === 0 ? (
+                    {recentStudy.length === 0 ? (
+                        <div className="recent-empty-wrapper">
                             <p className="recent-title">
                                 최근에 조회한 스터디가 없습니다.
                             </p>
-                        ) : (
+                        </div>
+                    ) : (
+                        <div className="recent-list">
                             <Card
                                 size="lg"
                                 theme="light"
                                 studyData={recentStudy}
                             />
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </section>
 
                 <section className="study-container">
@@ -226,17 +228,17 @@ function Home() {
                         />
                     </div>
 
-                    <div className="study-list">
-                        {loading ? (
-                            <p>불러오는 중...</p>
-                        ) : error ? (
-                            <p>{error}</p>
-                        ) : studies.length === 0 ? (
-                            <p>아직 둘러 볼 스터디가 없어요</p>
-                        ) : (
+                    {loading ? (
+                        <p>불러오는 중...</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : studies.length === 0 ? (
+                        <p>아직 둘러 볼 스터디가 없어요</p>
+                    ) : (
+                        <div className="study-list">
                             <Card size="lg" theme="light" studyData={studies} />
-                        )}
-                    </div>
+                        </div>
+                    )}
 
                     <div className="pagination">
                         {hasMore && !loading && (

@@ -10,18 +10,26 @@
     justify-content: center;
 }
 
-/* tag type별 - point,reaction */
-.tag--type-point {
-    padding: 4px 8px;
-    min-width: 63px;
-    height: 20px;
+.tag--type-point.tag--variant-home {
+    min-width: 76px;
+    height: 25px;
+    padding: 1px 2px;
 }
+
+.tag--type-point.tag--variant-detail {
+    display: flex;
+    padding: 8px 12px;
+    gap: 8px;
+}
+
 .tag--type-reaction {
     padding: 6px 8px;
 }
 /* 사이즈별 */
 .tag--type-point .tag--size-sm {
-    height: 86px;
+    padding: 8px 12px;
+    min-width: 63px;
+    height: 24px;
 }
 .tag--type-point .tag--size-lg {
     height: 116px;
@@ -45,16 +53,20 @@
 
 /* tag size - sm,lg  */
 .tag--emoji-sm {
-    width: 12px;
+    width: 14px;
 }
 .tag--emoji-lg {
     width: 16px;
 }
 .tag--label-sm {
     font-size: 12px;
-    margin-left: 5px;
+    margin-left: 4px;
 }
 .tag--label-lg {
-    font-size: 12px;
+    font-size: 16px;
+}
+
+.tag--label-emoji {
+    font-size: 14px;
     margin-left: 5px;
 }

@@ -3,6 +3,7 @@
     justify-content: center;
     padding-left: 24px;
     padding-right: 24px;
+    min-width: 344px;
 }
 
 .main-container {
@@ -27,6 +28,8 @@
 .recent-container {
     height: 302px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .section-title {
@@ -128,6 +131,21 @@
     color: #818181;
 }
 
+.recent-empty-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center; /* 세로 중앙 */
+}
+
+.recent-title {
+    text-align: center;
+    color: var(--gray-gray_818181, #818181);
+    font-family: Pretendard;
+    font-size: 20px;
+    font-weight: 500;
+}
+
 @media (max-width: 1024px) {
     .study-list {
         grid-template-columns: repeat(2, 1fr);
@@ -159,6 +177,9 @@
 
     .study-sort {
         width: 160px;
+    }
+    .study-container {
+        height: auto;
     }
 }
 

@@ -326,7 +326,13 @@ function Focus() {
                         <p className="focus-total-point">
                             현재 까지 획득한 포인트
                         </p>
-                        <Tag type="point" value={totalPoint} theme="light" />
+                        <Tag
+                            type="point"
+                            size="lg"
+                            value={totalPoint}
+                            theme="light"
+                            variant="detail"
+                        />
                     </div>
 
                     {/* 타이머 박스 */}
