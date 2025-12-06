@@ -3,9 +3,6 @@ import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import {
     fetchTodayHabits,
     toggleHabitCheck,
-    createHabit,
-    updateHabit,
-    deleteHabit,
     fetchStudyDetail,
 } from "@api/service/habitservice";
 import ModalHabitList from "@organism/ModalHabitList";
@@ -28,15 +25,6 @@ function Habit() {
     const [isHabitModalOpen, setIsHabitModalOpen] = useState(false);
     // 스터디 정보
     const [studyInfo, setStudyInfo] = useState(null);
-
-    /** 현재 날짜 YYYY-MM-DD */
-    const getTodayDateString = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    };
 
     /** 현재 시간 업데이트 */
     const formatDateTime = () => {
@@ -73,7 +61,6 @@ function Habit() {
 
         try {
             const data = await fetchTodayHabits(studyId, password);
-            console.log("오늘의 습관 API 응답:", data);
 
             const list = (data.habits ?? []).map((habit) => ({
                 id: habit.HABIT_ID,
@@ -92,7 +79,6 @@ function Habit() {
 
         try {
             const data = await fetchStudyDetail(studyId);
-            console.log("스터디 상세조회:", data);
 
             setStudyInfo({
                 nickname: data.NICKNAME ?? data.nickname,
@@ -111,9 +97,6 @@ function Habit() {
 
     /** 습관 체크/해제 토글 */
     const handleHabitClick = async (habitId) => {
-        console.log("칩 클릭됨! habitId:", habitId);
-        console.log("클릭 직전 habits:", habits);
-
         const target = habits.find((h) => h.id === habitId);
 
         if (!target) {
@@ -122,14 +105,13 @@ function Habit() {
         }
 
         const newDone = !target.isDone;
-        console.log("토글될 isDone 값:", newDone);
 
         // UI 먼저 토글
         setHabits((prev) => {
             const updated = prev.map((habit) =>
                 habit.id === habitId ? { ...habit, isDone: newDone } : habit
             );
-            console.log("업데이트된 habits:", updated);
+
             return updated;
         });
 
