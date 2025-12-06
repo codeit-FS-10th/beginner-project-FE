@@ -7,6 +7,7 @@
     display: flex;
     justify-content: center;
     margin-top: 39px;
+    box-sizing: border-box;
 }
 
 .focus-content {
@@ -90,7 +91,9 @@
     padding: 20px;
     margin: 100px auto 74px;
     border-radius: 20px;
-    width: 600px;
+    width: 100%; /* 화면에 맞게 */
+    max-width: 600px; /* 넓을 때는 최대 600px까지만 */
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -253,4 +256,109 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+/* =========================
+ * 미디어쿼리
+ * =======================*/
+
+/* 774px 이하 - 태블릿 */
+@media (max-width: 774px) {
+    .focus-container {
+        padding: 0 24px;
+    }
+
+    .focus-content {
+        padding: 24px;
+    }
+
+    .focus-content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .focus-header-title h2 {
+        font-size: 32px;
+    }
+
+    .focus-content-button {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .focus-today {
+        height: auto;
+        padding: 32px 16px 80px;
+    }
+
+    .focus-timmer-wrap {
+        width: 100%;
+        padding: 12px 0;
+        margin: 60px auto 40px;
+    }
+
+    .focus-timmer {
+        font-size: 120px;
+    }
+
+    .timer-button-box {
+        bottom: 24px;
+    }
+
+    .focus-start-button {
+        gap: 20px;
+    }
+}
+/* 375px 이하 - 모바일 */
+@media (max-width: 375px) {
+    .focus-container {
+        margin-top: 16px;
+    }
+
+    .focus-content {
+        padding: 20px 12px;
+    }
+
+    .focus-header-title h2 {
+        font-size: 24px;
+    }
+
+    .focus-total-point {
+        font-size: 14px;
+    }
+
+    .focus-today {
+        padding: 24px 12px 72px;
+        border-radius: 16px;
+    }
+
+    .focus-today h2 {
+        font-size: 20px;
+    }
+
+    .focus-timmer-wrap {
+        margin: 48px auto 32px;
+    }
+
+    .focus-timmer {
+        font-size: 72px;
+    }
+
+    .focus-start-button {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .focus-toast {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .focus-toast-pause {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
 }
