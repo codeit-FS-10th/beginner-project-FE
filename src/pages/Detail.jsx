@@ -309,7 +309,13 @@ function Detail() {
 
                     <p className="detail-point-title">현재까지 획득한 포인트</p>
                     {pointError && <p className="point-error">{pointError}</p>}
-                    <Tag type="point" value={points} theme="light" />
+                    <Tag
+                        type="point"
+                        size="lg"
+                        value={points}
+                        theme="light"
+                        variant="detail"
+                    />
                 </div>
 
                 {/* HABIT */}

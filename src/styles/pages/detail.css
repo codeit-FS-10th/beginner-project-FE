@@ -150,7 +150,6 @@
     font-weight: 400;
     margin-bottom: 8px;
 }
-
 .habit-grid {
     display: grid;
     width: 100%;
@@ -227,7 +226,6 @@
     .detail-conainer {
         padding: 0 24px;
     }
-
     .detail-content {
         padding: 24px;
     }
@@ -238,22 +236,6 @@
 
     .sticker-cell {
         padding: 14px;
-    }
-
-    .detail-habit-history {
-        padding: 16px;
-    }
-
-    .habit-title {
-      font-size: 24px;
-    }
-
-    .sticker-cell {
-      padding: 14px;
-    }
-
-    .day-cell {
-      font-size: 18px;
     }
 }
 
@@ -281,13 +263,11 @@
     /*  */
 
     .habit-grid {
-        width: min-content;
-        overflow-x: scroll;
+        overflow-x: hidden;
     }
 
     .habit-name-cell {
         padding: 0 16px;
-        font-size: 14px;
     }
 
     .day-cell {

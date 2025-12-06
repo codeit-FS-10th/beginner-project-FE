@@ -131,9 +131,10 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                                     </p>
                                     <Tag
                                         type="point"
-                                        size={size}
+                                        size="sm"
                                         value={safePoint}
                                         theme={changeTagTheme(bg)}
+                                        variant="home"
                                     />
                                 </div>
                                 <span className="Card-day-text">
@@ -154,7 +155,7 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                                     <li key={reaction.id} className="tag">
                                         <Tag
                                             type="reaction"
-                                            size={size}
+                                            size="emoji"
                                             emoji={reaction.emoji}
                                             value={reaction.value}
                                             theme="dark"
