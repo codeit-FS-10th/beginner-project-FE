@@ -196,13 +196,12 @@ export default function Study() {
             return;
         }
 
-        // 모두 유효할 때 제출
         const payload = {
             name: studyName.trim(),
             nickname: nickname.trim(),
             ...(password ? { password } : {}),
             intro: intro.trim(),
-            image: selectedBg?.image ?? null,
+            image: selectedBg?.code ?? null,
         };
 
         try {
