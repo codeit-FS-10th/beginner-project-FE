@@ -122,9 +122,10 @@
 
     /* 분/콜론/초를 한 줄로 정렬 */
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: center;
     gap: 4px;
+    line-height: 1;
 }
 
 /* 10초 이하 빨간색 */
@@ -147,6 +148,9 @@
     display: inline-block;
     width: 3ch;
     text-align: right;
+    vertical-align: middle;
+    line-height: 1em;
+    height: 1em;
 }
 
 /* 분 인풋 – span이랑 최대한 똑같이 */
@@ -154,12 +158,17 @@
     display: inline-block;
     width: 3ch;
     text-align: right;
+    vertical-align: middle;
+    line-height: 1em;
+    height: 1em;
 
     font: inherit;
     border: none;
     outline: none;
     background: transparent;
     padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 /* Chrome, Safari, Edge */
@@ -174,6 +183,11 @@
     -moz-appearance: textfield;
 }
 
+/* 초 인풋 - text-align: left */
+.focus-timmer-input-sec {
+    text-align: left;
+}
+
 /* 콜론, 초 스타일 */
 .focus-timmer-colon,
 .focus-timmer-sec {
@@ -182,6 +196,9 @@
 .focus-timmer-sec {
     width: 3ch;
     text-align: left;
+    vertical-align: middle;
+    line-height: 1em;
+    height: 1em;
 }
 /* =========================
  * Timer 버튼 영역
