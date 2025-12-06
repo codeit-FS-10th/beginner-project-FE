@@ -414,57 +414,59 @@ function Focus() {
                         </div>
 
                         {/* 버튼 영역 */}
-                        <div className="focus-start-button">
-                            {phase === PHASE.FINISHED ? (
-                                // finished는 Stop만
-                                <TimerButton
-                                    variant="stop"
-                                    size="lg"
-                                    status="active"
-                                    onClick={handleStop}
-                                />
-                            ) : (
-                                <>
-                                    {/* Pause 버튼 */}
-                                    {(phase === PHASE.RUNNING ||
-                                        phase === PHASE.PAUSED) && (
+                        <div className="timer-button-box">
+                            <div className="focus-start-button">
+                                {phase === PHASE.FINISHED ? (
+                                    // finished는 Stop만
+                                    <TimerButton
+                                        variant="stop"
+                                        size="lg"
+                                        status="active"
+                                        onClick={handleStop}
+                                    />
+                                ) : (
+                                    <>
+                                        {/* Pause 버튼 */}
+                                        {(phase === PHASE.RUNNING ||
+                                            phase === PHASE.PAUSED) && (
+                                            <TimerButton
+                                                variant="pause"
+                                                size="sm"
+                                                status={
+                                                    phase === PHASE.RUNNING
+                                                        ? "active"
+                                                        : "inactive"
+                                                }
+                                                onClick={handlePause}
+                                            />
+                                        )}
+
+                                        {/* Start 버튼 */}
                                         <TimerButton
-                                            variant="pause"
-                                            size="sm"
+                                            variant="start"
+                                            size="lg"
                                             status={
-                                                phase === PHASE.RUNNING
+                                                phase === PHASE.READY ||
+                                                phase === PHASE.PAUSED
                                                     ? "active"
                                                     : "inactive"
                                             }
-                                            onClick={handlePause}
+                                            onClick={handleStart}
                                         />
-                                    )}
 
-                                    {/* Start 버튼 */}
-                                    <TimerButton
-                                        variant="start"
-                                        size="lg"
-                                        status={
-                                            phase === PHASE.READY ||
-                                            phase === PHASE.PAUSED
-                                                ? "active"
-                                                : "inactive"
-                                        }
-                                        onClick={handleStart}
-                                    />
-
-                                    {/* Restart 버튼 */}
-                                    {(phase === PHASE.RUNNING ||
-                                        phase === PHASE.PAUSED) && (
-                                        <TimerButton
-                                            variant="restart"
-                                            size="sm"
-                                            status="active"
-                                            onClick={handleRestart}
-                                        />
-                                    )}
-                                </>
-                            )}
+                                        {/* Restart 버튼 */}
+                                        {(phase === PHASE.RUNNING ||
+                                            phase === PHASE.PAUSED) && (
+                                            <TimerButton
+                                                variant="restart"
+                                                size="sm"
+                                                status="active"
+                                                onClick={handleRestart}
+                                            />
+                                        )}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

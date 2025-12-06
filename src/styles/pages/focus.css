@@ -10,8 +10,14 @@
 }
 
 .focus-content {
-    width: 1168px;
+    width: 100%;
+    max-width: 1120px;
     padding: 40px;
+
+    margin-bottom: 73px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: flex-start;
     border-radius: 20px;
     background: #fff;
 }
@@ -47,12 +53,15 @@
 }
 
 .focus-today {
+    box-sizing: border-box;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
     margin-top: 24px;
     padding: 40px 24px;
-    width: 1120px;
-    height: 551px;
+
+    height: 546px;
     border-radius: 20px;
     border: 1px solid var(--gray-gray_DDDDDD, #ddd);
     background: #fff;
@@ -79,7 +88,7 @@
 .focus-timmer-wrap {
     border: none;
     padding: 20px;
-    margin: 100px auto 94px;
+    margin: 100px auto 74px;
     border-radius: 20px;
     width: 600px;
     display: flex;
@@ -177,6 +186,12 @@
 /* =========================
  * Timer 버튼 영역
  * =======================*/
+.timer-button-box {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+}
 
 .focus-start-button {
     display: flex;
@@ -184,24 +199,6 @@
     align-items: center;
     gap: 32px;
 }
-
-/* (예전 인풋 박스 레이아웃 – 지금은 사용 안 하지만 남겨둬도 무방)
-.focus-timer-edit-input {
-    margin-top: 16px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-}
-
-.focus-timer-edit-input input {
-    width: 80px;
-    padding: 4px 8px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    text-align: right;
-}
-*/
 
 /* =========================
  * Toast

@@ -6,7 +6,7 @@
 }
 
 .habit-content {
-    width: 1168px;
+    width: 1120px;
     padding: 40px;
     border-radius: 20px;
     background: #fff;
@@ -85,11 +85,14 @@
 }
 
 .habit-today {
+    box-sizing: border-box;
+    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 24px;
+
     padding: 40px 24px;
-    width: 1120px;
+
     height: 551px;
     border-radius: 20px;
     border: 1px solid var(--gray-gray_DDDDDD, #ddd);
