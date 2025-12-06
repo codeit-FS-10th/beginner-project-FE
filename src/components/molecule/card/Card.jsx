@@ -2,6 +2,7 @@ import React from "react";
 import Tag from "@atoms/tag/Tag";
 import "@styles/molecule/Card.css";
 import { useNavigate } from "react-router-dom";
+import { mockBackgrounds } from "@mocks/studyBackgrounds";
 
 const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
     const navigate = useNavigate();
@@ -38,35 +39,22 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
 
     const changeFontColor = (background) => {
         if (!background) return {};
-        if (background.type === "color") {
-            return {};
-        }
-        if (background.type === "image") {
-            return { color: "#fff" };
-        }
+        if (background.type === "color") return {};
+        if (background.type === "image") return { color: "#fff" };
         return {};
     };
 
     const changeTagTheme = (background) => {
         if (!background) return "light";
-        if (background.type === "color") {
-            return "light";
-        }
-        if (background.type === "image") {
-            return "dark";
-        }
+        if (background.type === "color") return "light";
+        if (background.type === "image") return "dark";
         return "light";
     };
 
-    // 배경 타입에 따른 CSS 클래스 반환
     const getFontColorClass = (background) => {
         if (!background) return "";
-        if (background.type === "color") {
-            return "";
-        }
-        if (background.type === "image") {
-            return "card--text-light";
-        }
+        if (background.type === "color") return "";
+        if (background.type === "image") return "card--text-light";
         return "";
     };
 
@@ -82,7 +70,7 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                     point,
                     day,
                     INTRO,
-                    IMAGE, //
+                    IMAGE, // now contains "yellow", "leaf", ...
                     background,
                     reactionData,
                 } = item;
@@ -96,9 +84,22 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                 const safeDay = day ?? 0;
                 const safeGoal = INTRO ?? "";
 
-                const bg = IMAGE
-                    ? { type: "image", value: IMAGE }
-                    : background ?? null;
+                // ✅ IMAGE(code값) → 실제 이미지 파일 매핑
+                let bg = null;
+
+                if (IMAGE) {
+                    const found = mockBackgrounds.find(
+                        (bgItem) => bgItem.code === IMAGE
+                    );
+                    if (found) {
+                        bg = { type: "image", value: found.image };
+                    }
+                }
+
+                // 기존 background 옵션 fallback
+                if (!bg) {
+                    bg = background ?? null;
+                }
 
                 const reactions = Array.isArray(reactionData)
                     ? reactionData
