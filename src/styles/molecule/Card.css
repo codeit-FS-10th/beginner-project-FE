@@ -1,5 +1,6 @@
 .card {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    outline: 1px solid rgba(0, 0, 0, 0.1);
+    outline-offset: -1px;
     border-radius: 20px;
     cursor: pointer;
     overflow: hidden;
