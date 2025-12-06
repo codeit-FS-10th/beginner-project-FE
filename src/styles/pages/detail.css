@@ -154,7 +154,7 @@
 .habit-grid {
     display: grid;
     width: 100%;
-    grid-template-columns: minmax(246px, 1fr) repeat(7, minmax(118px, 1fr));
+    grid-template-columns: minmax(160px, 1fr) repeat(7, minmax(74px, 1fr));
     align-items: center;
     overflow-x: hidden;
 }
@@ -231,32 +231,7 @@
     .detail-content {
         padding: 24px;
     }
-
-    .habit-grid {
-        overflow-x: hidden;
-    }
-
-    .sticker-cell {
-        padding: 14px;
-    }
-
-    .detail-habit-history {
-        padding: 16px;
-    }
-
-    .habit-title {
-      font-size: 24px;
-    }
-
-    .sticker-cell {
-      padding: 14px;
-    }
-
-    .day-cell {
-      font-size: 18px;
-    }
-}
-
+  }
 @media (max-width: 480px) {
     .detail-content-header {
         flex-direction: column-reverse;
@@ -279,10 +254,16 @@
         gap: 16px;
     }
     /*  */
+    .detail-habit-history {
+      padding: 16px;
+    }
+
+    .habit-title {
+      font-size: 18px;
+    }
 
     .habit-grid {
-        width: min-content;
-        overflow-x: scroll;
+        overflow: auto;
     }
 
     .habit-name-cell {
@@ -291,10 +272,7 @@
     }
 
     .day-cell {
-        font-size: 14px;
-    }
-
-    .sticker-cell {
-        padding: 14px;
+      font-size: 14px;
+      padding: 0 16px;
     }
 }
