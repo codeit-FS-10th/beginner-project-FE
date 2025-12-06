@@ -1,13 +1,14 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BaseButton from "@atoms/button/BaseButton";
 import "@styles/molecule/gnb.css";
 import useMediaQuery from "@hooks/seMediaQuery";
 
 function GNB() {
     const location = useLocation();
-    const path = location.pathname;
+    const navigate = useNavigate();
 
+    const path = location.pathname;
     const isHome = path === "/";
     const isDetail = path === "/Detail";
 
@@ -17,18 +18,20 @@ function GNB() {
     const isMax480 = useMediaQuery("(max-width: 480px)");
 
     let buttonSize = "lg";
-
     if (isHome) {
-        if (isMax480) {
-            buttonSize = "xs";
-        } else if (isMax744) {
-            buttonSize = "md";
-        } else {
-            buttonSize = "lg";
-        }
-    } else if (isDetail) {
-        buttonSize = "lg";
+        if (isMax480) buttonSize = "xs";
+        else if (isMax744) buttonSize = "md";
     }
+
+    const handleLogoClick = () => {
+        if (isHome) {
+            // 홈이면 검색/정렬 초기화를 위해 새로고침
+            navigate(0); // 또는 window.location.reload();
+        } else {
+            // 홈이 아니면 홈으로 이동
+            navigate("/");
+        }
+    };
 
     return (
         <header className="gnb-header">
@@ -37,21 +40,22 @@ function GNB() {
                     isDetail ? "gnb--detail" : ""
                 }`.trim()}
             >
-                <Link to="/">
-                    <img
-                        className="gnb-logo"
-                        src="/img/img_logo.png"
-                        alt="logo"
-                    />
-                </Link>
+                <img
+                    className="gnb-logo"
+                    src="/img/img_logo.png"
+                    alt="logo"
+                    onClick={handleLogoClick}
+                    style={{ cursor: "pointer" }}
+                />
 
                 <div className="gnb-right">
                     {showButton && !(isDetail && isMax744) && (
-                        <Link to="/Study">
-                            <BaseButton size={buttonSize}>
-                                스터디 만들기
-                            </BaseButton>
-                        </Link>
+                        <BaseButton
+                            size={buttonSize}
+                            onClick={() => navigate("/Study")}
+                        >
+                            스터디 만들기
+                        </BaseButton>
                     )}
                 </div>
             </nav>

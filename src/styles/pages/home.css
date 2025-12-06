@@ -49,7 +49,7 @@
 }
 
 .recent-list > * {
-    flex-shrink: 0;
+    min-width: 292px;
 }
 
 .study-controls {
@@ -79,7 +79,8 @@
 
 .study-list {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    box-sizing: border-box;
     gap: 24px;
     margin-bottom: 60px;
     overflow: hidden;
@@ -96,7 +97,8 @@
     position: relative;
     display: flex;
     align-items: center;
-    width: 335px;
+    max-width: 335px;
+    width: 100%;
     height: 42px;
     padding: 0;
     border-radius: 15px;
@@ -128,14 +130,8 @@
 
 @media (max-width: 1024px) {
     .study-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 24px;
-    }
-
-    .study-list .card--lg {
-        width: 100%;
-        height: auto;
-        padding: 30px;
     }
 }
 
@@ -157,10 +153,6 @@
         overflow-y: hidden;
     }
 
-    .recent-list > * {
-        flex-shrink: 0;
-    }
-
     .study-search {
         width: 100%;
     }
@@ -171,6 +163,12 @@
 }
 
 @media (max-width: 480px) {
+    .section-title {
+        font-size: 16px;
+    }
+    .study-search-wrapper {
+        max-width: 100%;
+    }
     .study-controls {
         flex-direction: column;
         gap: 16px;
@@ -180,29 +178,35 @@
         padding-left: 16px;
         padding-right: 16px;
     }
-
+    .recent-list > .card {
+        flex: 1;
+        min-width: 240px;
+        padding: 16px;
+        height: 180px;
+    }
     .recent-container,
     .study-container {
         padding: 16px;
     }
-
     .study-list {
         display: flex;
         flex-direction: column;
+        margin-bottom: 30px;
     }
     .study-list .card--lg {
-        width: 312px;
         height: 180px;
         padding: 16px;
-    }
-    .recent-list .card--lg {
-        width: 240px;
-        height: 180px;
     }
     .tag {
         margin-bottom: 8px;
     }
     .Card-day-text {
         margin-top: 4px;
+    }
+    .pagination {
+        margin-bottom: 20px;
+    }
+    .study-container {
+        margin-bottom: 34px;
     }
 }

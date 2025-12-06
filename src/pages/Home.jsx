@@ -36,19 +36,6 @@ function Home() {
 
     const debouncedSearchText = useDebounce(searchText, 400);
 
-    const getCreatedAt = (study) => {
-        const raw =
-            study?.REG_DATE ??
-            study?.CREATED_AT ??
-            study?.createdAt ??
-            study?.regDate ??
-            null;
-
-        return raw ? new Date(raw) : new Date(0);
-    };
-
-    const getPoint = (study) => Number(study.point ?? 0);
-
     const codeToEmoji = (code) => {
         if (!code) return "";
         try {
@@ -110,6 +97,7 @@ function Home() {
                 page: pageToLoad,
                 limit: LIMIT,
                 sort,
+                search: debouncedSearchText || "",
             });
 
             const items = res.items ?? [];
@@ -151,7 +139,7 @@ function Home() {
 
     useEffect(() => {
         loadStudies({ pageToLoad: 1, append: false, sort: sortParam });
-    }, [sortParam]);
+    }, [sortParam, debouncedSearchText]);
 
     const handleSortChange = (option) => {
         setSortOption(option);
@@ -170,15 +158,6 @@ function Home() {
             sort: sortParam, // ✅ 현재 정렬 기준 유지
         });
     };
-
-    const filteredStudies = useMemo(() => {
-        return (studies ?? []).filter((study) => {
-            const name = study?.NAME ?? "";
-            return name
-                .toLowerCase()
-                .includes(debouncedSearchText.toLowerCase());
-        });
-    }, [studies, debouncedSearchText]);
 
     const mapSortOptionToParam = (option) => {
         switch (option) {
@@ -252,14 +231,10 @@ function Home() {
                             <p>불러오는 중...</p>
                         ) : error ? (
                             <p>{error}</p>
-                        ) : filteredStudies.length === 0 ? (
+                        ) : studies.length === 0 ? (
                             <p>아직 둘러 볼 스터디가 없어요</p>
                         ) : (
-                            <Card
-                                size="lg"
-                                theme="light"
-                                studyData={filteredStudies}
-                            />
+                            <Card size="lg" theme="light" studyData={studies} />
                         )}
                     </div>
 

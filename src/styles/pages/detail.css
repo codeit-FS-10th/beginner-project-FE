@@ -137,6 +137,9 @@
     font-weight: 500;
     margin-bottom: 24px;
     line-height: 26px; /* 185.714% */
+    /* 긴 단어가 있을 때도 컨테이너 안에서 줄바꿈되게 함 */
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .detail-point-title {
@@ -214,6 +217,9 @@
     font-style: normal;
     font-weight: 800;
     line-height: normal;
+    /* 제목에 공백 없는 긴 문자열이 있어도 줄바꿈 허용 */
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 @media (max-width: 744px) {

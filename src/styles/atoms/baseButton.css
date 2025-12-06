@@ -48,3 +48,15 @@
 .btn--full {
     width: 100%;
 }
+
+@media (max-width: 744px) {
+    .btn {
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        border-radius: 8px;
+    }
+}
