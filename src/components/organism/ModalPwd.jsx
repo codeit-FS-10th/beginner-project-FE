@@ -31,11 +31,22 @@ function ModalPwd({ onClose, onVerified, actionType, studyId, studyName }) {
 
             if (res.verified) {
                 // Detail.jsx 에게 비밀번호 통과 사실 전달
-                onVerified?.(actionType);
-                onClose();
+              if (res.token) {
+                localStorage.setItem("studyToken", res.token);
+                }
+              if (actionType === "today-habit") {
+                window.location.href = `/studies/${studyId}/habits/today`;
+                }
+              else if (actionType === "today-focus") {
+              window.location.href = `/studies/${studyId}/focus`;
+                }
+              else {
+              onVerified?.(actionType);
+              }
+              onClose();
             } else {
                 showErrorToast("🚨 비밀번호가 일치하지 않습니다.");
-            }
+              }
         } catch (err) {
             console.error(err);
             showErrorToast("🚨 비밀번호가 일치하지 않습니다.");
