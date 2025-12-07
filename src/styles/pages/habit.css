@@ -1,12 +1,13 @@
 .habit-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 39px;
+    width: 100%;
     padding: 0 24px;
+    box-sizing: border-box;
+    /* flex, justify-content 없어도 됨 */
 }
 
 .habit-content {
-    width: 1120px;
+    max-width: 1120px; /* 카드 최대 너비 */
+    margin: 39px auto 73px; /* 가운데 정렬 */
     padding: 40px;
     border-radius: 20px;
     background: #fff;
@@ -16,12 +17,21 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
+}
+
+/* 제목 래퍼 */
+.habit-header-title {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .habit-content-button {
     display: flex;
     gap: 16px;
+    flex-shrink: 0; /* 너무 줄어들지 않게 */
 }
+
 .habit-header-title h2 {
     color: #414141;
     font-family: Pretendard;
@@ -153,4 +163,60 @@
     font-weight: 500;
     line-height: 1.6;
     text-align: center;
+}
+/* =========================
+ * 미디어쿼리
+ * =======================*/
+/* 774px 이하 - 태블릿 */
+@media (max-width: 774px) {
+    .habit-container {
+        padding: 0 24px;
+    }
+    .habit-content {
+        padding: 24px;
+    }
+    .habit-header-title h2 {
+        font-size: 32px;
+    }
+
+    /* 태블릿 구간: 제목 왼쪽 / 버튼 오른쪽 한 줄 */
+    .habit-content-button {
+        justify-content: flex-end;
+        gap: 8px;
+    }
+}
+/* 375px 이하 - 모바일 */
+@media (max-width: 375px) {
+    .habit-container {
+        padding: 0 16px;
+    }
+    .habit-content {
+        padding: 16px;
+    }
+    /* 모바일: 제목 위 / 버튼 아래 세로 정렬 */
+    .habit-content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .habit-header-title h2 {
+        font-size: 24px;
+    }
+    .habit-title-row {
+        width: 100%;
+    }
+    .habit-chip-list {
+        flex: 0 0 auto;
+        width: 280px;
+        margin: 0 auto;
+    }
+    .habit-today {
+        padding: 24px 16px;
+    }
+
+    .habit-chip-list .chip {
+        width: 100%; /* 리스트 폭(280px)에 맞춰짐 */
+        max-width: 280px;
+    }
 }
