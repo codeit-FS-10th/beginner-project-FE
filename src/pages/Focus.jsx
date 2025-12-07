@@ -6,6 +6,7 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
+import useMediaQuery from "@hooks/seMediaQuery";
 
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
@@ -59,6 +60,8 @@ function Focus() {
     const minuteInputRef = useRef(null);
     const secondInputRef = useRef(null);
     const blurTimeoutRef = useRef(null);
+
+    const isMobileSmall = useMediaQuery("(max-width: 375px)");
 
     // ---------- 유틸 ----------
 
@@ -550,7 +553,7 @@ function Focus() {
                                     // finished는 Stop만
                                     <TimerButton
                                         variant="stop"
-                                        size="lg"
+                                        size={isMobileSmall ? "sm" : "lg"}
                                         status="active"
                                         onClick={handleStop}
                                     />
@@ -561,7 +564,9 @@ function Focus() {
                                             phase === PHASE.PAUSED) && (
                                             <TimerButton
                                                 variant="pause"
-                                                size="sm"
+                                                size={
+                                                    isMobileSmall ? "sm" : "lg"
+                                                } // pause/restart는 원래 sm만 사용
                                                 status={
                                                     phase === PHASE.RUNNING
                                                         ? "active"
@@ -574,7 +579,7 @@ function Focus() {
                                         {/* Start 버튼 */}
                                         <TimerButton
                                             variant="start"
-                                            size="lg"
+                                            size={isMobileSmall ? "sm" : "lg"}
                                             status={
                                                 phase === PHASE.READY ||
                                                 phase === PHASE.PAUSED
@@ -589,7 +594,9 @@ function Focus() {
                                             phase === PHASE.PAUSED) && (
                                             <TimerButton
                                                 variant="restart"
-                                                size="sm"
+                                                size={
+                                                    isMobileSmall ? "sm" : "lg"
+                                                } // 원래 sm 고정
                                                 status="active"
                                                 onClick={handleRestart}
                                             />
