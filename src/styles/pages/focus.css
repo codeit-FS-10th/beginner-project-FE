@@ -3,11 +3,10 @@
  * =======================*/
 
 .focus-container {
-    width: 100%;
-    padding: 0 24px;
     display: flex;
+    width: 100%;
     justify-content: center;
-    margin-top: 39px;
+    padding: 0 24px; /* 항상 좌우 24px 여백 유지 */
     box-sizing: border-box;
 }
 
@@ -15,6 +14,7 @@
     width: 100%;
     max-width: 1120px;
     padding: 40px;
+    margin-top: 40px;
     margin-bottom: 73px;
     margin-left: auto;
     margin-right: auto;
