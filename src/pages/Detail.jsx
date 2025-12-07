@@ -6,6 +6,7 @@ import { postEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
+import { saveToken } from "@utils/tokenStorage";
 
 import "@styles/pages/detail.css";
 
@@ -46,7 +47,12 @@ function Detail() {
     const studyName = study?.NAME ?? "";
     const intro = study?.INTRO ?? "";
 
-    const handleVerified = async (actionType) => {
+    const handleVerified = async (actionType, verifiedToken) => {
+        // 비밀번호 검증 성공 시 토큰 저장
+        if (verifiedToken && studyId) {
+            saveToken(studyId, verifiedToken);
+        }
+
         if (actionType === "edit") {
             // 비밀번호 확인 후 수정 페이지로 이동 (기존 Study.jsx를 수정 모드로 사용)
             // Study 페이지는 location.state 또는 query param으로 edit 모드를 인식합니다.

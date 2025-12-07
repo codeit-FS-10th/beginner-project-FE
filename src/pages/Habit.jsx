@@ -6,8 +6,7 @@ import {
     fetchStudyDetail,
 } from "@api/service/habitservice";
 import ModalHabitList from "@organism/ModalHabitList";
-import ModalPwd from "@organism/ModalPwd";
-import { getToken, saveToken } from "@utils/tokenStorage";
+import { getToken } from "@utils/tokenStorage";
 import "@styles/pages/habit.css";
 import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
@@ -18,7 +17,6 @@ function Habit() {
 
     const studyId = searchParams.get("id");
     const [token, setToken] = useState(null);
-    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
     // 현재 시간
     const [time, setTime] = useState("");
@@ -92,15 +90,6 @@ function Habit() {
         }
     };
 
-    /** 비밀번호 검증 완료 핸들러 */
-    const handlePasswordVerified = (actionType, verifiedToken) => {
-        // sessionStorage에 토큰 저장
-        saveToken(studyId, verifiedToken);
-        setToken(verifiedToken);
-        setIsVerified(true);
-        setIsPasswordModalOpen(false);
-    };
-
     /** 마운트 시 토큰 확인 */
     useEffect(() => {
         if (!studyId) return;
@@ -110,8 +99,6 @@ function Habit() {
         if (storedToken) {
             setToken(storedToken);
             setIsVerified(true);
-        } else {
-            setIsPasswordModalOpen(true);
         }
     }, [studyId]);
 
@@ -157,24 +144,32 @@ function Habit() {
     const handleDetailClick = () => navigate(`/detail?id=${studyId}`);
     const handleFocusClick = () => navigate(`/focus?id=${studyId}`);
 
-    // 비밀번호 검증 전에는 비밀번호 모달만 표시
-    if (!isVerified) {
+    // 토큰이 없으면 권한 없음 페이지 표시
+    if (!isVerified || !token) {
         return (
-            <>
-                {isPasswordModalOpen && (
-                    <ModalPwd
-                        studyId={studyId}
-                        actionType="habit"
-                        onClose={() => {
-                            setIsPasswordModalOpen(false);
-                            navigate(-1);
-                        }}
-                        onVerified={(actionType, verifiedToken) => {
-                            handlePasswordVerified(actionType, verifiedToken);
-                        }}
-                    />
-                )}
-            </>
+            <div className="habit-container">
+                <div className="habit-content">
+                    <div className="habit-content-header">
+                        <div className="habit-header-title">
+                            <h2>권한이 없습니다</h2>
+                        </div>
+                    </div>
+                    <div style={{ padding: "2rem", textAlign: "center" }}>
+                        <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
+                            이 페이지에 접근할 권한이 없습니다.
+                        </p>
+                        <p
+                            style={{
+                                fontSize: "1rem",
+                                color: "#666",
+                                marginBottom: "2rem",
+                            }}
+                        >
+                            스터디 홈에서 비밀번호를 입력한 후 접근해주세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
         );
     }
 
