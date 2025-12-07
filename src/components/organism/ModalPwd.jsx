@@ -11,7 +11,11 @@ function ModalPwd({ onClose, onVerified, actionType, studyId, studyName }) {
 
     // 버튼 문구 자동 변경
     const buttonLabel =
-        actionType === "delete" ? "삭제하러 가기" : "수정하러 가기";
+        actionType === "delete"
+            ? "삭제하러 가기"
+            : actionType === "habit"
+            ? "확인"
+            : "수정하러 가기";
 
     const handleSubmit = async () => {
         if (!studyId) {
@@ -29,24 +33,13 @@ function ModalPwd({ onClose, onVerified, actionType, studyId, studyName }) {
 
             const res = await verifyStudyPassword(studyId, password);
 
-            if (res.verified) {
-                // Detail.jsx 에게 비밀번호 통과 사실 전달
-              if (res.token) {
-                localStorage.setItem("studyToken", res.token);
-                }
-              if (actionType === "today-habit") {
-                window.location.href = `/studies/${studyId}/habits/today`;
-                }
-              else if (actionType === "today-focus") {
-              window.location.href = `/studies/${studyId}/focus`;
-                }
-              else {
-              onVerified?.(actionType);
-              }
-              onClose();
+            if (res.verified && res.token) {
+                // 토큰과 함께 검증 완료 사실 전달
+                onVerified?.(actionType, res.token);
+                onClose();
             } else {
                 showErrorToast("🚨 비밀번호가 일치하지 않습니다.");
-              }
+            }
         } catch (err) {
             console.error(err);
             showErrorToast("🚨 비밀번호가 일치하지 않습니다.");

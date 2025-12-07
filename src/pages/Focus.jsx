@@ -6,8 +6,8 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
-import useMediaQuery from "@hooks/seMediaQuery";
-
+import PencilIcon from "@assets/Icons/PencilIcon";
+import { getToken } from "@utils/tokenStorage";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 import {
@@ -15,7 +15,6 @@ import {
     fetchFocusInfo,
     finishFocus,
 } from "@api/service/focusApi";
-import { getToken } from "@utils/auth";
 
 const PHASE = {
     READY: "ready",
@@ -61,8 +60,6 @@ function Focus() {
     const minuteInputRef = useRef(null);
     const secondInputRef = useRef(null);
     const blurTimeoutRef = useRef(null);
-
-    const isMobileSmall = useMediaQuery("(max-width: 375px)");
 
     // ---------- 유틸 ----------
 
@@ -203,22 +200,25 @@ function Focus() {
         }, 150);
     };
 
-    // password 없이 직접 URL로 들어오면 비밀번호 페이지로 돌려보내기
-    // useEffect(() => {
-    //     if (!password) {
-    //         navigate(`/study/${studyId}/password`, { replace: true });
-    //     }
-    // }, [studyId, navigate]);
+    // ---------- 비밀번호 체크 + 초기 데이터 로딩 ----------
+    const [token, setToken] = useState(null);
+    const [isVerified, setIsVerified] = useState(false);
+
+    // token 확인
+    useEffect(() => {
+        if (!studyId) return;
+
+        // sessionStorage에서 토큰 확인
+        const storedToken = getToken(studyId);
+        if (storedToken) {
+            setToken(storedToken);
+            setIsVerified(true);
+        }
+    }, [studyId]);
 
     // 스터디 정보 + 현재 포인트 로딩
     useEffect(() => {
-      const token = getToken();
-      if (!token) {
-        showErrorToast("🔐 접근 권한이 없습니다.\n비밀번호를 다시 입력해주세요.");
-        navigate(`/detail?id=${studyId}`, { replace: true });
-        return;
-        }
-        if (!studyId) return;
+        if (!studyId || !token || !isVerified) return;
 
         const load = async () => {
             try {
@@ -260,7 +260,7 @@ function Focus() {
         };
 
         load();
-    }, [studyId]);
+    }, [studyId, token, isVerified]);
 
     // ---------- 타이머 조작 ----------
 
@@ -296,10 +296,10 @@ function Focus() {
             console.error("finishFocus 실패: studyId 없음");
             return;
         }
-        // if (!password) {
-        //     console.error("finishFocus 실패: password 없음");
-        //     return;
-        // }
+        if (!token) {
+            console.error("finishFocus 실패: token 없음");
+            return;
+        }
 
         // 사용자가 설정한 기본 집중 시간
         const totalSec = focusMinutes * 60;
@@ -310,7 +310,6 @@ function Focus() {
         try {
             console.log("finishFocus 요청:", {
                 studyId,
-
                 timeSec,
             });
 
@@ -404,6 +403,35 @@ function Focus() {
     };
 
     // ---------- 렌더 ----------
+
+    // 토큰이 없으면 권한 없음 페이지 표시
+    if (!isVerified || !token) {
+        return (
+            <div className="focus-container">
+                <div className="focus-content">
+                    <div className="focus-content-header">
+                        <div className="focus-header-title">
+                            <h2>권한이 없습니다</h2>
+                        </div>
+                    </div>
+                    <div style={{ padding: "2rem", textAlign: "center" }}>
+                        <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
+                            이 페이지에 접근할 권한이 없습니다. 돌아가세요
+                        </p>
+                        <p
+                            style={{
+                                fontSize: "1rem",
+                                color: "#666",
+                                marginBottom: "2rem",
+                            }}
+                        >
+                            스터디 홈에서 비밀번호를 입력한 후 접근해주세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -560,7 +588,7 @@ function Focus() {
                                     // finished는 Stop만
                                     <TimerButton
                                         variant="stop"
-                                        size={isMobileSmall ? "sm" : "lg"}
+                                        size="lg"
                                         status="active"
                                         onClick={handleStop}
                                     />
@@ -571,9 +599,7 @@ function Focus() {
                                             phase === PHASE.PAUSED) && (
                                             <TimerButton
                                                 variant="pause"
-                                                size={
-                                                    isMobileSmall ? "sm" : "lg"
-                                                } // pause/restart는 원래 sm만 사용
+                                                size="sm"
                                                 status={
                                                     phase === PHASE.RUNNING
                                                         ? "active"
@@ -586,7 +612,7 @@ function Focus() {
                                         {/* Start 버튼 */}
                                         <TimerButton
                                             variant="start"
-                                            size={isMobileSmall ? "sm" : "lg"}
+                                            size="lg"
                                             status={
                                                 phase === PHASE.READY ||
                                                 phase === PHASE.PAUSED
@@ -601,9 +627,7 @@ function Focus() {
                                             phase === PHASE.PAUSED) && (
                                             <TimerButton
                                                 variant="restart"
-                                                size={
-                                                    isMobileSmall ? "sm" : "lg"
-                                                } // 원래 sm 고정
+                                                size="sm"
                                                 status="active"
                                                 onClick={handleRestart}
                                             />
