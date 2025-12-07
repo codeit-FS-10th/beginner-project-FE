@@ -15,6 +15,7 @@ import {
     fetchFocusInfo,
     finishFocus,
 } from "@api/service/focusApi";
+import { getToken } from "@utils/auth";
 
 const PHASE = {
     READY: "ready",
@@ -211,6 +212,12 @@ function Focus() {
 
     // 스터디 정보 + 현재 포인트 로딩
     useEffect(() => {
+      const token = getToken();
+      if (!token) {
+        showErrorToast("🔐 접근 권한이 없습니다.\n비밀번호를 다시 입력해주세요.");
+        navigate(`/detail?id=${studyId}`, { replace: true });
+        return;
+        }
         if (!studyId) return;
 
         const load = async () => {

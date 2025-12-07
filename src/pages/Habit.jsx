@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import {
-    fetchTodayHabits,
     toggleHabitCheck,
     fetchStudyDetail,
 } from "@api/service/habitservice";
@@ -9,6 +8,8 @@ import ModalHabitList from "@organism/ModalHabitList";
 import "@styles/pages/habit.css";
 import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
+import { getToken } from "../utils/auth";
+import { apiFetch } from "../utils/api";
 
 function Habit() {
     const [searchParams] = useSearchParams();
@@ -60,7 +61,7 @@ function Habit() {
         }
 
         try {
-            const data = await fetchTodayHabits(studyId);
+            const data = await apiFetch(`/api/studies/${studyId}/habits/today`);
 
             const list = (data.habits ?? []).map((habit) => ({
                 id: habit.HABIT_ID,
@@ -91,6 +92,12 @@ function Habit() {
 
     /** 마운트 시 loadHabits 호출 */
     useEffect(() => {
+      const token = getToken();
+      if (!token) {
+        alert("🔐 접근 권한이 없습니다.\n비밀번호를 입력해주세요.");
+        navigate(`/detail?id=${studyId}`);
+        return;
+      }
         loadHabits();
         loadStudyDetail();
     }, [studyId]);
