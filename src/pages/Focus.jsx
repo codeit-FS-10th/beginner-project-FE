@@ -6,7 +6,7 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
-import PencilIcon from "@assets/Icons/PencilIcon";
+
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 import {
@@ -199,19 +199,16 @@ function Focus() {
         }, 150);
     };
 
-    // ---------- 비밀번호 체크 + 초기 데이터 로딩 ----------
-    const password = location.state?.password ?? "1234"; // 임시
-
     // password 없이 직접 URL로 들어오면 비밀번호 페이지로 돌려보내기
-    useEffect(() => {
-        if (!password) {
-            navigate(`/study/${studyId}/password`, { replace: true });
-        }
-    }, [password, studyId, navigate]);
+    // useEffect(() => {
+    //     if (!password) {
+    //         navigate(`/study/${studyId}/password`, { replace: true });
+    //     }
+    // }, [studyId, navigate]);
 
     // 스터디 정보 + 현재 포인트 로딩
     useEffect(() => {
-        if (!studyId || !password) return;
+        if (!studyId) return;
 
         const load = async () => {
             try {
@@ -219,7 +216,7 @@ function Focus() {
                 setError(null);
 
                 // 스터디 정보 요청
-                const detailRes = await fetchStudyDetail(studyId, password);
+                const detailRes = await fetchStudyDetail(studyId);
                 console.log("스터디 상세조회:", detailRes);
 
                 const data = detailRes.data ?? detailRes;
@@ -232,7 +229,7 @@ function Focus() {
 
                 // 포커스 정보 요청
                 try {
-                    const focusRes = await fetchFocusInfo(studyId, password);
+                    const focusRes = await fetchFocusInfo(studyId);
                     setTotalPoint(focusRes.data.totalPoint);
                 } catch (err) {
                     if (err.response?.status === 404) {
@@ -253,7 +250,7 @@ function Focus() {
         };
 
         load();
-    }, [studyId, password]);
+    }, [studyId]);
 
     // ---------- 타이머 조작 ----------
 
@@ -289,10 +286,10 @@ function Focus() {
             console.error("finishFocus 실패: studyId 없음");
             return;
         }
-        if (!password) {
-            console.error("finishFocus 실패: password 없음");
-            return;
-        }
+        // if (!password) {
+        //     console.error("finishFocus 실패: password 없음");
+        //     return;
+        // }
 
         // 사용자가 설정한 기본 집중 시간
         const totalSec = focusMinutes * 60;
@@ -303,11 +300,11 @@ function Focus() {
         try {
             console.log("finishFocus 요청:", {
                 studyId,
-                password,
+
                 timeSec,
             });
 
-            const res = await finishFocus(studyId, password, timeSec);
+            const res = await finishFocus(studyId, timeSec);
 
             console.log("finishFocus 응답:", res.status, res.data);
 
@@ -387,17 +384,13 @@ function Focus() {
     const handleHabitClick = () => {
         if (!studyId) return;
 
-        navigate(`/habit?id=${studyId}`, {
-            state: { password },
-        });
+        navigate(`/habit?id=${studyId}`);
     };
 
     const handleHomeClick = () => {
         if (!studyId) return;
 
-        navigate(`/detail?id=${studyId}`, {
-            state: { password },
-        });
+        navigate(`/detail?id=${studyId}`);
     };
 
     // ---------- 렌더 ----------
