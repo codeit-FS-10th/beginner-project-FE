@@ -224,6 +224,31 @@ export default function Study() {
         }
     };
 
+    useEffect(() => {
+        if (!isEditMode || !editStudyId) {
+            return;
+        }
+
+        const initForm = async () => {
+            try {
+                let baseStudy = location.state.study;
+
+                if (!baseStudy) {
+                    baseStudy = await fetchStudyDetail();
+                }
+
+                setNickname(baseStudy.NICKNAME);
+                setStudyName(baseStudy.NAME);
+                setIntro(baseStudy.INTRO);
+                setSelectedBg(baseStudy.IMAGE);
+            } catch (err) {
+                showSuccessToast("데이터를 불러오는데 실패하였습니다");
+                return;
+            }
+        };
+        initForm();
+    }, [isEditMode, editStudyId, location.state]);
+
     return (
         <div className="study-root-container">
             <div className="study-main-container">

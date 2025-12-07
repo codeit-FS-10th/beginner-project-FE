@@ -113,3 +113,28 @@
     justify-content: center;
     gap: 24px;
 }
+
+/* =========================
+ * 미디어쿼리
+ * =======================*/
+/* 375px 이하 - 모바일 */
+@media (max-width: 375px) {
+    .modal-habit-container {
+        width: calc(100% - 30px);
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    .habit-add-btn {
+        position: static; /* absolute 해제 */
+        bottom: auto;
+        left: auto;
+        transform: none;
+
+        width: 100%;
+    }
+
+    .modal-habit-footer {
+        position: static; /* footer도 같이 static으로 */
+        margin-top: 24px;
+    }
+}

@@ -3,17 +3,18 @@
  * =======================*/
 
 .focus-container {
-    width: 100%;
     display: flex;
+    width: 100%;
     justify-content: center;
-    margin-top: 39px;
+    padding: 0 24px; /* 항상 좌우 24px 여백 유지 */
+    box-sizing: border-box;
 }
 
 .focus-content {
     width: 100%;
     max-width: 1120px;
     padding: 40px;
-
+    margin-top: 40px;
     margin-bottom: 73px;
     margin-left: auto;
     margin-right: auto;
@@ -26,11 +27,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
+}
+
+/* 제목 래퍼 */
+.focus-header-title {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .focus-content-button {
     display: flex;
     gap: 16px;
+    flex-shrink: 0; /* 너무 줄어들지 않게 */
 }
 
 .focus-header-title h2 {
@@ -60,7 +69,6 @@
     position: relative;
     margin-top: 24px;
     padding: 40px 24px;
-
     height: 546px;
     border-radius: 20px;
     border: 1px solid var(--gray-gray_DDDDDD, #ddd);
@@ -90,7 +98,8 @@
     padding: 20px;
     margin: 100px auto 74px;
     border-radius: 20px;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -109,8 +118,8 @@
 }
 
 .focus-timer-edit-btn--hidden {
-    visibility: hidden; /* 자리는 유지하면서 안 보이게 */
-    pointer-events: none; /* 혹시 모를 클릭도 방지 */
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* 기본 타이머 글자 */
@@ -119,8 +128,6 @@
     text-align: center;
     font-size: 150px;
     font-weight: 800;
-
-    /* 분/콜론/초를 한 줄로 정렬 */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -161,7 +168,6 @@
     vertical-align: middle;
     line-height: 1em;
     height: 1em;
-
     font: inherit;
     border: none;
     outline: none;
@@ -193,6 +199,7 @@
 .focus-timmer-sec {
     font: inherit;
 }
+
 .focus-timmer-sec {
     width: 3ch;
     text-align: left;
@@ -200,6 +207,7 @@
     line-height: 1em;
     height: 1em;
 }
+
 /* =========================
  * Timer 버튼 영역
  * =======================*/
@@ -253,4 +261,118 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+/* =========================
+ * 미디어쿼리
+ * =======================*/
+
+/* 774px 이하 - 태블릿 */
+@media (max-width: 774px) {
+    .focus-container {
+        padding: 0 24px;
+    }
+
+    .focus-content {
+        padding: 24px;
+    }
+
+    .focus-header-title h2 {
+        font-size: 32px;
+    }
+
+    /* 태블릿 구간: 제목 왼쪽 / 버튼 오른쪽 한 줄 */
+    .focus-content-button {
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .focus-today {
+        height: auto;
+        padding: 32px 16px 80px;
+    }
+
+    .focus-timmer-wrap {
+        width: 100%;
+        padding: 12px 0;
+        margin: 60px auto 40px;
+    }
+
+    .focus-timmer {
+        font-size: 120px;
+    }
+
+    .timer-button-box {
+        bottom: 24px;
+    }
+
+    .focus-start-button {
+        gap: 20px;
+    }
+}
+
+/* 375px 이하 - 모바일 */
+@media (max-width: 375px) {
+    .focus-container {
+        margin-top: 16px;
+    }
+
+    .focus-content {
+        padding: 20px 12px;
+    }
+
+    /* 모바일: 제목 위 / 버튼 아래 세로 정렬 */
+    .focus-content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .focus-header-title h2 {
+        font-size: 24px;
+    }
+
+    .focus-total-point {
+        font-size: 14px;
+    }
+
+    .focus-today {
+        padding: 24px 12px 72px;
+        border-radius: 16px;
+    }
+
+    .focus-today h2 {
+        font-size: 20px;
+    }
+
+    .focus-timmer-wrap {
+        margin: 48px auto 32px;
+    }
+
+    .focus-timmer {
+        font-size: 72px;
+    }
+
+    .focus-start-button {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .focus-toast {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .focus-toast-pause {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    /* 모바일에서 버튼은 줄 바꿈 가능 + 가로 100% */
+    .focus-content-button {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        row-gap: 8px;
+    }
 }

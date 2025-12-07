@@ -16,7 +16,6 @@ function ModalHabitList({ onClose, onSubmit }) {
     const [searchParams] = useSearchParams();
     const location = useLocation();
     const studyId = searchParams.get("id");
-    const password = location.state?.password ?? "1234";
 
     // 2. state 선언
     const [habits, setHabits] = useState([]);
@@ -33,7 +32,7 @@ function ModalHabitList({ onClose, onSubmit }) {
     // 3. 오늘의 습관 로딩 함수
     const loadHabits = async () => {
         try {
-            const data = await fetchTodayHabits(studyId, password);
+            const data = await fetchTodayHabits(studyId);
 
             const list = (data.habits ?? []).map((habit) => ({
                 id: habit.HABIT_ID,
@@ -48,10 +47,10 @@ function ModalHabitList({ onClose, onSubmit }) {
         }
     };
 
-    // 4. 마운트 & studyId/password 변경 시 로딩
+    // 4. 마운트 & studyId 시 로딩
     useEffect(() => {
         loadHabits();
-    }, [studyId, password]);
+    }, [studyId]);
 
     // 5. 수정완료(저장) 핸들러
     const handleSubmit = async () => {

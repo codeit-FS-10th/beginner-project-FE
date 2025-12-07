@@ -5,7 +5,7 @@ import "@styles/organism/ModalPwd.css";
 import { showErrorToast } from "@atoms/toast/Toast";
 import { verifyStudyPassword } from "@api/service/studyservice";
 
-function ModalPwd({ onClose, onVerified, actionType, studyId }) {
+function ModalPwd({ onClose, onVerified, actionType, studyId, studyName }) {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -50,7 +50,7 @@ function ModalPwd({ onClose, onVerified, actionType, studyId }) {
                 <div className="modal-content">
                     <header className="modal-header">
                         <div className="title-wrap">
-                            <h2>연우의 개발공장</h2>
+                            <h2>{studyName}</h2>
                             <button className="close-btn" onClick={onClose}>
                                 나가기
                             </button>

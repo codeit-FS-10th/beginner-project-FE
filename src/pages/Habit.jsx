@@ -16,7 +16,7 @@ function Habit() {
     const location = useLocation();
 
     const studyId = searchParams.get("id");
-    const password = location.state?.password ?? "1234"; // 임시 비번
+
     // 현재 시간
     const [time, setTime] = useState("");
     // 오늘의 습관 리스트
@@ -60,7 +60,7 @@ function Habit() {
         }
 
         try {
-            const data = await fetchTodayHabits(studyId, password);
+            const data = await fetchTodayHabits(studyId);
 
             const list = (data.habits ?? []).map((habit) => ({
                 id: habit.HABIT_ID,
@@ -93,7 +93,7 @@ function Habit() {
     useEffect(() => {
         loadHabits();
         loadStudyDetail();
-    }, [studyId, password]);
+    }, [studyId]);
 
     /** 습관 체크/해제 토글 */
     const handleHabitClick = async (habitId) => {

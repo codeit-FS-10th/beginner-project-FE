@@ -21,3 +21,8 @@
     background-color: #99c08e;
     color: #ffffff;
 }
+@media (max-width: 375px) {
+    .chip {
+        width: 280px;
+    }
+}
