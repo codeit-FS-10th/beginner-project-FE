@@ -416,7 +416,7 @@ function Focus() {
                     </div>
                     <div style={{ padding: "2rem", textAlign: "center" }}>
                         <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
-                            이 페이지에 접근할 권한이 없습니다. 돌아가세요
+                            이 페이지에 접근할 권한이 없습니다.
                         </p>
                         <p
                             style={{
