@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
     fetchTodayHabits,
     toggleHabitCheck,
     fetchStudyDetail,
 } from "@api/service/habitservice";
 import ModalHabitList from "@organism/ModalHabitList";
+import ModalPwd from "@organism/ModalPwd";
+import { getToken, saveToken } from "@utils/tokenStorage";
 import "@styles/pages/habit.css";
 import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
@@ -13,10 +15,11 @@ import NavButton from "@atoms/button/NavButton";
 function Habit() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const studyId = searchParams.get("id");
-    const password = location.state?.password ?? "1234"; // 임시 비번
+    const [token, setToken] = useState(null);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
     // 현재 시간
     const [time, setTime] = useState("");
     // 오늘의 습관 리스트
@@ -60,7 +63,7 @@ function Habit() {
         }
 
         try {
-            const data = await fetchTodayHabits(studyId, password);
+            const data = await fetchTodayHabits(studyId);
 
             const list = (data.habits ?? []).map((habit) => ({
                 id: habit.HABIT_ID,
@@ -89,11 +92,36 @@ function Habit() {
         }
     };
 
-    /** 마운트 시 loadHabits 호출 */
+    /** 비밀번호 검증 완료 핸들러 */
+    const handlePasswordVerified = (actionType, verifiedToken) => {
+        // sessionStorage에 토큰 저장
+        saveToken(studyId, verifiedToken);
+        setToken(verifiedToken);
+        setIsVerified(true);
+        setIsPasswordModalOpen(false);
+    };
+
+    /** 마운트 시 토큰 확인 */
     useEffect(() => {
-        loadHabits();
-        loadStudyDetail();
-    }, [studyId, password]);
+        if (!studyId) return;
+
+        // sessionStorage에서 토큰 확인
+        const storedToken = getToken(studyId);
+        if (storedToken) {
+            setToken(storedToken);
+            setIsVerified(true);
+        } else {
+            setIsPasswordModalOpen(true);
+        }
+    }, [studyId]);
+
+    /** 토큰이 설정되면 데이터 로드 */
+    useEffect(() => {
+        if (isVerified && token && studyId) {
+            loadHabits();
+            loadStudyDetail();
+        }
+    }, [isVerified, token, studyId]);
 
     /** 습관 체크/해제 토글 */
     const handleHabitClick = async (habitId) => {
@@ -128,6 +156,27 @@ function Habit() {
     /** 이동 버튼 */
     const handleDetailClick = () => navigate(`/detail?id=${studyId}`);
     const handleFocusClick = () => navigate(`/focus?id=${studyId}`);
+
+    // 비밀번호 검증 전에는 비밀번호 모달만 표시
+    if (!isVerified) {
+        return (
+            <>
+                {isPasswordModalOpen && (
+                    <ModalPwd
+                        studyId={studyId}
+                        actionType="habit"
+                        onClose={() => {
+                            setIsPasswordModalOpen(false);
+                            navigate(-1);
+                        }}
+                        onVerified={(actionType, verifiedToken) => {
+                            handlePasswordVerified(actionType, verifiedToken);
+                        }}
+                    />
+                )}
+            </>
+        );
+    }
 
     return (
         <div className="habit-container">

@@ -5,10 +5,8 @@ export const fetchWeekHabits = async (studyId) => {
     return res.data;
 };
 // 오늘의 습관 조회
-export const fetchTodayHabits = async (studyId, password) => {
-    const res = await api.get(`/studies/${studyId}/habits/today`, {
-        params: { password },
-    });
+export const fetchTodayHabits = async (studyId) => {
+    const res = await api.get(`/studies/${studyId}/habits/today`);
     return res.data;
 };
 // 오늘의 습관 생성

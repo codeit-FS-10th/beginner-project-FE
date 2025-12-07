@@ -7,6 +7,8 @@ import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
 import PencilIcon from "@assets/Icons/PencilIcon";
+import ModalPwd from "@organism/ModalPwd";
+import { getToken, saveToken } from "@utils/tokenStorage";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 import {
@@ -200,18 +202,36 @@ function Focus() {
     };
 
     // ---------- 비밀번호 체크 + 초기 데이터 로딩 ----------
-    const password = location.state?.password ?? "1234"; // 임시
+    const [token, setToken] = useState(null);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
 
-    // password 없이 직접 URL로 들어오면 비밀번호 페이지로 돌려보내기
+    // 비밀번호 검증 완료 핸들러
+    const handlePasswordVerified = (actionType, verifiedToken) => {
+        // sessionStorage에 토큰 저장
+        saveToken(studyId, verifiedToken);
+        setToken(verifiedToken);
+        setIsVerified(true);
+        setIsPasswordModalOpen(false);
+    };
+
+    // token 없이 직접 URL로 들어오면 비밀번호 모달 띄우기
     useEffect(() => {
-        if (!password) {
-            navigate(`/study/${studyId}/password`, { replace: true });
+        if (!studyId) return;
+
+        // sessionStorage에서 토큰 확인
+        const storedToken = getToken(studyId);
+        if (storedToken) {
+            setToken(storedToken);
+            setIsVerified(true);
+        } else {
+            setIsPasswordModalOpen(true);
         }
-    }, [password, studyId, navigate]);
+    }, [studyId]);
 
     // 스터디 정보 + 현재 포인트 로딩
     useEffect(() => {
-        if (!studyId || !password) return;
+        if (!studyId || !token || !isVerified) return;
 
         const load = async () => {
             try {
@@ -219,7 +239,7 @@ function Focus() {
                 setError(null);
 
                 // 스터디 정보 요청
-                const detailRes = await fetchStudyDetail(studyId, password);
+                const detailRes = await fetchStudyDetail(studyId);
                 console.log("스터디 상세조회:", detailRes);
 
                 const data = detailRes.data ?? detailRes;
@@ -232,7 +252,7 @@ function Focus() {
 
                 // 포커스 정보 요청
                 try {
-                    const focusRes = await fetchFocusInfo(studyId, password);
+                    const focusRes = await fetchFocusInfo(studyId);
                     setTotalPoint(focusRes.data.totalPoint);
                 } catch (err) {
                     if (err.response?.status === 404) {
@@ -253,7 +273,7 @@ function Focus() {
         };
 
         load();
-    }, [studyId, password]);
+    }, [studyId, token, isVerified]);
 
     // ---------- 타이머 조작 ----------
 
@@ -289,8 +309,8 @@ function Focus() {
             console.error("finishFocus 실패: studyId 없음");
             return;
         }
-        if (!password) {
-            console.error("finishFocus 실패: password 없음");
+        if (!token) {
+            console.error("finishFocus 실패: token 없음");
             return;
         }
 
@@ -303,11 +323,10 @@ function Focus() {
         try {
             console.log("finishFocus 요청:", {
                 studyId,
-                password,
                 timeSec,
             });
 
-            const res = await finishFocus(studyId, password, timeSec);
+            const res = await finishFocus(studyId, timeSec);
 
             console.log("finishFocus 응답:", res.status, res.data);
 
@@ -387,20 +406,37 @@ function Focus() {
     const handleHabitClick = () => {
         if (!studyId) return;
 
-        navigate(`/habit?id=${studyId}`, {
-            state: { password },
-        });
+        navigate(`/habit?id=${studyId}`);
     };
 
     const handleHomeClick = () => {
         if (!studyId) return;
 
-        navigate(`/detail?id=${studyId}`, {
-            state: { password },
-        });
+        navigate(`/detail?id=${studyId}`);
     };
 
     // ---------- 렌더 ----------
+
+    // 비밀번호 검증 전에는 비밀번호 모달만 표시
+    if (!isVerified) {
+        return (
+            <>
+                {isPasswordModalOpen && (
+                    <ModalPwd
+                        studyId={studyId}
+                        actionType="habit"
+                        onClose={() => {
+                            setIsPasswordModalOpen(false);
+                            navigate(-1);
+                        }}
+                        onVerified={(actionType, verifiedToken) => {
+                            handlePasswordVerified(actionType, verifiedToken);
+                        }}
+                    />
+                )}
+            </>
+        );
+    }
 
     return (
         <>
