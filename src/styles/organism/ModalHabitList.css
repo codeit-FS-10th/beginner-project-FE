@@ -9,7 +9,7 @@
 
 .modal-habit-container {
     width: 648px;
-    height: 861px;
+    min-height: 300px;
     border-radius: 20px;
     background: #fff;
     position: relative;
@@ -80,9 +80,9 @@
     color: #818181;
 }
 .habit-add-btn {
-    position: absolute;
-    bottom: 114px; /* footer 위 40px + 버튼 높이 + 여백 */
-    left: 50%;
+    position: relative;
+    bottom: 2px; /* footer 위 40px + 버튼 높이 + 여백 */
+    left: 51%;
     transform: translateX(-58%);
 
     width: 400px;
@@ -104,7 +104,8 @@
     width: 100%;
 }
 .modal-habit-footer {
-    position: absolute;
+    position: relative;
+    top: 0px;
     bottom: 40px;
     left: 0;
     width: 100%;

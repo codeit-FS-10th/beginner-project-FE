@@ -257,8 +257,7 @@ function ModalHabitList({ onClose, onSubmit }) {
                                 </div>
                             )}
                         </div>
-                    </div>
-                    {/* 습관 add버튼 */}
+                                            {/* 습관 add버튼 */}
                     <button
                         className="habit-add-btn"
                         type="button"
@@ -266,6 +265,8 @@ function ModalHabitList({ onClose, onSubmit }) {
                     >
                         +
                     </button>
+                    </div>
+
                     {/*  수정완료, 취소 버튼*/}
                     <footer className="modal-habit-footer">
                         <BaseButton type="cancle" size="xl" onClick={onClose}>
