@@ -29,6 +29,7 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
         light: "card--light",
     }[theme];
 
+    // 이제는 "배경 전용 div"에만 style을 줄 거라 그대로 둬도 되고, 배경 div에만 사용함
     const getBackgroundStyle = (background) => {
         if (!background) return {};
 
@@ -108,17 +109,32 @@ const Card = ({ size = "lg", theme = "dark", studyData = [] }) => {
                     });
                 };
 
-                // ⬇ 텍스트/Tag 색 결정
+                // 텍스트/Tag 색 결정
                 const fontColorClass = getFontColorClass(IMAGE);
                 const tagTheme = changeTagTheme(IMAGE);
 
                 return (
+                    // ✅ 여기 div가 "카드" 자체
                     <div
                         key={studyId}
                         className={`card ${sizeClass} ${themeClass}`}
-                        style={getBackgroundStyle(bg)}
                         onClick={handleClick}
                     >
+                        {/* ✅ 여기 div가 "배경 전용 레이어" */}
+                        {bg && (
+                            <div
+                                className="card-bg-layer"
+                                style={getBackgroundStyle(bg)}
+                            >
+                                {/* 배경이 특정 4개 이미지면 어둡게 오버레이 */}
+                                {bg.type === "image" &&
+                                    isWhiteTextBackground(IMAGE) && (
+                                        <div className="card-bg-overlay" />
+                                    )}
+                            </div>
+                        )}
+
+                        {/* ✅ 실제 컨텐츠는 배경 위에 올라감 */}
                         <article>
                             <header>
                                 <div
