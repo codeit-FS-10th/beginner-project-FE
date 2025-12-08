@@ -223,9 +223,6 @@
 }
 
 @media (max-width: 744px) {
-    .detail-conainer {
-        padding: 0 24px;
-    }
     .detail-content {
         padding: 24px;
     }

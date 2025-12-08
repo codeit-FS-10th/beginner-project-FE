@@ -370,36 +370,38 @@ function Detail() {
                     )}
 
                     {habitData.length > 0 && (
-                        <div className="habit-grid">
-                            <div className="habit-name-cell empty"></div>
+                        <div className="habit-grid-wrapper">
+                            <div className="habit-grid">
+                                <div className="habit-name-cell empty"></div>
 
-                            {days.map((day) => (
-                                <div key={day} className="day-cell">
-                                    {day}
-                                </div>
-                            ))}
-
-                            {habitData.map((habit) => (
-                                <React.Fragment key={habit.id}>
-                                    <div className="habit-name-cell">
-                                        {habit.name}
+                                {days.map((day) => (
+                                    <div key={day} className="day-cell">
+                                        {day}
                                     </div>
+                                ))}
 
-                                    {days.map((day) => {
-                                        const done = habit[day] === 1;
-                                        return (
-                                            <div
-                                                key={day}
-                                                className={`sticker-cell ${
-                                                    done ? "done" : "empty"
-                                                }`}
-                                            >
-                                                <Sticker active={done} />
-                                            </div>
-                                        );
-                                    })}
-                                </React.Fragment>
-                            ))}
+                                {habitData.map((habit) => (
+                                    <React.Fragment key={habit.id}>
+                                        <div className="habit-name-cell">
+                                            {habit.name}
+                                        </div>
+
+                                        {days.map((day) => {
+                                            const done = habit[day] === 1;
+                                            return (
+                                                <div
+                                                    key={day}
+                                                    className={`sticker-cell ${
+                                                        done ? "done" : "empty"
+                                                    }`}
+                                                >
+                                                    <Sticker active={done} />
+                                                </div>
+                                            );
+                                        })}
+                                    </React.Fragment>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

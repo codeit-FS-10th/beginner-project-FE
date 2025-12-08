@@ -218,6 +218,7 @@ function Home() {
                                 placeholder="검색"
                                 value={searchText}
                                 onChange={(e) => setSearchText(e.target.value)}
+                                maxLength={50}
                             />
                         </div>
                         <Dropdown
@@ -233,11 +234,13 @@ function Home() {
                     </div>
 
                     {loading ? (
-                        <p>불러오는 중...</p>
+                        <p className="Home-notfound-study">불러오는 중...</p>
                     ) : error ? (
                         <p>{error}</p>
                     ) : studies.length === 0 ? (
-                        <p>아직 둘러 볼 스터디가 없어요</p>
+                        <p className="Home-notfound-study">
+                            아직 둘러 볼 스터디가 없어요
+                        </p>
                     ) : (
                         <div className="study-list">
                             <Card size="lg" theme="light" studyData={studies} />
