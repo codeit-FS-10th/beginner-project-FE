@@ -227,7 +227,7 @@
 
 @media (max-width: 768px) {
     .detail-container {
-        padding: 0 16px;
+        padding: 0 24px;
     }
 
     .sticker-cell {
