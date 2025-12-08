@@ -3,15 +3,23 @@
  * =======================*/
 
 .focus-container {
+    display: flex;
     width: 100%;
-    padding: 0 24px;
+    justify-content: center;
+    padding: 0 24px; /* 항상 좌우 24px 여백 유지 */
     box-sizing: border-box;
 }
 
 .focus-content {
-    max-width: 1120px; /* 카드 최대 너비 */
-    margin: 39px auto 73px; /* 가운데 정렬 */
+    max-width: 1120px;
+    width: 100%;
+    box-sizing: border-box;
     padding: 40px;
+    margin-top: 40px;
+    margin-bottom: 73px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: flex-start;
     border-radius: 20px;
     background: #fff;
 }
