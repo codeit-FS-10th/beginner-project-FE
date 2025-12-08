@@ -278,7 +278,7 @@ function Detail() {
     };
 
     return (
-        <div className="detail-conainer">
+        <div className="detail-container">
             <div className="detail-content">
                 <div className="detail-content-header">
                     <div className="detail-content-first">
