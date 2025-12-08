@@ -93,7 +93,9 @@ function Detail() {
             const codePoint = parseInt(code.toUpperCase(), 16);
             return String.fromCodePoint(codePoint);
         } catch (err) {
-            console.error("이모지 변환 실패:", code, err);
+            if (process.env.NODE_ENV === "development") {
+                console.error("이모지 변환 실패:", code, err);
+            }
             return "";
         }
     };
@@ -122,7 +124,10 @@ function Detail() {
 
             setReactions(normalized);
         } catch (err) {
-            console.error("이모지 불러오기 실패", err);
+            if (process.env.NODE_ENV === "development") {
+                console.error("이모지 불러오기 실패", err);
+            }
+
             setEmojiError("이모지 불러오기 실패");
             setReactions([]);
         }
@@ -138,7 +143,9 @@ function Detail() {
             } else if (typeof emojiData === "string") {
                 code = emojiData.toLowerCase();
             } else {
-                console.error("잘못된 이모지 데이터:", emojiData);
+                if (process.env.NODE_ENV === "development") {
+                    console.error("잘못된 이모지 데이터:", emojiData);
+                }
                 return;
             }
 
@@ -148,7 +155,9 @@ function Detail() {
 
             await loadEmoji();
         } catch (err) {
-            console.error("이모지 업데이트 실패", err);
+            if (process.env.NODE_ENV === "development") {
+                console.error("이모지 업데이트 실패", err);
+            }
         }
     };
 
@@ -179,7 +188,9 @@ function Detail() {
                 });
                 setReactions(normalized);
             } catch (err) {
-                console.error("스터디 정보 불러오기 실패", err);
+                if (process.env.NODE_ENV === "development") {
+                    console.error("스터디 정보 불러오기 실패", err);
+                }
             }
         };
         loadStudyDetail();

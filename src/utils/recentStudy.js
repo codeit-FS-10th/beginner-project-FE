@@ -9,12 +9,13 @@ export const getRecentStudies = () => {
         if (!stored) return [];
         const parsed = JSON.parse(stored);
 
-
         if (!Array.isArray(parsed)) return [];
 
         return parsed;
     } catch (e) {
-        console.error("getRecentStudies error:", e);
+        if (process.env.NODE_ENV === "development") {
+            console.error("getRecentStudies error:", e);
+        }
         return [];
     }
 };
@@ -29,11 +30,12 @@ export const addRecentStudy = (study) => {
             (item) => item.STUDY_ID !== study.STUDY_ID
         );
 
-
         const next = [study, ...filtered].slice(0, MAX_RECENT);
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch (e) {
-        console.error("addRecentStudy error:", e);
+        if (process.env.NODE_ENV === "development") {
+            console.error("addRecentStudy error:", e);
+        }
     }
 };
