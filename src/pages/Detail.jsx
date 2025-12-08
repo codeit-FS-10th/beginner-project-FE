@@ -6,7 +6,7 @@ import { postEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
-import { saveToken } from "@utils/tokenStorage";
+import { saveToken, getToken } from "@utils/tokenStorage";
 
 import "@styles/pages/detail.css";
 
@@ -239,13 +239,25 @@ function Detail() {
     };
 
     const handleHabitClick = () => {
-        setModalAction("habit");
-        setIsModalOpen(true);
+        // 토큰이 있으면 바로 이동, 없으면 모달 띄우기
+        const token = getToken(studyId);
+        if (token) {
+            navigate(`/habit?id=${studyId}`);
+        } else {
+            setModalAction("habit");
+            setIsModalOpen(true);
+        }
     };
 
     const handleFocusClick = () => {
-        setModalAction("focus");
-        setIsModalOpen(true);
+        // 토큰이 있으면 바로 이동, 없으면 모달 띄우기
+        const token = getToken(studyId);
+        if (token) {
+            navigate(`/focus?id=${studyId}`);
+        } else {
+            setModalAction("focus");
+            setIsModalOpen(true);
+        }
     };
 
     return (
