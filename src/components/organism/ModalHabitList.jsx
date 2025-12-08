@@ -43,9 +43,7 @@ function ModalHabitList({ onClose, onSubmit }) {
             }));
 
             setHabits(list);
-        } catch (error) {
-            console.error("오늘의 습관 조회 실패:", error);
-        }
+        } catch (error) {}
     };
 
     // 4. 마운트 & studyId/token 변경 시 로딩
@@ -102,7 +100,7 @@ function ModalHabitList({ onClose, onSubmit }) {
                 await onSubmit();
             }
         } catch (error) {
-            console.error("습관 수정 전체 저장 실패:", error);
+            showErrorToast("🚨 저장에 실패했습니다. 다시 시도해 주세요.");
         } finally {
             onClose();
         }

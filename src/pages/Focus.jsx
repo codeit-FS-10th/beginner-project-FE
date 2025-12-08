@@ -227,7 +227,6 @@ function Focus() {
 
                 // 스터디 정보 요청
                 const detailRes = await fetchStudyDetail(studyId);
-                console.log("스터디 상세조회:", detailRes);
 
                 const data = detailRes.data ?? detailRes;
 
@@ -243,16 +242,20 @@ function Focus() {
                     setTotalPoint(focusRes.data.totalPoint);
                 } catch (err) {
                     if (err.response?.status === 404) {
-                        console.warn(
-                            "포커스 정보 없음, totalPoint를 0으로 설정합니다."
-                        );
+                        if (process.env.NODE_ENV === "development") {
+                            console.warn(
+                                "포커스 정보 없음, totalPoint = 0 처리"
+                            );
+                        }
                         setTotalPoint(0);
                     } else {
                         throw err;
                     }
                 }
             } catch (err) {
-                console.error("Focus 페이지 초기 로딩 실패:", err);
+                if (process.env.NODE_ENV === "development") {
+                    console.error("Focus 페이지 초기 로딩 실패:", err);
+                }
                 setError("집중 정보를 불러오지 못했습니다.");
             } finally {
                 setIsLoading(false);
@@ -293,11 +296,15 @@ function Focus() {
         if (phase !== PHASE.FINISHED) return;
 
         if (!studyId) {
-            console.error("finishFocus 실패: studyId 없음");
+            if (process.env.NODE_ENV === "development") {
+                console.error("finishFocus 실패: studyId 없음");
+            }
             return;
         }
         if (!token) {
-            console.error("finishFocus 실패: token 없음");
+            if (process.env.NODE_ENV === "development") {
+                console.error("finishFocus 실패: token 없음");
+            }
             return;
         }
 
@@ -308,14 +315,7 @@ function Focus() {
         const timeSec = usedSec > 0 ? usedSec : totalSec;
 
         try {
-            console.log("finishFocus 요청:", {
-                studyId,
-                timeSec,
-            });
-
             const res = await finishFocus(studyId, timeSec);
-
-            console.log("finishFocus 응답:", res.status, res.data);
 
             // Swagger 응답이 { point, totalPoint } 라고 가정
             const { point, totalPoint: newTotal } = res.data;
@@ -324,11 +324,13 @@ function Focus() {
             setTotalPoint(newTotal ?? 0); // 누적 포인트
             setIsToastVisible(true); // 토스트 표시
         } catch (err) {
-            console.error(
-                "포인트 적립 실패:",
-                err.response?.status,
-                err.response?.data ?? err.message
-            );
+            if (process.env.NODE_ENV === "development") {
+                console.error(
+                    "포인트 적립 실패:",
+                    err.response?.status,
+                    err.response?.data ?? err.message
+                );
+            }
             alert("포인트 적립에 실패했습니다. 잠시 후 다시 시도해주세요.");
         } finally {
             // 타이머 상태 초기화
