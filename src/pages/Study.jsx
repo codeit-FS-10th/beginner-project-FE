@@ -213,7 +213,9 @@ export default function Study() {
                 addRecentStudy(updatedStudy);
             } else {
                 await createStudy(payload);
-                showSuccessToast("스터디가 생성되었습니다!");
+                showSuccessToast("스터디가 생성되었습니다.", {
+                    toastType: "point",
+                });
             }
 
             navigate("/", { replace: true });
