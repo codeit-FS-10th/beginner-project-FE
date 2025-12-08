@@ -41,7 +41,6 @@ function ModalPwd({ onClose, onVerified, actionType, studyId, studyName }) {
                 showErrorToast("🚨 비밀번호가 일치하지 않습니다.");
             }
         } catch (err) {
-            console.error(err);
             showErrorToast("🚨 비밀번호가 일치하지 않습니다.");
         } finally {
             setLoading(false);
