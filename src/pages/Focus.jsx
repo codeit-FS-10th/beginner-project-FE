@@ -499,7 +499,9 @@ function Focus() {
                                         {/* 분: 편집 중에는 input으로, UI는 그대로 */}
                                         <input
                                             ref={minuteInputRef}
-                                            type="number"
+                                            type="text"
+                                            inputMode="numeric"
+                                            pattern="\d*"
                                             className="focus-timmer-input"
                                             min={0}
                                             max={60}
@@ -536,7 +538,9 @@ function Focus() {
                                         </span>
                                         <input
                                             ref={secondInputRef}
-                                            type="number"
+                                            type="text"
+                                            inputMode="numeric"
+                                            pattern="\d*"
                                             className="focus-timmer-input focus-timmer-input-sec"
                                             min={0}
                                             max={59}
