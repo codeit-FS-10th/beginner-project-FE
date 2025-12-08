@@ -146,6 +146,11 @@
     font-weight: 500;
 }
 
+.Home-notfound-study {
+    display: flex;
+    justify-content: center;
+    padding: 100px;
+}
 @media (max-width: 1024px) {
     .study-list {
         grid-template-columns: repeat(2, 1fr);

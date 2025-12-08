@@ -15,6 +15,10 @@ function Habit() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        document.title = "공부의 숲 오늘의 습관";
+    }, []);
+
     const studyId = searchParams.get("id");
     const [token, setToken] = useState(null);
     const [isVerified, setIsVerified] = useState(false);

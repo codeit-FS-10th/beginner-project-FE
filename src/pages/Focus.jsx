@@ -6,7 +6,7 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
-import PencilIcon from "@assets/Icons/PencilIcon";
+
 import { getToken } from "@utils/tokenStorage";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
@@ -25,6 +25,10 @@ function Focus() {
     const studyId = searchParams.get("id");
     const location = useLocation();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = "공부의 숲 오늘의 집중";
+    }, []);
 
     // 수정 가능한 분 단위
     const [focusMinutes, setFocusMinutes] = useState(25);

@@ -20,6 +20,10 @@ const SORT_OPTIONS = {
 const LIMIT = 6;
 
 function Home() {
+    useEffect(() => {
+        document.title = "공부의 숲 메인 페이지";
+    }, []);
+
     const [sortOption, setSortOption] = useState(SORT_OPTIONS.DEFAULT);
     const [sortParam, setSortParam] = useState("newest");
 
@@ -35,6 +39,7 @@ function Home() {
     const [error, setError] = useState(null);
 
     const debouncedSearchText = useDebounce(searchText, 400);
+    const isSearching = debouncedSearchText.trim().length > 0;
 
     const codeToEmoji = (code) => {
         if (!code) return "";
@@ -218,6 +223,7 @@ function Home() {
                                 placeholder="검색"
                                 value={searchText}
                                 onChange={(e) => setSearchText(e.target.value)}
+                                maxLength={50}
                             />
                         </div>
                         <Dropdown
@@ -233,11 +239,15 @@ function Home() {
                     </div>
 
                     {loading ? (
-                        <p>불러오는 중...</p>
+                        <p className="Home-notfound-study">불러오는 중...</p>
                     ) : error ? (
                         <p>{error}</p>
                     ) : studies.length === 0 ? (
-                        <p>아직 둘러 볼 스터디가 없어요</p>
+                        <p className="Home-notfound-study">
+                            {isSearching
+                                ? "해당 스터디를 찾을 수 없어요."
+                                : "아직 둘러 볼 스터디가 없어요"}
+                        </p>
                     ) : (
                         <div className="study-list">
                             <Card size="lg" theme="light" studyData={studies} />

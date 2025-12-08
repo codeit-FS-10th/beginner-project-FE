@@ -1,8 +1,11 @@
+/* =========================
+ * Layout
+ * =======================*/
+
 .habit-container {
     width: 100%;
     padding: 0 24px;
     box-sizing: border-box;
-    /* flex, justify-content 없어도 됨 */
 }
 
 .habit-content {
@@ -50,6 +53,7 @@
     line-height: normal;
     margin: 16px 0 8px 0;
 }
+
 .habit-time-box {
     display: flex;
     padding: 8px 12px;
@@ -70,21 +74,19 @@
     font-weight: 500;
     line-height: normal;
 }
+
+/* 오늘의 습관 타이틀 + 버튼 줄 */
 .habit-title-row {
-    /* width: 100%; */
-    width: 430px;
+    width: 100%;
+    max-width: 430px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    margin-bottom: 24px;
+    margin: 0 auto 24px;
 }
+
 .habit-title-row h2 {
-    color: #414141;
-    font-family: Pretendard;
-    font-size: 24px;
-    font-weight: 800;
-    margin: 0;
     color: var(--black-black_414141, #414141);
     text-align: center;
     font-family: Pretendard;
@@ -92,6 +94,7 @@
     font-style: normal;
     font-weight: 800;
     line-height: normal;
+    margin: 0;
 }
 
 .habit-today {
@@ -113,10 +116,9 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-
-    /* width: 100%; */
     height: auto;
 }
+
 /* habit.css */
 .habit-box-header {
     display: flex;
@@ -124,6 +126,7 @@
     align-items: center;
     margin-bottom: 24px;
 }
+
 .habit-title-box {
     display: flex;
     justify-content: space-between;
@@ -143,12 +146,15 @@
     transform: translateY(-50%);
 }
 
+/* 오늘의 습관 칩 리스트 */
 .habit-chip-list {
     flex: 1;
     display: flex;
-    margin: 0 auto;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
+    max-width: 430px; /* 카드 안에서만 */
+    margin: 0 auto;
     padding-right: 4px;
 }
 
@@ -165,17 +171,21 @@
     line-height: 1.6;
     text-align: center;
 }
+
 /* =========================
  * 미디어쿼리
  * =======================*/
+
 /* 774px 이하 - 태블릿 */
 @media (max-width: 774px) {
     .habit-container {
         padding: 0 24px;
     }
+
     .habit-content {
         padding: 24px;
     }
+
     .habit-header-title h2 {
         font-size: 32px;
     }
@@ -186,15 +196,42 @@
         gap: 8px;
     }
 }
+
+/* 630px 이하 - 작은 태블릿/큰 모바일 */
+@media (max-width: 630px) {
+    .habit-content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .habit-title-row {
+        width: 100%;
+        max-width: 430px;
+        margin: 0 auto 24px;
+    }
+
+    .habit-chip-list {
+        width: 100%;
+        max-width: 430px;
+        margin: 0 auto;
+    }
+
+    .habit-chip-list .chip {
+        width: 100%;
+    }
+}
+
 /* 375px 이하 - 모바일 */
 @media (max-width: 375px) {
     .habit-container {
         padding: 0 16px;
     }
+
     .habit-content {
         padding: 16px;
     }
-    /* 모바일: 제목 위 / 버튼 아래 세로 정렬 */
+
     .habit-content-header {
         flex-direction: column;
         align-items: flex-start;
@@ -204,20 +241,23 @@
     .habit-header-title h2 {
         font-size: 24px;
     }
+
     .habit-title-row {
         width: 100%;
+        max-width: 100%;
+        flex-direction: column;
     }
-    .habit-chip-list {
-        flex: 0 0 auto;
-        width: 280px;
-        margin: 0 auto;
-    }
+
     .habit-today {
         padding: 24px 16px;
     }
 
+    .habit-chip-list {
+        max-width: 100%;
+    }
+
     .habit-chip-list .chip {
-        width: 100%; /* 리스트 폭(280px)에 맞춰짐 */
-        max-width: 280px;
+        width: 100%;
+        max-width: 100%;
     }
 }

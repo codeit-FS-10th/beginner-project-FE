@@ -40,6 +40,10 @@ export default function Study() {
     const passwordConfirmRef = useRef(null);
     const bgRef = useRef(null);
 
+    useEffect(() => {
+        document.title = "공부의 숲 스터디 만들기";
+    }, []);
+
     const [shakeField, setShakeField] = useState("");
 
     const [nickname, setNickname] = useState("");
