@@ -12,6 +12,7 @@
 }
 .card--lg {
     padding: 30px;
+    height: 177px;
 }
 
 /* 카드헤더 - title + point 태그 + day  */
