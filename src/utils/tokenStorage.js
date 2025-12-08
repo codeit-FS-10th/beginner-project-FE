@@ -7,7 +7,9 @@ export const saveToken = (studyId, token) => {
     try {
         sessionStorage.setItem(`${TOKEN_KEY_PREFIX}${studyId}`, token);
     } catch (error) {
-        console.error("토큰 저장 실패:", error);
+        if (process.env.NODE_ENV === "development") {
+            console.error("토큰 저장 실패:", error);
+        }
     }
 };
 
@@ -16,7 +18,9 @@ export const getToken = (studyId) => {
     try {
         return sessionStorage.getItem(`${TOKEN_KEY_PREFIX}${studyId}`);
     } catch (error) {
-        console.error("토큰 조회 실패:", error);
+        if (process.env.NODE_ENV === "development") {
+            console.error("토큰 조회 실패:", error);
+        }
         return null;
     }
 };
@@ -26,7 +30,9 @@ export const removeToken = (studyId) => {
     try {
         sessionStorage.removeItem(`${TOKEN_KEY_PREFIX}${studyId}`);
     } catch (error) {
-        console.error("토큰 삭제 실패:", error);
+        if (process.env.NODE_ENV === "development") {
+            console.error("토큰 삭제 실패:", error);
+        }
     }
 };
 
@@ -39,7 +45,8 @@ export const clearAllTokens = () => {
             }
         });
     } catch (error) {
-        console.error("모든 토큰 삭제 실패:", error);
+        if (process.env.NODE_ENV === "development") {
+            console.error("모든 토큰 삭제 실패:", error);
+        }
     }
 };
-
