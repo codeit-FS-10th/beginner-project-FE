@@ -6,6 +6,7 @@ import { postEmoji } from "@api/service/Emojiservice";
 import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
 import { fetchWeekHabits } from "@api/service/habitservice";
 import { addRecentStudy } from "@utils/recentStudy";
+import { saveToken } from "@utils/tokenStorage";
 
 import "@styles/pages/detail.css";
 
@@ -39,17 +40,19 @@ function Detail() {
     const [points, setPoints] = useState(0);
     const [pointError, setPointError] = useState(null);
 
-    const [reactions, setReactions] = useState([]); // 이모지 리스트
-    const [emojiError, setEmojiError] = useState(null); // 에러 메시지
+    const [reactions, setReactions] = useState([]);
+    const [emojiError, setEmojiError] = useState(null);
 
     const nickname = study?.NICKNAME ?? "";
     const studyName = study?.NAME ?? "";
     const intro = study?.INTRO ?? "";
 
-    const handleVerified = async (actionType) => {
+    const handleVerified = async (actionType, verifiedToken) => {
+        if (verifiedToken && studyId) {
+            saveToken(studyId, verifiedToken);
+        }
+
         if (actionType === "edit") {
-            // 비밀번호 확인 후 수정 페이지로 이동 (기존 Study.jsx를 수정 모드로 사용)
-            // Study 페이지는 location.state 또는 query param으로 edit 모드를 인식합니다.
             navigate(`/study`, {
                 state: { mode: "edit", studyId: studyId, study },
             });
@@ -87,7 +90,6 @@ function Detail() {
     const codeToEmoji = (code) => {
         if (!code) return "";
         try {
-            // "1f600" 형식을 "1F600"으로 변환 후 코드 포인트로 변환
             const codePoint = parseInt(code.toUpperCase(), 16);
             return String.fromCodePoint(codePoint);
         } catch (err) {
@@ -160,10 +162,8 @@ function Detail() {
                 const data = await fetchStudyDetail(studyId);
                 setStudy(data);
 
-                // 응답에 totalPoint 포함되어 있음
                 setPoints(data?.totalPoint ?? 0);
 
-                // 응답에 emojis 포함되어 있으므로 처리
                 const raw = Array.isArray(data.emojis) ? data.emojis : [];
                 const normalized = raw.map((item) => {
                     const code = (item.code || "").toLowerCase();
@@ -255,8 +255,8 @@ function Detail() {
                     <div className="detail-content-first">
                         <EmojiBar
                             reactions={reactions}
-                            onEmojiClick={handleEmojiAction} // 기존 이모지 클릭
-                            onAddEmoji={handleEmojiAction} // 새 이모지 선택
+                            onEmojiClick={handleEmojiAction}
+                            onAddEmoji={handleEmojiAction}
                         />
                     </div>
 
@@ -294,7 +294,6 @@ function Detail() {
                     </div>
                 </div>
 
-                {/* TITLE */}
                 <div className="detail-title-container">
                     <h2 className="detail-title">
                         {nickname && studyName
@@ -312,7 +311,6 @@ function Detail() {
                     </div>
                 </div>
 
-                {/* INTRO */}
                 <div className="detail-intro-box">
                     <h3>소개</h3>
 
@@ -335,7 +333,6 @@ function Detail() {
                     />
                 </div>
 
-                {/* HABIT */}
                 <div className="detail-habit-history">
                     <h2 className="habit-title">습관 기록표</h2>
 
@@ -385,7 +382,6 @@ function Detail() {
                 </div>
             </div>
 
-            {/* MODAL */}
             {isModalOpen && (
                 <ModalPwd
                     onClose={() => setIsModalOpen(false)}

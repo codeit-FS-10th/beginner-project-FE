@@ -156,7 +156,6 @@
     grid-template-columns: minmax(160px, 1fr) repeat(7, minmax(74px, 1fr));
     align-items: center;
     overflow-x: hidden;
-
 }
 
 .habit-name-cell {
@@ -230,7 +229,13 @@
     .detail-content {
         padding: 24px;
     }
-  }
+    .habit-title-row {
+        width: 100%;
+    }
+    .chip {
+        min-width: 200px;
+    }
+}
 @media (max-width: 480px) {
     .detail-content-header {
         flex-direction: column-reverse;
@@ -239,6 +244,13 @@
         padding: 0 12px;
     }
 
+    .habit-chip-list,
+    .chip {
+        width: 100%;
+    }
+    .habit-title-row {
+        width: 100%;
+    }
     /* 상위 버튼들임 */
     .detail-content {
         padding: 16px;
@@ -254,11 +266,11 @@
     }
     /*  */
     .detail-habit-history {
-      padding: 16px;
+        padding: 16px;
     }
 
     .habit-title {
-      font-size: 18px;
+        font-size: 18px;
     }
 
     .habit-grid {
@@ -270,7 +282,7 @@
     }
 
     .day-cell {
-      font-size: 14px;
-      padding: 0 16px;
+        font-size: 14px;
+        padding: 0 16px;
     }
 }

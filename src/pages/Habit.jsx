@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import {
     fetchTodayHabits,
     toggleHabitCheck,
     fetchStudyDetail,
 } from "@api/service/habitservice";
 import ModalHabitList from "@organism/ModalHabitList";
+import { getToken } from "@utils/tokenStorage";
 import "@styles/pages/habit.css";
 import Chip from "@atoms/chip/Chip";
 import NavButton from "@atoms/button/NavButton";
@@ -13,10 +14,10 @@ import NavButton from "@atoms/button/NavButton";
 function Habit() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const studyId = searchParams.get("id");
-
+    const [token, setToken] = useState(null);
+    const [isVerified, setIsVerified] = useState(false);
     // 현재 시간
     const [time, setTime] = useState("");
     // 오늘의 습관 리스트
@@ -89,11 +90,25 @@ function Habit() {
         }
     };
 
-    /** 마운트 시 loadHabits 호출 */
+    /** 마운트 시 토큰 확인 */
     useEffect(() => {
-        loadHabits();
-        loadStudyDetail();
+        if (!studyId) return;
+
+        // sessionStorage에서 토큰 확인
+        const storedToken = getToken(studyId);
+        if (storedToken) {
+            setToken(storedToken);
+            setIsVerified(true);
+        }
     }, [studyId]);
+
+    /** 토큰이 설정되면 데이터 로드 */
+    useEffect(() => {
+        if (isVerified && token && studyId) {
+            loadHabits();
+            loadStudyDetail();
+        }
+    }, [isVerified, token, studyId]);
 
     /** 습관 체크/해제 토글 */
     const handleHabitClick = async (habitId) => {
@@ -128,6 +143,35 @@ function Habit() {
     /** 이동 버튼 */
     const handleDetailClick = () => navigate(`/detail?id=${studyId}`);
     const handleFocusClick = () => navigate(`/focus?id=${studyId}`);
+
+    // 토큰이 없으면 권한 없음 페이지 표시
+    if (!isVerified || !token) {
+        return (
+            <div className="habit-container">
+                <div className="habit-content">
+                    <div className="habit-content-header">
+                        <div className="habit-header-title">
+                            <h2>권한이 없습니다</h2>
+                        </div>
+                    </div>
+                    <div style={{ padding: "2rem", textAlign: "center" }}>
+                        <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
+                            이 페이지에 접근할 권한이 없습니다.
+                        </p>
+                        <p
+                            style={{
+                                fontSize: "1rem",
+                                color: "#666",
+                                marginBottom: "2rem",
+                            }}
+                        >
+                            스터디 홈에서 비밀번호를 입력한 후 접근해주세요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="habit-container">

@@ -13,9 +13,12 @@
     height: 100%;
     background: linear-gradient(
         90deg,
-        #4caf50 0%,
-        #8bc34a 50%,
-        #4caf50 100%
+        #ff9ecb 0%,
+        #b39fff 20%,
+        #8fd8ff 40%,
+        #a8ffda 60%,
+        #fff6a1 80%,
+        #ff9ecb 100%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
@@ -31,4 +34,3 @@
         background-position: 200% 0;
     }
 }
-

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import BaseButton from "@atoms/button/BaseButton";
+import { getToken } from "@utils/tokenStorage";
 import "@styles/organism/ModalHabitList.css";
 import {
     fetchTodayHabits,
@@ -14,8 +15,8 @@ import DeleteButton from "../atoms/button/DeleteButton";
 function ModalHabitList({ onClose, onSubmit }) {
     // 1. 라우터 훅
     const [searchParams] = useSearchParams();
-    const location = useLocation();
     const studyId = searchParams.get("id");
+    const token = getToken(studyId) || "";
 
     // 2. state 선언
     const [habits, setHabits] = useState([]);
@@ -32,7 +33,7 @@ function ModalHabitList({ onClose, onSubmit }) {
     // 3. 오늘의 습관 로딩 함수
     const loadHabits = async () => {
         try {
-            const data = await fetchTodayHabits(studyId);
+            const data = await fetchTodayHabits(studyId, token);
 
             const list = (data.habits ?? []).map((habit) => ({
                 id: habit.HABIT_ID,
@@ -47,10 +48,12 @@ function ModalHabitList({ onClose, onSubmit }) {
         }
     };
 
-    // 4. 마운트 & studyId 시 로딩
+    // 4. 마운트 & studyId/token 변경 시 로딩
     useEffect(() => {
-        loadHabits();
-    }, [studyId]);
+        if (studyId && token) {
+            loadHabits();
+        }
+    }, [studyId, token]);
 
     // 5. 수정완료(저장) 핸들러
     const handleSubmit = async () => {

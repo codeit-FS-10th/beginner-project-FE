@@ -69,7 +69,7 @@
     overflow-wrap: anywhere;
     word-break: break-word;
     display: -webkit-box;
-    -webkit-line-clamp: 2;   /* 제한 줄수 */
+    -webkit-line-clamp: 2; /* 제한 줄수 */
     -webkit-box-orient: vertical;
 }
 
