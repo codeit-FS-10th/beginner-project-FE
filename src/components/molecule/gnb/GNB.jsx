@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BaseButton from "@atoms/button/BaseButton";
 import "@styles/molecule/gnb.css";
-import useMediaQuery from "@hooks/seMediaQuery";
+import useMediaQuery from "@hooks/useMediaQuery";
 
 function GNB() {
     const location = useLocation();
