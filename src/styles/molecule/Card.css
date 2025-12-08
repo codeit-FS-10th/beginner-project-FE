@@ -12,7 +12,6 @@
 }
 .card--lg {
     padding: 30px;
-    height: 177px;
 }
 
 /* 카드헤더 - title + point 태그 + day  */
@@ -72,6 +71,29 @@
     display: -webkit-box;
     -webkit-line-clamp: 2; /* 제한 줄수 */
     -webkit-box-orient: vertical;
+}
+
+.card--text-light {
+    color: #fff;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+}
+
+.card--text-light .auther,
+.card--text-light .title-lg,
+.card--text-light .title-sm,
+.card--text-light .goal-lg,
+.card--text-light .goal-sm,
+.card--text-light.Card-day-text {
+    color: #fff;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
 }
 
 /* .title-box-dark > * {
