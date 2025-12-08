@@ -5,6 +5,7 @@
     cursor: pointer;
     overflow: hidden;
     height: 177px;
+    position: relative;
 }
 .card--sm {
     width: 180px;
@@ -13,6 +14,26 @@
 }
 .card--lg {
     padding: 30px;
+}
+
+/* 배경 레이어 (이미지/컬러 들어가는 곳) */
+.card-bg-layer {
+    position: absolute;
+    inset: 0; /* top:0, right:0, bottom:0, left:0 */
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.card > article {
+    position: relative;
+    z-index: 2;
 }
 
 /* 카드헤더 - title + point 태그 + day  */
@@ -111,7 +132,9 @@ body > * {
     font-weight: 400;
     line-height: normal;
 }
-
+.card-dark-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
 @media (max-width: 480px) {
     .title-lg {
         font-size: 16px;
