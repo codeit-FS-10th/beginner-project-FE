@@ -20,6 +20,10 @@ const SORT_OPTIONS = {
 const LIMIT = 6;
 
 function Home() {
+    useEffect(() => {
+        document.title = "공부의 숲 메인 페이지";
+    }, []);
+
     const [sortOption, setSortOption] = useState(SORT_OPTIONS.DEFAULT);
     const [sortParam, setSortParam] = useState("newest");
 
@@ -35,6 +39,7 @@ function Home() {
     const [error, setError] = useState(null);
 
     const debouncedSearchText = useDebounce(searchText, 400);
+    const isSearching = debouncedSearchText.trim().length > 0;
 
     const codeToEmoji = (code) => {
         if (!code) return "";
@@ -239,7 +244,9 @@ function Home() {
                         <p>{error}</p>
                     ) : studies.length === 0 ? (
                         <p className="Home-notfound-study">
-                            아직 둘러 볼 스터디가 없어요
+                            {isSearching
+                                ? "해당 스터디를 찾을 수 없어요."
+                                : "아직 둘러 볼 스터디가 없어요"}
                         </p>
                     ) : (
                         <div className="study-list">
