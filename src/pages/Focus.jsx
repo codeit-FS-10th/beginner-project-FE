@@ -6,7 +6,7 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
-import PencilIcon from "@assets/Icons/PencilIcon";
+
 import { getToken } from "@utils/tokenStorage";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 

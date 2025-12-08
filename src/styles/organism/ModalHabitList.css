@@ -8,7 +8,7 @@
 }
 
 .modal-habit-container {
-    width: 648px;
+    width: min(648px, calc(100% - 48px));
     height: 861px;
     border-radius: 20px;
     background: #fff;
