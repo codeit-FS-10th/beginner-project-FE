@@ -6,6 +6,7 @@ import Tag from "@atoms/tag/Tag";
 import "@styles/pages/focus.css";
 import TimerButton from "../components/atoms/button/TimerButton";
 import NavButton from "@atoms/button/NavButton";
+import useMediaQuery from "@hooks/useMediaQuery";
 
 import { getToken } from "@utils/tokenStorage";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
@@ -25,6 +26,11 @@ function Focus() {
     const studyId = searchParams.get("id");
     const location = useLocation();
     const navigate = useNavigate();
+
+    const istablet = useMediaQuery("(max-width: 744px)");
+
+    const mainBtnSize = istablet ? "sm" : "lg"; // Start / Stop
+    const subBtnSize = istablet ? "sm" : "sm"; // Pause / Restart (지금은 모두 sm)
 
     useEffect(() => {
         document.title = "공부의 숲 오늘의 집중";
@@ -594,21 +600,19 @@ function Focus() {
                         <div className="timer-button-box">
                             <div className="focus-start-button">
                                 {phase === PHASE.FINISHED ? (
-                                    // finished는 Stop만
                                     <TimerButton
                                         variant="stop"
-                                        size="lg"
+                                        size={mainBtnSize} // ★ 화면에 따라 sm / lg
                                         status="active"
                                         onClick={handleStop}
                                     />
                                 ) : (
                                     <>
-                                        {/* Pause 버튼 */}
                                         {(phase === PHASE.RUNNING ||
                                             phase === PHASE.PAUSED) && (
                                             <TimerButton
                                                 variant="pause"
-                                                size="sm"
+                                                size={subBtnSize}
                                                 status={
                                                     phase === PHASE.RUNNING
                                                         ? "active"
@@ -618,10 +622,9 @@ function Focus() {
                                             />
                                         )}
 
-                                        {/* Start 버튼 */}
                                         <TimerButton
                                             variant="start"
-                                            size="lg"
+                                            size={mainBtnSize} // ★ 여기
                                             status={
                                                 phase === PHASE.READY ||
                                                 phase === PHASE.PAUSED
@@ -631,12 +634,11 @@ function Focus() {
                                             onClick={handleStart}
                                         />
 
-                                        {/* Restart 버튼 */}
                                         {(phase === PHASE.RUNNING ||
                                             phase === PHASE.PAUSED) && (
                                             <TimerButton
                                                 variant="restart"
-                                                size="sm"
+                                                size={subBtnSize}
                                                 status="active"
                                                 onClick={handleRestart}
                                             />
