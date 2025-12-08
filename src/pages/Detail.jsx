@@ -19,7 +19,6 @@ import EmojiBar from "@molecule/emoji/EmojiBar";
 
 function Detail() {
     const navigate = useNavigate();
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalAction, setModalAction] = useState(null); // edit | delete
 
@@ -46,6 +45,13 @@ function Detail() {
     const nickname = study?.NICKNAME ?? "";
     const studyName = study?.NAME ?? "";
     const intro = study?.INTRO ?? "";
+
+    useEffect(() => {
+        // nickname / studyName은 아래에서 study로부터 계산
+        if (nickname && studyName) {
+            document.title = `공부의 숲 ${nickname}의 ${studyName}`;
+        }
+    }, [studyId, nickname, studyName]);
 
     const handleVerified = async (actionType, verifiedToken) => {
         if (verifiedToken && studyId) {
@@ -370,36 +376,38 @@ function Detail() {
                     )}
 
                     {habitData.length > 0 && (
-                        <div className="habit-grid">
-                            <div className="habit-name-cell empty"></div>
+                        <div className="habit-grid-wrapper">
+                            <div className="habit-grid">
+                                <div className="habit-name-cell empty"></div>
 
-                            {days.map((day) => (
-                                <div key={day} className="day-cell">
-                                    {day}
-                                </div>
-                            ))}
-
-                            {habitData.map((habit) => (
-                                <React.Fragment key={habit.id}>
-                                    <div className="habit-name-cell">
-                                        {habit.name}
+                                {days.map((day) => (
+                                    <div key={day} className="day-cell">
+                                        {day}
                                     </div>
+                                ))}
 
-                                    {days.map((day) => {
-                                        const done = habit[day] === 1;
-                                        return (
-                                            <div
-                                                key={day}
-                                                className={`sticker-cell ${
-                                                    done ? "done" : "empty"
-                                                }`}
-                                            >
-                                                <Sticker active={done} />
-                                            </div>
-                                        );
-                                    })}
-                                </React.Fragment>
-                            ))}
+                                {habitData.map((habit) => (
+                                    <React.Fragment key={habit.id}>
+                                        <div className="habit-name-cell">
+                                            {habit.name}
+                                        </div>
+
+                                        {days.map((day) => {
+                                            const done = habit[day] === 1;
+                                            return (
+                                                <div
+                                                    key={day}
+                                                    className={`sticker-cell ${
+                                                        done ? "done" : "empty"
+                                                    }`}
+                                                >
+                                                    <Sticker active={done} />
+                                                </div>
+                                            );
+                                        })}
+                                    </React.Fragment>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

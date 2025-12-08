@@ -26,6 +26,10 @@ function Focus() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        document.title = "공부의 숲 오늘의 집중";
+    }, []);
+
     // 수정 가능한 분 단위
     const [focusMinutes, setFocusMinutes] = useState(25);
 
