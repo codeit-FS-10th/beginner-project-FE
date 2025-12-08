@@ -12,9 +12,9 @@ import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
 import {
     fetchStudyDetail,
-    fetchFocusInfo,
     finishFocus,
 } from "@api/service/focusApi";
+import { fetchStudyPoints } from "@api/service/studyservice";
 
 const PHASE = {
     READY: "ready",
@@ -237,18 +237,19 @@ function Focus() {
                     name: data.NAME ?? data.name,
                 });
 
-                // 포커스 정보 요청
+                // 포인트 정보 요청
                 try {
-                    const focusRes = await fetchFocusInfo(studyId);
-                    setTotalPoint(focusRes.data.totalPoint);
+                    const pointsRes = await fetchStudyPoints(studyId);
+                    setTotalPoint(pointsRes.totalPoint ?? 0);
                 } catch (err) {
                     if (err.response?.status === 404) {
                         console.warn(
-                            "포커스 정보 없음, totalPoint를 0으로 설정합니다."
+                            "포인트 정보 없음, totalPoint를 0으로 설정합니다."
                         );
                         setTotalPoint(0);
                     } else {
-                        throw err;
+                        console.warn("포인트 조회 실패:", err);
+                        setTotalPoint(0);
                     }
                 }
             } catch (err) {
