@@ -10,11 +10,8 @@ import PencilIcon from "@assets/Icons/PencilIcon";
 import { getToken } from "@utils/tokenStorage";
 import { showErrorToast, showSuccessToast } from "@atoms/toast/Toast";
 
-import {
-    fetchStudyDetail,
-    fetchFocusInfo,
-    finishFocus,
-} from "@api/service/focusApi";
+import { fetchStudyDetail, finishFocus } from "@api/service/focusApi";
+import { fetchStudyPoints } from "@api/service/studyservice";
 
 const PHASE = {
     READY: "ready",
@@ -236,10 +233,10 @@ function Focus() {
                     name: data.NAME ?? data.name,
                 });
 
-                // 포커스 정보 요청
+                // 포인트 정보 요청
                 try {
-                    const focusRes = await fetchFocusInfo(studyId);
-                    setTotalPoint(focusRes.data.totalPoint);
+                    const pointsRes = await fetchStudyPoints(studyId);
+                    setTotalPoint(pointsRes.totalPoint ?? 0);
                 } catch (err) {
                     if (err.response?.status === 404) {
                         if (process.env.NODE_ENV === "development") {
@@ -247,9 +244,11 @@ function Focus() {
                                 "포커스 정보 없음, totalPoint = 0 처리"
                             );
                         }
+
                         setTotalPoint(0);
                     } else {
-                        throw err;
+                        console.warn("포인트 조회 실패:", err);
+                        setTotalPoint(0);
                     }
                 }
             } catch (err) {
