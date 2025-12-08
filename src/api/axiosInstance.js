@@ -51,7 +51,6 @@ api.interceptors.response.use(
         return res;
     },
     (err) => {
-        console.error("API Error:", err);
         
         // 에러 발생 시에도 로딩 종료
         loadingCount--;
