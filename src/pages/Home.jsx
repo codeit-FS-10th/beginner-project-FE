@@ -42,7 +42,9 @@ function Home() {
             const codePoint = parseInt(code.toUpperCase(), 16);
             return String.fromCodePoint(codePoint);
         } catch (err) {
-            console.error("이모지 변환 실패:", code, err);
+            if (process.env.NODE_ENV === "development") {
+                console.error("이모지 변환 실패:", code, err);
+            }
             return "";
         }
     };
@@ -129,7 +131,9 @@ function Home() {
             setHasMore(pageToLoad < totalPages);
             setPage(pageToLoad);
         } catch (err) {
-            console.error(err);
+            if (process.env.NODE_ENV === "development") {
+                console.error("스터디 목록 fetch 실패:", err);
+            }
             setError("스터디 목록을 불러오는 데 실패했습니다.");
         } finally {
             setLoading(false);

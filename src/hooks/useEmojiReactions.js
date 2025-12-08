@@ -14,10 +14,14 @@ export function useEmojiReactions(studyId, initial = []) {
             });
 
             if (!res.ok) {
-                console.error("emoji post 실패", await res.text());
+                if (process.env.NODE_ENV === "development") {
+                    console.error("emoji post 실패", await res.text());
+                }
             }
         } catch (err) {
-            console.error("emoji post 에러", err);
+            if (process.env.NODE_ENV === "development") {
+                console.error("emoji post 에러", err);
+            }
         }
     };
 

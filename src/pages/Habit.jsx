@@ -54,9 +54,11 @@ function Habit() {
     /** 오늘의 습관 불러오기 */
     const loadHabits = async () => {
         if (!studyId) {
-            console.warn(
-                "studyId가 없습니다. 오늘의 습관을 불러오지 않습니다."
-            );
+            if (process.env.NODE_ENV === "development") {
+                console.warn(
+                    "studyId가 없습니다. 오늘의 습관을 불러오지 않습니다."
+                );
+            }
             return;
         }
 
@@ -71,7 +73,12 @@ function Habit() {
 
             setHabits(list);
         } catch (error) {
-            console.error("오늘의 습관 조회 실패:", error?.response || error);
+            if (process.env.NODE_ENV === "development") {
+                console.error(
+                    "오늘의 습관 조회 실패:",
+                    error?.response || error
+                );
+            }
         }
     };
     /** 스터디 상세 정보 불러오기 */
@@ -86,7 +93,12 @@ function Habit() {
                 name: data.NAME ?? data.name,
             });
         } catch (error) {
-            console.error("스터디 상세조회 실패:", error?.response || error);
+            if (process.env.NODE_ENV === "development") {
+                console.error(
+                    "스터디 상세조회 실패:",
+                    error?.response || error
+                );
+            }
         }
     };
 
@@ -115,7 +127,9 @@ function Habit() {
         const target = habits.find((h) => h.id === habitId);
 
         if (!target) {
-            console.warn("해당 habitId를 가진 습관을 찾지 못함:", habitId);
+            if (process.env.NODE_ENV === "development") {
+                console.warn("해당 habitId를 가진 습관을 찾지 못함:", habitId);
+            }
             return;
         }
 
@@ -133,10 +147,10 @@ function Habit() {
         // API 호출
         try {
             const res = await toggleHabitCheck(studyId, habitId, newDone);
-            // console.log("체크 API 응답:", res);
-            // console.log("서버에 저장된 isDone:", res.isDone);
         } catch (e) {
-            console.error("체크 실패:", e?.response || e);
+            if (process.env.NODE_ENV === "development") {
+                console.error("체크 실패:", e?.response || e);
+            }
         }
     };
 
