@@ -13,9 +13,12 @@
     height: 100%;
     background: linear-gradient(
         90deg,
-        #4caf50 0%,
-        #8bc34a 50%,
-        #4caf50 100%
+        #ff6ec4 0%,
+        /* 핑크 */ #7873f5 20%,
+        /* 퍼플 */ #4adede 40%,
+        /* 민트 */ #a0ff6c 60%,
+        /* 라임 */ #ffd36b 80%,
+        /* 노랑 */ #ff6ec4 100% /* 다시 핑크 */
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
@@ -31,4 +34,3 @@
         background-position: 200% 0;
     }
 }
-
