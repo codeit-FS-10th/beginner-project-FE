@@ -3,22 +3,15 @@
  * =======================*/
 
 .focus-container {
-    display: flex;
     width: 100%;
-    justify-content: center;
-    padding: 0 24px; /* 항상 좌우 24px 여백 유지 */
+    padding: 0 24px;
     box-sizing: border-box;
 }
 
 .focus-content {
-    width: 100%;
-    max-width: 1120px;
+    max-width: 1120px; /* 카드 최대 너비 */
+    margin: 39px auto 73px; /* 가운데 정렬 */
     padding: 40px;
-    margin-top: 40px;
-    margin-bottom: 73px;
-    margin-left: auto;
-    margin-right: auto;
-    align-items: flex-start;
     border-radius: 20px;
     background: #fff;
 }
@@ -311,21 +304,26 @@
     }
 }
 
-/* 375px 이하 - 모바일 */
-@media (max-width: 375px) {
-    .focus-container {
-        margin-top: 16px;
-    }
-
-    .focus-content {
-        padding: 20px 12px;
-    }
-
+@media (max-width: 630px) {
     /* 모바일: 제목 위 / 버튼 아래 세로 정렬 */
     .focus-content-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
+    }
+    .focus-timmer {
+        font-size: 90px;
+    }
+}
+
+/* 375px 이하 - 모바일 */
+@media (max-width: 375px) {
+    .focus-container {
+        padding: 0 16px;
+    }
+
+    .focus-content {
+        padding: 16px;
     }
 
     .focus-header-title h2 {
