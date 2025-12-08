@@ -26,7 +26,7 @@
     margin-bottom: 174px;
 }
 .recent-container {
-    height: 302px;
+    height: auto;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -52,7 +52,7 @@
 }
 
 .recent-list > * {
-    min-width: 292px;
+    min-width: 297px;
 }
 
 .study-controls {
@@ -138,6 +138,9 @@
     align-items: center; /* 세로 중앙 */
 }
 
+.recent-empty-wrapper {
+    padding: 100px;
+}
 .recent-title {
     text-align: center;
     color: var(--gray-gray_818181, #818181);
