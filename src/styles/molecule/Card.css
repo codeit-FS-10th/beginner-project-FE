@@ -4,6 +4,7 @@
     border-radius: 20px;
     cursor: pointer;
     overflow: hidden;
+    height: 177px;
 }
 .card--sm {
     width: 180px;
@@ -34,7 +35,6 @@
 .title-box.title-box-lg {
     display: flex;
     flex-direction: row;
-    padding-bottom: 10px;
     justify-content: space-between;
 }
 
@@ -46,6 +46,10 @@
     min-width: 193px;
     max-width: 230px;
     min-height: 36px;
+}
+
+body > * {
+    font-family: Pretendard;
 }
 
 .title-sm {
@@ -75,11 +79,6 @@
 
 .card--text-light {
     color: #fff;
-    font-family: Pretendard;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px; /* 150% */
 }
 
 .card--text-light .auther,
@@ -89,11 +88,6 @@
 .card--text-light .goal-sm,
 .card--text-light.Card-day-text {
     color: #fff;
-    font-family: Pretendard;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px; /* 150% */
 }
 
 /* .title-box-dark > * {
@@ -112,7 +106,6 @@
 }
 .Card-day-text {
     color: #818181;
-    font-family: Pretendard;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -120,14 +113,22 @@
 }
 
 @media (max-width: 480px) {
+    .title-lg {
+        font-size: 16px;
+    }
+    .Card-day-text {
+        font-size: 12px;
+    }
     .title-box.title-box-lg {
         flex-direction: column-reverse;
         padding-bottom: 0;
     }
     .title-box p {
-        margin-bottom: 4px;
+        margin-bottom: 6px;
+        min-height: 0;
     }
     .goal-lg {
-        margin-top: 11px;
+        font-size: 14px;
+        margin-top: 12px;
     }
 }

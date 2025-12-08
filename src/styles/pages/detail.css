@@ -7,8 +7,9 @@
 }
 
 .detail-content {
-    width: 100%;
     max-width: 1120px;
+    width: 100%;
+    box-sizing: border-box;
     padding: 40px;
     margin-top: 40px;
     margin-bottom: 73px;
@@ -87,6 +88,8 @@
     border-radius: 20px;
     border: 1px solid var(--gray-gray_DDDDDD, #ddd);
     min-height: 463px;
+    overflow-x: hidden; /* 컨테이너가 좁아질 때 내용을 안쪽으로 숨김 */
+    overflow-y: visible;
 }
 
 .habit-title {
@@ -222,6 +225,16 @@
     word-break: break-word;
 }
 
+@media (max-width: 768px) {
+    .detail-container {
+        padding: 0 24px;
+    }
+
+    .sticker-cell {
+        padding: 14px 28px; /* 스티커 좌우 패딩 축소 */
+    }
+}
+
 @media (max-width: 744px) {
     .detail-content {
         padding: 24px;
@@ -237,7 +250,7 @@
     .detail-content-header {
         flex-direction: column-reverse;
     }
-    .detail-conainer {
+    .detail-container {
         padding: 0 12px;
     }
 
@@ -270,8 +283,8 @@
         font-size: 18px;
     }
 
-    .habit-grid {
-        overflow-x: auto;
+    .sticker-cell {
+        padding: 14px 14px; /* 스티커 좌우 최소 패딩 */
     }
 
     .habit-name-cell {
